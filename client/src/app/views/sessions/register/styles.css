@@ -1,0 +1,9 @@
+.advancedSettings > div > div {
+    display: flex;
+    column-gap: 20px;
+    flex-wrap: wrap;
+}
+
+h2 {
+    color: #1976d2;
+}

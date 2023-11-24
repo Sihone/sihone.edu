@@ -1,0 +1,83 @@
+{
+  "name": "matx-react-pro",
+  "version": "3.7.0",
+  "private": true,
+  "dependencies": {
+    "@auth0/auth0-spa-js": "^2.0.1",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/icons-material": "^5.11.0",
+    "@mui/lab": "^5.0.0-alpha.114",
+    "@mui/material": "^5.11.4",
+    "@mui/x-date-pickers": "^5.0.13",
+    "@react-google-maps/api": "^2.17.1",
+    "@reduxjs/toolkit": "^1.9.1",
+    "apexcharts": "^3.36.3",
+    "autosuggest-highlight": "^3.3.4",
+    "axios": "^1.2.2",
+    "clsx": "^1.2.1",
+    "date-fns": "^2.29.3",
+    "echarts": "^5.4.1",
+    "echarts-for-react": "^3.0.2",
+    "firebase": "^9.15.0",
+    "formik": "^2.2.9",
+    "html-react-parser": "^3.0.6",
+    "i18next": "^23.7.6",
+    "i18next-http-backend": "^2.4.2",
+    "jwt-decode": "^3.1.2",
+    "lodash": "^4.17.21",
+    "notistack": "^2.0.8",
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
+    "react-apexcharts": "^1.4.0",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-big-calendar": "^1.5.2",
+    "react-copy-to-clipboard": "^5.1.0",
+    "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
+    "react-highlight": "^0.15.0",
+    "react-i18next": "^13.5.0",
+    "react-perfect-scrollbar": "^1.5.8",
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.6.1",
+    "react-scripts": "^5.0.1",
+    "recharts": "^2.2.0",
+    "shortid": "^2.2.16",
+    "yup": "^0.32.11"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "ghp": "react-scripts build && gh-pages -d build"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "axios-mock-adapter": "^1.21.2",
+    "gh-pages": "^4.0.0",
+    "json-loader": "^0.5.7",
+    "react-error-overlay": "6.0.11"
+  },
+  "resolutions": {
+    "//": "See https://github.com/facebook/create-react-app/issues/11773",
+    "react-error-overlay": "6.0.11"
+  },
+  "proxy": "http://localhost:5000/"
+}

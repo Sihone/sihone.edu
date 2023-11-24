@@ -1,0 +1,57 @@
+{
+    "register": {
+        "title": "Register",
+        "school information": "School Information",
+        "school name": "School Name",
+        "school address": "School Address",
+        "school phone": "School Phone",
+        "school email": "School Email",
+        "school website": "School Website",
+        "school logo": "School Logo",
+        "school currency": "School Currency",
+
+        "admin information": "Administrator Information",
+        "first name": "First Name",
+        "last name": "Last Name",
+        "email": "Email",
+        "password": "Password",
+        "confirm password": "Confirm Password",
+        "phone": "Phone",
+
+        "register": "Register",
+        "already have an account": "Already have an account?",
+        "not already have an account": "Don't have an account?",
+        "login": "Login",
+        "remember": "Remember me",
+        "forgot": "Forgot password?",
+        "register success": "Registration successful",
+        "login success": "Login successful",
+
+        "terms": "I have read and agree to the <a href='terms' target='_blank'>Terms of Service</a> and <a href='privacy' target='_blank'>Privacy Policy</a>",
+
+        "company name required": "Company name is required",
+        "company address required": "Company address is required",
+        "company phone required": "Company phone is required",
+        "company email required": "Company email is required",
+        "company currency required": "Company currency is required",
+
+        "first name required": "First name is required",
+        "last name required": "Last name is required",
+        "email required": "Email is required",
+        "email invalid": "Email is invalid",
+        "password required": "Password is required",
+        "password min": "Password must be at least 6 characters",
+        "password max": "Password must be at most 20 characters",
+        "password not match": "Password does not match",
+        "phone required": "Phone is required",
+        "phone invalid": "Phone is invalid",
+        "confirm password required": "Confirm password is required",
+
+        "advanced settings": "Advanced Settings",
+        "smtp server": "SMTP Server",
+        "smtp port": "SMTP Port",
+        "smtp username": "SMTP Username",
+        "smtp password": "SMTP Password"
+
+    }
+}
