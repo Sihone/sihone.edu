@@ -142,7 +142,7 @@ const registerRouter = async (req, res) => {
     const role = await db.query('INSERT INTO roles (name, description, permissions, company_id) VALUES ($1, $2, $3, $4) RETURNING *', ['SU', 'Super Admin', '', company_id]);
     const role_id = role.rows[0].id;
 
-    const employee_id = "EMP" + company_id + "0001";
+    const employee_id = "SU" + company_id + "0001";
     const base_salary = 0;
     const hourly_rate = 0;
     const pay_period = "Monthly";

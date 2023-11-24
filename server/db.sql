@@ -14,6 +14,18 @@ CREATE TABLE settings (
     smtp_security VARCHAR(255) NOT NULL
 );
 
+ALTER TABLE settings
+ADD COLUMN employee_id_prefix VARCHAR(255) DEFAULT 'EMP';
+
+ALTER TABLE settings
+ADD COLUMN employee_id_length INTEGER DEFAULT 7;
+
+ALTER TABLE settings
+ADD COLUMN student_id_prefix VARCHAR(255) DEFAULT 'STU';
+
+ALTER TABLE settings
+ADD COLUMN student_id_length INTEGER DEFAULT 9;
+
 CREATE TABLE permissions (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -49,3 +61,22 @@ CREATE TABLE employees (
     CONSTRAINT fk_company FOREIGN KEY (company_id) REFERENCES settings (id),
     CONSTRAINT fk_role FOREIGN KEY (role) REFERENCES roles (id)
 );
+
+ALTER TABLE employees
+ADD COLUMN salutation VARCHAR(255);
+
+-- Emmergency Contact
+ALTER TABLE employees
+ADD COLUMN emmergency_contact_name VARCHAR(255);
+
+ALTER TABLE employees
+ADD COLUMN emmergency_contact_phone VARCHAR(255);
+
+ALTER TABLE employees
+ADD COLUMN emmergency_contact_relation VARCHAR(255);
+
+-- Unique email
+ALTER TABLE employees
+ADD CONSTRAINT unique_email UNIQUE (email);
+
+
