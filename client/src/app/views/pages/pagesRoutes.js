@@ -16,6 +16,7 @@ const CustomerForm = Loadable(lazy(() => import("./customers/customer-form/Custo
 const CustomerViewer = Loadable(lazy(() => import("./customers/customer-viewer/CustomerViewer")));
 
 const EmployeeList = Loadable(lazy(() => import("./employees/EmployeeList")));
+const EmployeeForm = Loadable(lazy(() => import("./employees/customer-form/CustomerForm")));
 
 const pagesRoutes = [
   { path: "/pages/user-list-1", element: <UserList1 /> },
@@ -32,7 +33,9 @@ const pagesRoutes = [
   { path: "/pages/view-product", element: <ProductViewer /> },
   { path: "/pages/order-list", element: <OrderList /> },
 
-  { path: "/pages/employee-list", element: <EmployeeList /> },
+  { path: "/pages/employees", element: <EmployeeList /> },
+  { path: "/pages/employees/:id", element: <EmployeeForm /> },
+  { path: "/pages/new-employee", element: <EmployeeForm /> },
 ];
 
 export default pagesRoutes;

@@ -11,7 +11,7 @@ export const navigations = [
     name: "Employees",
     icon: "people",
     children: [
-      { name: "Employee List", path: "/pages/employee-list", iconText: "EL" },
+      { name: "Employee List", path: "/pages/employees", iconText: "EL" },
       { name: "New Employee", path: "/pages/new-employee", iconText: "NE" },
     ],
   },

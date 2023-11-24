@@ -1,5 +1,16 @@
 {
     "main": {
-        "hi": "Hi"
+        "hi": "Hi",
+        "pages": "Pages",
+        "submit": "Submit",
+        "cancel": "Cancel",
+        "required": "Required",
+        "first name": "First Name",
+        "last name": "Last Name",
+        "email": "Email",
+        "phone": "Phone Number",
+        "role": "Role",
+        "password": "Password",
+        "currency": "Currency"
     }
 }

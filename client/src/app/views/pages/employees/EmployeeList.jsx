@@ -8,11 +8,12 @@ import { TableHead, TableToolbar } from "app/components/data-table";
 import { getComparator, stableSort } from "app/components/data-table/utils";
 import { H5 } from "app/components/Typography";
 import useTable from "app/hooks/useTable";
-import useUsers from "app/hooks/useUsers";
+import useData from "app/hooks/useData";
 import { useNavigate } from "react-router-dom";
+import useAuth from "app/hooks/useAuth";
+import { useTranslation } from 'react-i18next';
 
 // styled components
-const IMG = styled("img")({ height: 32, borderRadius: "4px" });
 const FlexBox = styled(Box)({ display: "flex", alignItems: "center" });
 
 const Container = styled("div")(({ theme }) => ({
@@ -42,16 +43,19 @@ const EmployeeList = () => {
     handleChangeRowsPerPage,
   } = useTable({ defaultOrderBy: "name" });
 
-  const { users } = useUsers();
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const { data: users } = useData("employees", user.company_id);
+  const { t } = useTranslation();
 
   // TABLE HEADER COLUMN LIST
   const columns = [
-    { id: "name", align: "left", disablePadding: true, label: "Name" },
-    { id: "phone", align: "center", disablePadding: false, label: "Address" },
-    { id: "company", align: "center", disablePadding: false, label: "Company" },
-    { id: "balance", align: "center", disablePadding: false, label: "Balance" },
-    { id: "edit", align: "center", disablePadding: false, label: "Edit" },
+    { id: "name", align: "left", disablePadding: true, label: t("employees.table header.name") },
+    { id: "phone", align: "left", disablePadding: false, label: t("employees.table header.phone") },
+    { id: "email", align: "left", disablePadding: false, label: t("employees.table header.email") },
+    { id: "role", align: "left", disablePadding: false, label: t("employees.table header.role") },
+    { id: "edit", align: "center", disablePadding: false, label: t("employees.table header.actions") },
   ];
 
   const handleSelectAllRows = (event) => {
@@ -60,24 +64,23 @@ const EmployeeList = () => {
   };
 
   const filteredUsers = users?.map((item) => ({
-    name: item.name,
+    id: item.id,
+    name: item.first_name + " " + item.last_name,
+    phone: item.phone,
     email: item.email,
-    imgUrl: item.imgUrl,
-    balance: item.balance,
-    address: item.address,
-    company: item.company,
+    role: item.role_name + " - " + item.role_description ,
   }));
 
   return (
     <Container>
       <div className="breadcrumb">
         <Breadcrumb
-          routeSegments={[{ name: "Pages", path: "/pages" }, { name: "Customer List" }]}
+          routeSegments={[{ name: t("employees.title") }]}
         />
       </div>
 
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <TableToolbar title="All Customers" numSelected={selected.length} />
+        <TableToolbar title={t("employees.table title")} numSelected={selected.length} />
 
         <TableContainer>
           <Table sx={{ minWidth: 750 }}>
@@ -113,19 +116,18 @@ const EmployeeList = () => {
 
                       <TableCell component="th" scope="row" padding="none">
                         <FlexBox gap={1}>
-                          <IMG src={row.imgUrl} alt="user" />
                           <H5 fontSize={15}>{row.name}</H5>
                         </FlexBox>
                       </TableCell>
 
-                      <TableCell align="center">{row.address}</TableCell>
+                      <TableCell align="left">{row.phone}</TableCell>
 
-                      <TableCell align="center">{row.company}</TableCell>
+                      <TableCell align="left">{row.email}</TableCell>
 
-                      <TableCell align="center">{row.balance}</TableCell>
+                      <TableCell align="left">{row.role}</TableCell>
 
                       <TableCell align="center">
-                        <IconButton onClick={() => navigate("/pages/view-customer")}>
+                        <IconButton onClick={() => navigate("/pages/employees/" + row.id)}>
                           <Edit />
                         </IconButton>
 
