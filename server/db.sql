@@ -79,4 +79,18 @@ ADD COLUMN emmergency_contact_relation VARCHAR(255);
 ALTER TABLE employees
 ADD CONSTRAINT unique_email UNIQUE (email);
 
+-- Employee Attendance
+CREATE TABLE employee_attendance (
+    id SERIAL PRIMARY KEY,
+    employee_id INTEGER NOT NULL,
+    attendance_date VARCHAR(255) NOT NULL,
+    clock_in VARCHAR(255) NOT NULL,
+    clock_out VARCHAR(255),
+    total_hours INTEGER DEFAULT 0,
+    company_id INTEGER NOT NULL,
+    CONSTRAINT fk_company FOREIGN KEY (company_id) REFERENCES settings (id),
+    CONSTRAINT fk_employee FOREIGN KEY (employee_id) REFERENCES employees (id)
+);
+
+
 
