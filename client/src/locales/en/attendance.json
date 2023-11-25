@@ -1,0 +1,17 @@
+{
+    "attendance": {
+        "title": "Attendance",
+        "table title": "Attendance List",
+        "table header": {
+            "employee": "Employee",
+            "date": "Date",
+            "clock in": "Clock In",
+            "clock out": "Clock Out",
+            "total": "Time in Hours",
+            "actions": "Actions"
+        },
+        "dialog title": "Attendance Details",
+        "delete dialog title": "Delete Attendance",
+        "delete dialog content": "Are you sure you want to delete this attendance? This action cannot be undone."
+    }
+}

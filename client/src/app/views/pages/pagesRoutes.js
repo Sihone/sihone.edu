@@ -18,6 +18,8 @@ const CustomerViewer = Loadable(lazy(() => import("./customers/customer-viewer/C
 const EmployeeList = Loadable(lazy(() => import("./employees/EmployeeList")));
 const EmployeeForm = Loadable(lazy(() => import("./employees/customer-form/CustomerForm")));
 
+const AttendanceList = Loadable(lazy(() => import("./attendance/AttendanceList")));
+
 const pagesRoutes = [
   { path: "/pages/user-list-1", element: <UserList1 /> },
   { path: "/pages/user-list-2", element: <UserList2 /> },
@@ -36,6 +38,8 @@ const pagesRoutes = [
   { path: "/pages/employees", element: <EmployeeList /> },
   { path: "/pages/employees/:id", element: <EmployeeForm /> },
   { path: "/pages/new-employee", element: <EmployeeForm /> },
+  
+  { path: "/pages/attendance", element: <AttendanceList />}
 ];
 
 export default pagesRoutes;

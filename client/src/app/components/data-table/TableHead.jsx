@@ -2,7 +2,7 @@ import { Checkbox, TableCell, TableRow, TableSortLabel } from "@mui/material";
 import MuiTableHead from "@mui/material/TableHead";
 
 const TableHead = (props) => {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, headCells } =
+  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, headCells, showSelect = true } =
     props;
 
   const createSortHandler = (property) => (event) => onRequestSort(event, property);
@@ -10,21 +10,26 @@ const TableHead = (props) => {
   return (
     <MuiTableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            onChange={onSelectAllClick}
-            checked={rowCount > 0 && numSelected === rowCount}
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-          />
-        </TableCell>
+        {
+          showSelect && (
+            <TableCell padding="checkbox">
+              <Checkbox
+                color="primary"
+                onChange={onSelectAllClick}
+                checked={rowCount > 0 && numSelected === rowCount}
+                indeterminate={numSelected > 0 && numSelected < rowCount}
+              />
+            </TableCell>
+          )
+        }
 
-        {headCells.map((headCell) => (
+        {headCells.map((headCell, index) => (
           <TableCell
             key={headCell.id}
             align={headCell.align}
-            padding={headCell.disablePadding ? "none" : "normal"}
+            padding={headCell.disablePadding ? "none checkbox" : "normal checkbox"}
             sortDirection={orderBy === headCell.id ? order : false}
+            style={(!showSelect && index === 0) ? {paddingLeft: "16px"} : {}}
           >
             <TableSortLabel
               active={orderBy === headCell.id}

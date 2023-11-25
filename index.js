@@ -36,6 +36,14 @@ const { settingGetRouter, settingPutRouter } = require('./server/settings');
 app.get('/api/settings/:company_id', settingGetRouter);
 app.put('/api/settings', settingPutRouter);
 
+// attendance routes
+const { attendanceGetAllRouter, attendanceGetRouter, attendancePostRouter, attendancePutRouter, attendanceDeleteRouter } = require('./server/attendance');
+app.get('/api/attendance/:company_id/:id', attendanceGetRouter);
+app.get('/api/attendance/:company_id', attendanceGetAllRouter);
+app.post('/api/attendance', attendancePostRouter);
+app.put('/api/attendance', attendancePutRouter);
+app.delete('/api/attendance/:id', attendanceDeleteRouter);
+
 // let the react app to handle any unknown routes 
 // serve up the index.html if express does'nt recognize the route
 app.get('*', function(req, res) {

@@ -16,6 +16,11 @@ export const navigations = [
     ],
   },
   {
+    name: "Attendance",
+    icon: "timer",
+    path: "/pages/attendance",
+  },
+  {
     name: "Analytics",
     path: "/dashboard/analytics",
     icon: "analytics",
