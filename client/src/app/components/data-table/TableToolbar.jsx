@@ -22,20 +22,6 @@ const TableToolbar = ({ numSelected, title }) => {
           {title}
         </Typography>
       )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <Delete />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterList />
-          </IconButton>
-        </Tooltip>
-      )}
     </Toolbar>
   );
 };

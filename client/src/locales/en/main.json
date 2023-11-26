@@ -11,6 +11,9 @@
         "phone": "Phone Number",
         "role": "Role",
         "password": "Password",
-        "currency": "Currency"
+        "currency": "Currency",
+        "close": "Close",
+        "print": "Print",
+        "other": "Other"
     }
 }

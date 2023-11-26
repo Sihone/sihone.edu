@@ -11,6 +11,7 @@ const loginRouter = async (req, res) => {
     const { email, password } = req.body;
 
     const result = await db.query('SELECT * FROM employees WHERE email = $1', [email]);
+    const settings = await db.query('SELECT * FROM settings WHERE id = $1', [result.rows[0].company_id]);
     const userDb = result.rows[0];
     if (!userDb) {
         return res.status(401).json({ message: "Invalid email or password" });
@@ -31,6 +32,11 @@ const loginRouter = async (req, res) => {
                     email: userDb.email,
                     employee_id: userDb.employee_id,
                     company_id: userDb.company_id,
+                    currency: settings.rows[0].company_currency,
+                    company_name: settings.rows[0].company_name,
+                    company_address: settings.rows[0].company_address,
+                    company_phone: settings.rows[0].company_phone,
+                    company_registration: settings.rows[0].company_registration,
                 },
                 accessToken: accessToken
             });
@@ -51,6 +57,7 @@ const profileRouter = async (req, res) => {
         console.log("userId", userId);
         const userDb = await db.query('SELECT * FROM employees WHERE id = $1', [userId]);
         const user = userDb.rows[0];
+        const settings = await db.query('SELECT * FROM settings WHERE id = $1', [user.company_id]);
         if (!user) {
             return res.status(401).json({ message: "Invalid authorization token" });
         } else {
@@ -63,6 +70,11 @@ const profileRouter = async (req, res) => {
                     role: user.role,
                     employee_id: user.employee_id,
                     company_id: user.company_id,
+                    currency: settings.rows[0].company_currency,
+                    company_name: settings.rows[0].company_name,
+                    company_address: settings.rows[0].company_address,
+                    company_phone: settings.rows[0].company_phone,
+                    company_registration: settings.rows[0].company_registration,
                 },
                 accessToken: accessToken
             });
@@ -161,6 +173,11 @@ const registerRouter = async (req, res) => {
             email: userDb.email,
             employee_id: userDb.employee_id,
             company_id: userDb.company_id,
+            currency: settings.rows[0].company_currency,
+            company_name: settings.rows[0].company_name,
+            company_address: settings.rows[0].company_address,
+            company_phone: settings.rows[0].company_phone,
+            company_registration: settings.rows[0].company_registration,
         },
         accessToken: accessToken
     });

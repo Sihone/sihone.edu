@@ -57,7 +57,7 @@ const ConfirmationDialog = ({
     <Dialog maxWidth="xs" open={open} onClose={onConfirmDialogClose}>
       <DialogBox>
         <Title>{title}</Title>
-        <p>{text}</p>
+        {text}
         <Controller>
           <StyledButton className="yesBtn" variant="outlined" color="primary" onClick={onYesClick}>
             Yes

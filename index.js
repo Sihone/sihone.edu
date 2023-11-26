@@ -44,6 +44,14 @@ app.post('/api/attendance', attendancePostRouter);
 app.put('/api/attendance', attendancePutRouter);
 app.delete('/api/attendance/:id', attendanceDeleteRouter);
 
+// payroll routes
+const { payrollGetAllRouter, payrollGetRouter, payrollPostRouter, payrollPutRouter, payrollDeleteRouter } = require('./server/payroll');
+app.get('/api/payroll/:company_id/:id', payrollGetRouter);
+app.get('/api/payroll/:company_id', payrollGetAllRouter);
+app.post('/api/payroll', payrollPostRouter);
+app.put('/api/payroll', payrollPutRouter);
+app.delete('/api/payroll/:id', payrollDeleteRouter);
+
 // let the react app to handle any unknown routes 
 // serve up the index.html if express does'nt recognize the route
 app.get('*', function(req, res) {
