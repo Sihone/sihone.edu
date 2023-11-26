@@ -1,0 +1,42 @@
+{
+    "payroll": {
+        "title": "Payroll Pay",
+        "table title": "Employee Payroll",
+        "table header": {
+            "employee": "Employee",
+            "pay period": "Pay Period",
+            "basic salary": "Base Salary",
+            "hourly salary": "Hourly Salary",
+            "total": "Net Salary",
+            "actions": "Actions",
+            "status": "Status",
+            "pay month": "Salary Month"
+        },
+        "slip": {
+            "employee name": "Employee Name",
+            "employee id": "Employee ID",
+            "pay period": "Pay Period",
+            "deductions": "Deductions",
+            "employee start date": "Employee Start Date",
+            "employee phone": "Employee Phone",
+            "company phone": "Company Phone",
+            "company name": "Company Name",
+            "company address": "Company Address",
+            "company registration": "Company Registration"
+        },
+        "paid": "Paid",
+        "unpaid": "Unpaid",
+        "delete dialog title": "Delete Pay Entry",
+        "delete dialog content": "Are you sure you want to delete this pay entry?",
+        "pay dialog title": "Pay Employee",
+        "pay dialog content": "Are you sure you want to pay this employee?",
+        "pay dialog date": "Pay Date",
+        "pay success": "Employee paid successfully",
+        "delete success": "Pay entry deleted successfully",
+        "pay error": "Error paying employee",
+        "delete error": "Error deleting pay entry",
+        "table year month": "Select Month and Year",
+        "table filter all": "All Employees",
+        "slip dialog title": "Pay Slip"
+    }
+}

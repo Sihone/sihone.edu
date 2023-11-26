@@ -21,6 +21,15 @@ export const navigations = [
     path: "/pages/attendance",
   },
   {
+    name: "Payroll",
+    icon: "money",
+    path: "/pages/payroll",
+    children: [
+      { name: "Payments", path: "/pages/payroll/payments", iconText: "EL" },
+      { name: "Pay Slip", path: "/pages/payroll/payslip", iconText: "NE" },
+    ],
+  },
+  {
     name: "Analytics",
     path: "/dashboard/analytics",
     icon: "analytics",

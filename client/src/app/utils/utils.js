@@ -37,3 +37,7 @@ export function generateRandomId() {
   let uid = tempId.substring(2, tempId.length - 1);
   return uid;
 }
+
+export function numberWithCommas(x = 0) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}

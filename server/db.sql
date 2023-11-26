@@ -26,6 +26,9 @@ ADD COLUMN student_id_prefix VARCHAR(255) DEFAULT 'STU';
 ALTER TABLE settings
 ADD COLUMN student_id_length INTEGER DEFAULT 9;
 
+ALTER TABLE settings
+ADD COLUMN company_registration VARCHAR(255);
+
 CREATE TABLE permissions (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -92,5 +95,20 @@ CREATE TABLE employee_attendance (
     CONSTRAINT fk_employee FOREIGN KEY (employee_id) REFERENCES employees (id)
 );
 
+-- Payroll
+CREATE TABLE payroll (
+    id SERIAL PRIMARY KEY,
+    employee_id INTEGER NOT NULL,
+    pay_period VARCHAR(255) NOT NULL,
+    base_salary VARCHAR(255) NOT NULL,
+    total_hours INTEGER NOT NULL,
+    hourly_rate INTEGER NOT NULL,
+    total_salary INTEGER NOT NULL,
+    company_id INTEGER NOT NULL,
+    CONSTRAINT fk_company FOREIGN KEY (company_id) REFERENCES settings (id),
+    CONSTRAINT fk_employee FOREIGN KEY (employee_id) REFERENCES employees (id)
+);
 
+ALTER TABLE payroll
+ADD COLUMN pay_date VARCHAR(255);
 
