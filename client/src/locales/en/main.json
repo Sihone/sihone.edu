@@ -47,6 +47,10 @@
         "home": "Home",
         "profile": "Profile",
         "settings": "Settings",
-        "logout": "Logout"
+        "logout": "Logout",
+        "city": "City",
+        "country": "Country",
+        "website": "Website",
+        "registration": "Registration Number"
     }
 }

@@ -7,9 +7,9 @@ CREATE TABLE settings (
     company_website VARCHAR(255),
     company_logo VARCHAR(255),
     company_currency VARCHAR(255) NOT NULL,
-    smtp_host VARCHAR(255) NOT NULL,
+    smtp_server VARCHAR(255) NOT NULL,
     smtp_port VARCHAR(255) NOT NULL,
-    smtp_username VARCHAR(255) NOT NULL,
+    smtp_user VARCHAR(255) NOT NULL,
     smtp_password VARCHAR(255) NOT NULL,
     smtp_security VARCHAR(255) NOT NULL
 );

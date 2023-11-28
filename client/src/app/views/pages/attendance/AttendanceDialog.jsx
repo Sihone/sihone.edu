@@ -4,7 +4,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, A
 const AttendanceDialog = ({ open, onClose, employees, save, update, attendance, t }) => {
   const [clock_in, setClockInTime] = useState('');
   const [clock_out, setClockOutTime] = useState('');
-  const [attendance_date, setAttendanceDate] = useState(null);
+  const [attendance_date, setAttendanceDate] = useState(new Date().toISOString().slice(0, 10));
   const [employee, setEmployee] = useState(null);
 
   useEffect(() => {
