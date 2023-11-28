@@ -16,7 +16,7 @@ import { Formik } from "formik";
 import { useEffect, useState } from "react";
 import CompDetailsForm from "./CompDetailsForm";
 import ContactDetailsForm from "./ContactDetailsForm";
-import useAuth from "app/hooks/useAuth";
+import { useAuth } from "app/hooks/useAuth";
 import { useNavigate, useParams } from "react-router-dom";
 import useData from "app/hooks/useData";
 import { LoadingButton } from "@mui/lab";
@@ -64,7 +64,7 @@ const CustomerForm = () => {
       .then((newEmployee) => {
         if (newEmployee) {
           enqueueSnackbar(t("employees.create success"), { variant: "success" });
-          navigate("/pages/employees/" + newEmployee.id)
+          navigate("/employees/" + newEmployee.id)
         }
       })
       .catch((err) => enqueueSnackbar(err.message || err.detail || err, { variant: "error" }));
@@ -152,7 +152,7 @@ const CustomerForm = () => {
   return (
     <Container>
       <div className="breadcrumb">
-        <Breadcrumb routeSegments={[{ name: title }]} />
+        <Breadcrumb routeSegments={[{name: t("employees.title"), path: "/employees"}, { name: title }]} />
       </div>
 
       <Card elevation={3}>
@@ -268,11 +268,14 @@ const CustomerForm = () => {
                       helperText={touched.role && errors.role}
                       error={Boolean(errors.role && touched.role)}
                     >
-                      {roles?.map((item, ind) => (
-                        <MenuItem value={item.id} key={item.name}>
-                          {item.name} - {item.description}
-                        </MenuItem>
-                      ))}
+                      {roles?.map((item, ind) => {
+                        if (item.super == 1) return null;
+                        return (
+                          <MenuItem value={item.id} key={item.name}>
+                            {item.name}{item.description ? " - " + item.description : ""}
+                          </MenuItem>
+                        )
+                      })}
                     </StyledTextField>
                   </Box>
                 </Grid>

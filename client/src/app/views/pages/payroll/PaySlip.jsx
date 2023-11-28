@@ -8,7 +8,7 @@ import { TableHead, TableToolbar } from "app/components/data-table";
 import { H5 } from "app/components/Typography";
 import useTable from "app/hooks/useTable";
 import useData from "app/hooks/useData";
-import useAuth from "app/hooks/useAuth";
+import { useAuth } from "app/hooks/useAuth";
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from "react";
 import { numberWithCommas } from "app/utils/utils";

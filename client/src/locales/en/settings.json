@@ -16,6 +16,28 @@
         "smtp password": "SMTP Password",
         "smtp security": "SMTP Security",
         "general company": "Company Details",
-        "general smtp": "SMTP Details"
+        "general smtp": "SMTP Details",
+        "roles title": "Roles & Permissions",
+        "new role": "New Role",
+        "role name": "Role Name",
+        "role description": "Description",
+        "general permissions": "Employee Permissions",
+        "select role": "Select Role",
+        "select permissions": "Select Permissions",
+        "permissions": {
+            "accounting": "Accounting",
+            "admin": "Full Control",
+            "settings": "Settings",
+            "attendance": "Attendance",
+            "payroll": "Payroll",
+            "add_employee": "Add Employee",
+            "edit_employee": "Edit Employee",
+            "delete_employee": "Delete Employee",
+            "students": "Students",
+            "academics": "Academics",
+            "reports": "Reports"
+        },
+        "role delete title": "Delete Role",
+        "role delete text": "Are you sure you want to delete this role?"
     }
 }

@@ -8,7 +8,7 @@ import * as Yup from "yup";
 import { MatxDivider } from "app/components";
 import { Paragraph } from "app/components/Typography";
 import { FlexAlignCenter, FlexBox } from "app/components/FlexBox";
-import useAuth from "app/hooks/useAuth";
+import { useAuth } from "app/hooks/useAuth";
 
 // styled components
 const ContentBox = styled(FlexAlignCenter)(({ theme }) => ({

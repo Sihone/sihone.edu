@@ -28,11 +28,11 @@ async function roleGetRouter(req, res) {
 
 async function rolesPostRouter(req, res) {
     console.log('rolesPostRouter');
-    const { company_id, name, description } = req.body;
+    const { company_id, name, description, permissions } = req.body;
     try {
         const result = await db.query(
-            'INSERT INTO roles (company_id, name, description) VALUES ($1, $2, $3) RETURNING *',
-            [company_id, name, description]
+            'INSERT INTO roles (company_id, name, description, permissions) VALUES ($1, $2, $3, $4) RETURNING *',
+            [company_id, name, description, permissions]
         );
         const role = result.rows[0];
         res.status(201).json(role);
@@ -44,11 +44,11 @@ async function rolesPostRouter(req, res) {
 
 async function rolesPutRouter(req, res) {
     console.log('rolesPutRouter');
-    const { id, name, description } = req.body;
+    const { id, name, description, permissions } = req.body;
     try {
         const result = await db.query(
-            'UPDATE roles SET name = $1, description = $2 WHERE id = $3 RETURNING *',
-            [name, description, id]
+            'UPDATE roles SET name = $1, description = $2, permissions = $3 WHERE id = $4 RETURNING *',
+            [name, description, permissions, id]
         );
         const role = result.rows[0];
         res.status(201).json(role);
@@ -63,7 +63,9 @@ async function rolesDeleteRouter(req, res) {
     const { id } = req.params;
     try {
         const result = await db.query('DELETE FROM roles WHERE id = $1 RETURNING *', [id]);
+        // return after deleting
         const role = result.rows[0];
+        console.log("Deleted", role);
         res.status(201).json(role);
     } catch (error) {
         console.log(error);

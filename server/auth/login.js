@@ -9,8 +9,7 @@ const JWT_VALIDITY = "1h";
 const loginRouter = async (req, res) => {
     console.log('POST /api/auth/login', req.body);
     const { email, password } = req.body;
-
-    const result = await db.query('SELECT * FROM employees WHERE email = $1', [email]);
+    const result = await db.query('SELECT *, employees.id AS id FROM employees LEFT JOIN roles ON role = roles.id WHERE email = $1', [email]);
     const settings = await db.query('SELECT * FROM settings WHERE id = $1', [result.rows[0].company_id]);
     const userDb = result.rows[0];
     if (!userDb) {
@@ -37,6 +36,7 @@ const loginRouter = async (req, res) => {
                     company_address: settings.rows[0].company_address,
                     company_phone: settings.rows[0].company_phone,
                     company_registration: settings.rows[0].company_registration,
+                    permissions: JSON.parse(userDb.permissions),
                 },
                 accessToken: accessToken
             });
@@ -55,7 +55,7 @@ const profileRouter = async (req, res) => {
         console.log("accessToken", accessToken);
         const { userId } = jwt.verify(accessToken, JWT_SECRET);
         console.log("userId", userId);
-        const userDb = await db.query('SELECT * FROM employees WHERE id = $1', [userId]);
+        const userDb = await db.query('SELECT *, employees.id AS id FROM employees LEFT JOIN roles ON role = roles.id WHERE employees.id = $1', [userId]);
         const user = userDb.rows[0];
         const settings = await db.query('SELECT * FROM settings WHERE id = $1', [user.company_id]);
         if (!user) {
@@ -78,6 +78,7 @@ const profileRouter = async (req, res) => {
                     company_address: settings.rows[0].company_address,
                     company_phone: settings.rows[0].company_phone,
                     company_registration: settings.rows[0].company_registration,
+                    permissions: JSON.parse(user.permissions),
                 },
                 accessToken: accessToken
             });
@@ -154,7 +155,7 @@ const registerRouter = async (req, res) => {
     const settings = await db.query('INSERT INTO settings (company_name, company_address, company_phone, company_email, company_website, company_logo, company_currency, smtp_server, smtp_port, smtp_user, smtp_password, smtp_security) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *', [company_name, company_address, company_phone, company_email, company_website, company_logo, company_currency, smtp_server, smtp_port, smtp_user, smtp_password, smtp_security]);
     const company_id = settings.rows[0].id;
 
-    const role = await db.query('INSERT INTO roles (name, description, permissions, company_id) VALUES ($1, $2, $3, $4) RETURNING *', ['SU', 'Super Admin', '', company_id]);
+    const role = await db.query('INSERT INTO roles (name, description, permissions, company_id, super) VALUES ($1, $2, $3, $4, $5) RETURNING *', ['SU', 'Super Admin', '[superadmin]', company_id, 1]);
     const role_id = role.rows[0].id;
 
     const employee_id = "SU" + company_id + "0001";
@@ -181,6 +182,7 @@ const registerRouter = async (req, res) => {
             company_address: settings.rows[0].company_address,
             company_phone: settings.rows[0].company_phone,
             company_registration: settings.rows[0].company_registration,
+            permissions: JSON.parse(role.rows[0].permissions),
         },
         accessToken: accessToken
     });

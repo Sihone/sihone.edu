@@ -6,7 +6,7 @@ import { Formik } from "formik";
 import { LoadingButton } from "@mui/lab";
 import { FlexAlignCenter } from "app/components/FlexBox";
 import { Paragraph } from "app/components/Typography";
-import useAuth from "app/hooks/useAuth";
+import { useAuth } from "app/hooks/useAuth";
 import { useSnackbar } from "notistack";
 import { useTranslation } from 'react-i18next';
 

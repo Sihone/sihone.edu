@@ -1,7 +1,7 @@
 import { Avatar, Box, Button, Card, Grid, Icon, styled, useTheme } from "@mui/material";
 import { FlexAlignCenter } from "app/components/FlexBox";
 import { H3, H4, Paragraph, Span } from "app/components/Typography";
-import useAuth from "app/hooks/useAuth";
+import { useAuth } from "app/hooks/useAuth";
 
 const FlexBox = styled(Box)(() => ({ display: "flex", alignItems: "center" }));
 

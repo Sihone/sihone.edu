@@ -3,7 +3,7 @@ import { FlexBetween } from "app/components/FlexBox";
 import MatxMenu from "app/components/MatxMenu";
 import MatxSearchBox from "app/components/MatxSearchBox";
 import MatxToolbarMenu from "app/components/MatxToolbarMenu";
-import useAuth from "app/hooks/useAuth";
+import { useAuth } from "app/hooks/useAuth";
 import useSettings from "app/hooks/useSettings";
 import { topBarHeight } from "app/utils/constant";
 import { Link } from "react-router-dom";
