@@ -1,6 +1,6 @@
 import { Box, styled } from "@mui/material";
 import MatxHorizontalNav from "app/components/MatxHorizontalNav";
-import { navigations } from "app/navigations";
+import { useNavigations } from "app/navigations";
 
 const NavbarRoot = styled("div")(({ theme }) => ({
   "&, & .horizontal-nav ul ul": {
@@ -16,6 +16,7 @@ const NavbarRoot = styled("div")(({ theme }) => ({
 }));
 
 const Layout2Navbar = () => {
+  const {navigations} = useNavigations();
   return (
     <NavbarRoot className="navbar">
       <Box pl={3}>

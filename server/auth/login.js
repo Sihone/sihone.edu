@@ -61,6 +61,9 @@ const profileRouter = async (req, res) => {
         if (!user) {
             return res.status(401).json({ message: "Invalid authorization token" });
         } else {
+            const accessToken = jwt.sign({ userId: userDb.id }, JWT_SECRET, {
+                expiresIn: JWT_VALIDITY,
+            });
             return res.status(200).json({
                 user: {
                     id: user.id,

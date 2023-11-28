@@ -1,6 +1,6 @@
 import { styled } from "@mui/material";
 import useSettings from "app/hooks/useSettings";
-import { navigations } from "app/navigations";
+import { useNavigations } from "app/navigations";
 import { Fragment, useCallback } from "react";
 import Scrollbar from "react-perfect-scrollbar";
 import MatxVerticalNav from "./MatxVerticalNav/MatxVerticalNav";
@@ -28,6 +28,7 @@ const Sidenav = ({ children }) => {
   // const { user } = useAuth();
   const { settings, updateSettings } = useSettings();
   const { mode } = settings.layout1Settings.leftSidebar;
+  const {navigations} = useNavigations();
 
   const updateSidebarMode = useCallback(
     (sidebarSettings) => {
