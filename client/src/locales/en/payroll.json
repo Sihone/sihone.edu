@@ -37,6 +37,7 @@
         "delete error": "Error deleting pay entry",
         "table year month": "Select Month and Year",
         "table filter all": "All Employees",
-        "slip dialog title": "Pay Slip"
+        "slip dialog title": "Pay Slip",
+        "slip title": "Pay Slips"
     }
 }

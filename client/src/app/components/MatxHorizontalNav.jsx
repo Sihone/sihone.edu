@@ -1,5 +1,5 @@
 import { Icon, styled } from "@mui/material";
-import { navigations } from "app/navigations";
+import { useNavigations } from "app/navigations";
 import { NavLink } from "react-router-dom";
 
 const StyledIcon = styled(Icon)(() => ({
@@ -8,6 +8,7 @@ const StyledIcon = styled(Icon)(() => ({
 }));
 
 const MatxHorizontalNav = ({ max }) => {
+  const {navigations} = useNavigations();
   // let navigation = useSelector(({ navigations }) => navigations);
   if (navigations.length === 0) {
     return null;

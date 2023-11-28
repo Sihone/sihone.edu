@@ -94,7 +94,7 @@ const Payroll = () => {
     <Container>
       <div className="breadcrumb" style={{display: "flex", justifyContent: "space-between"}}>
         <Breadcrumb
-          routeSegments={[{ name: t("payroll.title") }]}
+          routeSegments={[{ name: t("payroll.slip title") }]}
         />
       </div>
 

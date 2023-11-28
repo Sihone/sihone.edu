@@ -23,27 +23,27 @@ const Payroll = Loadable(lazy(() => import("./payroll/Payroll")));
 const PaySlip = Loadable(lazy(() => import("./payroll/PaySlip")));
 
 const pagesRoutes = [
-  { path: "/pages/user-list-1", element: <UserList1 /> },
-  { path: "/pages/user-list-2", element: <UserList2 /> },
-  { path: "/pages/user-list-3", element: <UserList3 /> },
-  { path: "/pages/user-list-4", element: <UserList4 /> },
-  { path: "/pages/faq-1", element: <Faq1 /> },
-  { path: "/pages/faq-2", element: <Faq2 /> },
-  { path: "/pages/customer-list", element: <CustomerList /> },
-  { path: "/pages/new-customer", element: <CustomerForm /> },
-  { path: "/pages/view-customer", element: <CustomerViewer /> },
-  { path: "/pages/product-list", element: <ProductList /> },
-  { path: "/pages/new-product", element: <ProductForm /> },
-  { path: "/pages/view-product", element: <ProductViewer /> },
-  { path: "/pages/order-list", element: <OrderList /> },
+  { path: "/user-list-1", element: <UserList1 /> },
+  { path: "/user-list-2", element: <UserList2 /> },
+  { path: "/user-list-3", element: <UserList3 /> },
+  { path: "/user-list-4", element: <UserList4 /> },
+  { path: "/faq-1", element: <Faq1 /> },
+  { path: "/faq-2", element: <Faq2 /> },
+  { path: "/customer-list", element: <CustomerList /> },
+  { path: "/new-customer", element: <CustomerForm /> },
+  { path: "/view-customer", element: <CustomerViewer /> },
+  { path: "/product-list", element: <ProductList /> },
+  { path: "/new-product", element: <ProductForm /> },
+  { path: "/view-product", element: <ProductViewer /> },
+  { path: "/order-list", element: <OrderList /> },
 
-  { path: "/pages/employees", element: <EmployeeList /> },
-  { path: "/pages/employees/:id", element: <EmployeeForm /> },
-  { path: "/pages/new-employee", element: <EmployeeForm /> },
+  { path: "/employees", element: <EmployeeList /> },
+  { path: "/employees/:id", element: <EmployeeForm /> },
+  { path: "/new-employee", element: <EmployeeForm /> },
   
-  { path: "/pages/attendance", element: <AttendanceList />},
-  { path: "/pages/payroll/payments", element: <Payroll />},
-  { path: "/pages/payroll/payslip", element: <PaySlip />},
+  { path: "/attendance", element: <AttendanceList />},
+  { path: "/payroll/payments", element: <Payroll />},
+  { path: "/payroll/payslip", element: <PaySlip />},
 ];
 
 export default pagesRoutes;
