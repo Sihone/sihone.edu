@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Card, Grid, styled } from "@mui/material";
 import { FlexAlignCenter } from "app/components/FlexBox";
 import { Paragraph } from "app/components/Typography";
-import useAuth from "app/hooks/useAuth";
+import { useAuth } from "app/hooks/useAuth";
 
 // styled components
 const Auth0Root = styled(FlexAlignCenter)({

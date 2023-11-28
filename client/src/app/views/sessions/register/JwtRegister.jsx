@@ -5,7 +5,7 @@ import { Box, Button, Card, Checkbox, Collapse, Grid, Select, styled, TextField,
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { Paragraph } from "app/components/Typography";
-import useAuth from "app/hooks/useAuth";
+import { useAuth } from "app/hooks/useAuth";
 import { FlexAlignCenter } from "app/components/FlexBox";
 import { useTranslation } from 'react-i18next';
 import { Add, Minimize } from "@mui/icons-material";

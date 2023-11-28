@@ -22,6 +22,7 @@ const AttendanceList = Loadable(lazy(() => import("./attendance/AttendanceList")
 const Payroll = Loadable(lazy(() => import("./payroll/Payroll")));
 const PaySlip = Loadable(lazy(() => import("./payroll/PaySlip")));
 const General = Loadable(lazy(() => import("./settings/General")));
+const Roles = Loadable(lazy(() => import("./settings/Roles")));
 
 const pagesRoutes = [
   { path: "/user-list-1", element: <UserList1 /> },
@@ -47,6 +48,7 @@ const pagesRoutes = [
   { path: "/payroll/payslip", element: <PaySlip />},
   
   { path: "/settings/general", element: <General />},
+  { path: "/settings/roles", element: <Roles />},
 ];
 
 export default pagesRoutes;

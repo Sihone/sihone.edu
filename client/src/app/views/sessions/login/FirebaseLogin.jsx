@@ -9,7 +9,7 @@ import * as Yup from "yup";
 import { MatxDivider, MatxLogo } from "app/components";
 import { FlexAlignCenter, FlexBox } from "app/components/FlexBox";
 import { Paragraph, Span } from "app/components/Typography";
-import useAuth from "app/hooks/useAuth";
+import { useAuth } from "app/hooks/useAuth";
 
 // styled components
 const GoogleButton = styled(Button)(({ theme }) => ({

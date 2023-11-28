@@ -11,7 +11,7 @@ import { Breadcrumb } from "app/components";
 import { H4 } from "app/components/Typography";
 import { Formik } from "formik";
 import { useEffect, useState } from "react";
-import useAuth from "app/hooks/useAuth";
+import { useAuth } from "app/hooks/useAuth";
 import useData from "app/hooks/useData";
 import { LoadingButton } from "@mui/lab";
 import { useSnackbar } from "notistack";
@@ -36,7 +36,7 @@ const CustomerForm = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { t } = useTranslation();
   const {user} = useAuth();
-  const {data, error, updateData} = useData("/settings", user.company_id);
+  const {data, error, updateData} = useData("settings", user.company_id);
 
   const handleGeneralSubmit = async (values) => {
     console.log(values);
@@ -167,6 +167,8 @@ const CustomerForm = () => {
                     onChange={handleChange}
                     sx={{ minWidth: 208 }}
                     InputLabelProps={{ shrink: !!values.company_name }}
+                    error={Boolean(errors.company_name && touched.company_name)}
+                    helperText={touched.company_name && errors.company_name}
                   />
                 </Grid>
 
@@ -185,6 +187,8 @@ const CustomerForm = () => {
                       onChange={handleChange}
                       InputLabelProps={{ shrink: !!values.company_address1 }}
                       sx={{ minWidth: 208 }}
+                      error={Boolean(errors.company_address1 && touched.company_address1)}
+                      helperText={touched.company_address1 && errors.company_address1}
                     />
                     <StyledTextField
                       size="small"
@@ -195,6 +199,8 @@ const CustomerForm = () => {
                       onChange={handleChange}
                       InputLabelProps={{ shrink: !!values.company_address2 }}
                       sx={{ minWidth: 208 }}
+                      error={Boolean(errors.company_address2 && touched.company_address2)}
+                      helperText={touched.company_address2 && errors.company_address2}
                     />
                   </Box>
                 </Grid>
@@ -369,6 +375,8 @@ const CustomerForm = () => {
                     onChange={handleChange}
                     sx={{ minWidth: 208 }}
                     InputLabelProps={{ shrink: !!values.smtp_server }}
+                    error={Boolean(errors.smtp_server && touched.smtp_server)}
+                    helperText={touched.smtp_server && errors.smtp_server}
                   />
                 </Grid>
 
@@ -386,6 +394,8 @@ const CustomerForm = () => {
                     onChange={handleChange}
                     sx={{ minWidth: 208 }}
                     InputLabelProps={{ shrink: !!values.smtp_port }}
+                    error={Boolean(errors.smtp_port && touched.smtp_port)}
+                    helperText={touched.smtp_port && errors.smtp_port}
                   />
                 </Grid>
 
@@ -403,6 +413,8 @@ const CustomerForm = () => {
                     onChange={handleChange}
                     sx={{ minWidth: 208 }}
                     InputLabelProps={{ shrink: !!values.smtp_user }}
+                    error={Boolean(errors.smtp_user && touched.smtp_user)}
+                    helperText={touched.smtp_user && errors.smtp_user}
                   />
                 </Grid>
 
@@ -420,6 +432,8 @@ const CustomerForm = () => {
                     onChange={handleChange}
                     sx={{ minWidth: 208 }}
                     InputLabelProps={{ shrink: !!values.smtp_password }}
+                    error={Boolean(errors.smtp_password && touched.smtp_password)}
+                    helperText={touched.smtp_password && errors.smtp_password}
                   />
                 </Grid>
 
@@ -437,6 +451,8 @@ const CustomerForm = () => {
                     onChange={handleChange}
                     sx={{ minWidth: 208 }}
                     InputLabelProps={{ shrink: !!values.smtp_security }}
+                    error={Boolean(errors.smtp_security && touched.smtp_security)}
+                    helperText={touched.smtp_security && errors.smtp_security}
                   />
                 </Grid>
               </Grid>

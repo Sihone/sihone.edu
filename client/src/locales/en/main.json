@@ -40,8 +40,8 @@
             "control panel": "Control Panel",
             "settings": "General Settings",
             "my account": "My Account",
-            "employees settings": "Employees Settings",
-            "academics settings": "Academics Settings",
+            "settings roles": "Roles & Permissions",
+            "settings academics": "Academics Settings",
             "reports": "Generate Reports"
         },
         "home": "Home",
@@ -51,6 +51,8 @@
         "city": "City",
         "country": "Country",
         "website": "Website",
-        "registration": "Registration Number"
+        "registration": "Registration Number",
+        "delete": "Delete",
+        "success": "Success"
     }
 }

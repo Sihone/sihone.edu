@@ -1,4 +1,4 @@
-import useAuth from "app/hooks/useAuth";
+import { useAuth } from "app/hooks/useAuth";
 import { Navigate, useLocation } from "react-router-dom";
 
 // const userHasPermission = (pathname, user, routes) => {

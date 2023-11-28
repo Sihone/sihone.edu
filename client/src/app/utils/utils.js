@@ -41,3 +41,12 @@ export function generateRandomId() {
 export function numberWithCommas(x = 0) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
+export function hasAccess(permissions, permission) {
+  if (permissions.includes(permission)) {
+    return true;
+  } else if (permissions.includes("superadmin") || permissions.includes("admin")) {
+    return true;
+  }
+  return false;
+}

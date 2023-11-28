@@ -1,9 +1,13 @@
 import { authRoles } from "app/auth/authRoles";
 import { useTranslation } from 'react-i18next';
+import { useAuth, getSections } from "./hooks/useAuth";
+import { hasAccess } from "./utils/utils";
 
 export const useNavigations = () => {
   const {t} = useTranslation();
-  return {
+  const { user } = useAuth();
+  const sections = getSections(t);
+  const nav = {
     navigations: [
       {
         name: t('main.menu.dashboard'),
@@ -11,16 +15,16 @@ export const useNavigations = () => {
         icon: "dashboard",
         auth: authRoles.sa, // ONLY SUPER ADMIN(SA) CAN ACCESS
       },
-      {
+      (hasAccess(user.permissions, sections.delete_employee.id) || hasAccess(user.permissions, sections.add_employee.id) || hasAccess(user.permissions, sections.attendance.id)) && {
         name: t('main.menu.employees'),
         icon: "people",
         children: [
-          { name: "Employee List", path: "/employees", iconText: "EL" },
-          { name: "New Employee", path: "/new-employee", iconText: "NE" },
-          { name: "Attendance", path: "/attendance", iconText: "AT" },
+          hasAccess(user.permissions, sections.delete_employee.id) && { name: "Employee List", path: "/employees", iconText: "EL" },
+          hasAccess(user.permissions, sections.add_employee.id) && { name: "New Employee", path: "/new-employee", iconText: "NE" },
+          hasAccess(user.permissions, sections.attendance.id) && { name: "Attendance", path: "/attendance", iconText: "AT" },
         ],
       },
-      {
+      hasAccess(user.permissions, sections.payroll.id) && {
         name: t('main.menu.payroll'),
         icon: "money",
         path: "/payroll",
@@ -29,7 +33,7 @@ export const useNavigations = () => {
           { name: t('main.menu.pay slips'), path: "/payroll/payslip", iconText: "PS" },
         ],
       },
-      {
+      hasAccess(user.permissions, sections.academics.id) && {
         name: t('main.menu.academics'),
         icon: "business",
         children: [
@@ -40,7 +44,7 @@ export const useNavigations = () => {
           { name: t('main.menu.grading'), path: "/grading", iconText: "GD" },
         ],
       },
-      {
+      hasAccess(user.permissions, sections.students.id) && {
         name: t('main.menu.students'),
         icon: "school",
         children: [
@@ -50,7 +54,7 @@ export const useNavigations = () => {
           { name: t('main.menu.attendance'), path: "/attendance", iconText: "AT" },
         ],
       },
-      {
+      hasAccess(user.permissions, sections.accounting.id) && {
         name: t('main.menu.finance'),
         icon: "account_balance",
         children: [
@@ -58,14 +62,14 @@ export const useNavigations = () => {
           { name: t('main.menu.transactions'), path: "/transactions", iconText: "TR" },
         ],
       },
-      {
+      (hasAccess(user.permissions, sections.settings.id) || hasAccess(user.permissions, sections.reports.id) || hasAccess(user.permissions, sections.academics.id)) && {
         name: t('main.menu.control panel'),
         icon: "settings",
         children: [
           { name: t('main.menu.settings'), path: "/settings/general", iconText: "ST" },
-          { name: t('main.menu.employees settings'), path: "/settings/employees", iconText: "EM" },
-          { name: t('main.menu.academics settings'), path: "/settings/academics", iconText: "US" },
-          { name: t('main.menu.reports'), path: "/reports", iconText: "RP" },
+          { name: t('main.menu.settings roles'), path: "/settings/roles", iconText: "EM" },
+          hasAccess(user.permissions, sections.academics.id) && { name: t('main.menu.settings academics'), path: "/settings/academics", iconText: "US" },
+          hasAccess(user.permissions, sections.reports.id) && { name: t('main.menu.reports'), path: "/reports", iconText: "RP" },
         ],
       },
       {
@@ -270,4 +274,7 @@ export const useNavigations = () => {
       },
     ]
   }
+  // remove null, undefined, empty string and false items from array
+  nav.navigations = nav.navigations.filter(item => item);
+  return nav;
 } 

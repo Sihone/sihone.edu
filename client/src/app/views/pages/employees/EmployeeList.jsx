@@ -10,7 +10,7 @@ import { H5 } from "app/components/Typography";
 import useTable from "app/hooks/useTable";
 import useData from "app/hooks/useData";
 import { useNavigate } from "react-router-dom";
-import useAuth from "app/hooks/useAuth";
+import { useAuth } from "app/hooks/useAuth";
 import { useTranslation } from 'react-i18next';
 
 // styled components
@@ -127,7 +127,7 @@ const EmployeeList = () => {
                       <TableCell align="left">{row.role}</TableCell>
 
                       <TableCell align="center">
-                        <IconButton onClick={() => navigate("/pages/employees/" + row.id)}>
+                        <IconButton onClick={() => navigate("/employees/" + row.id)}>
                           <Edit />
                         </IconButton>
 

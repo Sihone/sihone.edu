@@ -15,7 +15,7 @@ import { FlexBetween } from "app/components/FlexBox";
 import MatxMenu from "app/components/MatxMenu";
 import { themeShadows } from "app/components/MatxTheme/themeColors";
 import { Span } from "app/components/Typography";
-import useAuth from "app/hooks/useAuth";
+import { useAuth } from "app/hooks/useAuth";
 import useSettings from "app/hooks/useSettings";
 import { topBarHeight } from "app/utils/constant";
 import React from "react";

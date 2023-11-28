@@ -21,7 +21,7 @@ import {
 import { MatxMenu } from "app/components";
 import { FlexBetween } from "app/components/FlexBox";
 import { H6, Paragraph, Small, Span } from "app/components/Typography";
-import useAuth from "app/hooks/useAuth";
+import { useAuth } from "app/hooks/useAuth";
 import { updateCardInList } from "app/redux/slices/scrumSlice";
 import { generateRandomId, getTimeDifference } from "app/utils/utils.js";
 import { useEffect, useState } from "react";

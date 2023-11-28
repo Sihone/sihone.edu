@@ -91,13 +91,32 @@ const useData = (type, company_id, id) => {
   const deleteData = async (dataId) => {
     console.log(`deleteData-${type}: ` + dataId);
     try {
-      await fetch(`/api/${type}/${dataId}`, {
+      const response = await fetch(`/api/${type}/${dataId}`, {
         method: 'DELETE',
       });
-      const returnData = data.filter(item => item.id !== dataId);
-      setData(returnData);
+
+      const responseData = await response.json();
+      if (!responseData.id) {
+        setError(responseData);
+        setTimeout(function(){
+          setError(null);
+        }, 5000);
+        setSuccess(null);
+        return null;
+      } else {
+        setSuccess(`${type} deleted successfully`);
+        setTimeout(function(){
+          setSuccess(null);
+        }, 5000);
+        const returnData = data.filter(item => item.id !== responseData.id);
+        setData(returnData);
+        return responseData;
+      }
     } catch (error) {
       setError(error);
+      setTimeout(function(){
+        setError(null);
+      }, 5000);
     }
   };
 
