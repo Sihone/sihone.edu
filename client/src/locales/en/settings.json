@@ -1,0 +1,21 @@
+{
+    "settings": {
+        "title": "Control Panel",
+        "general title": "General Settings",
+        "company name": "Company Name",
+        "company address": "Company Address",
+        "company phone": "Company Phone",
+        "company email": "Company Email",
+        "company website": "Company Website",
+        "company logo": "Company Logo",
+        "company registration": "Company Registration",
+        "company currency": "Company Currency",
+        "smtp server": "SMTP Server",
+        "smtp port": "SMTP Port",
+        "smtp user": "SMTP User",
+        "smtp password": "SMTP Password",
+        "smtp security": "SMTP Security",
+        "general company": "Company Details",
+        "general smtp": "SMTP Details"
+    }
+}

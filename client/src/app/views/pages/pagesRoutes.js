@@ -21,6 +21,7 @@ const EmployeeForm = Loadable(lazy(() => import("./employees/customer-form/Custo
 const AttendanceList = Loadable(lazy(() => import("./attendance/AttendanceList")));
 const Payroll = Loadable(lazy(() => import("./payroll/Payroll")));
 const PaySlip = Loadable(lazy(() => import("./payroll/PaySlip")));
+const General = Loadable(lazy(() => import("./settings/General")));
 
 const pagesRoutes = [
   { path: "/user-list-1", element: <UserList1 /> },
@@ -44,6 +45,8 @@ const pagesRoutes = [
   { path: "/attendance", element: <AttendanceList />},
   { path: "/payroll/payments", element: <Payroll />},
   { path: "/payroll/payslip", element: <PaySlip />},
+  
+  { path: "/settings/general", element: <General />},
 ];
 
 export default pagesRoutes;

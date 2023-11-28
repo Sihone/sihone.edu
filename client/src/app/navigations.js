@@ -62,10 +62,10 @@ export const useNavigations = () => {
         name: t('main.menu.control panel'),
         icon: "settings",
         children: [
-          { name: t('main.menu.employees settings'), path: "/employees/settings", iconText: "EM" },
-          { name: t('main.menu.academics settings'), path: "/academics/settings", iconText: "US" },
+          { name: t('main.menu.settings'), path: "/settings/general", iconText: "ST" },
+          { name: t('main.menu.employees settings'), path: "/settings/employees", iconText: "EM" },
+          { name: t('main.menu.academics settings'), path: "/settings/academics", iconText: "US" },
           { name: t('main.menu.reports'), path: "/reports", iconText: "RP" },
-          { name: t('main.menu.settings'), path: "/settings", iconText: "ST" },
         ],
       },
       {

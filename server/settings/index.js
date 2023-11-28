@@ -15,11 +15,11 @@ async function settingGetRouter (req, res) {
 
 async function settingPutRouter (req, res) {
     console.log('settingPutRouter');
-    const { id, company_name, company_address, company_phone, company_email, company_website, company_logo, company_currency, smtp_host, smtp_port, smtp_username, smtp_password, smtp_security } = req.body;
+    const { id, company_name, company_address, company_phone, company_email, company_website, company_logo, company_currency, smtp_server, smtp_port, smtp_user, smtp_password, smtp_security, company_registration } = req.body;
     try {
         const result = await db.query(
-            'UPDATE settings SET company_name = $1, company_address = $2, company_phone = $3, company_email = $4, company_website = $5, company_logo = $6, company_currency = $7, smtp_host = $8, smtp_port = $9, smtp_username = $10, smtp_password = $11, smtp_security = $12 WHERE id = $13 RETURNING *',
-            [company_name, company_address, company_phone, company_email, company_website, company_logo, company_currency, smtp_host, smtp_port, smtp_username, smtp_password, smtp_security, id]
+            'UPDATE settings SET company_name = $1, company_address = $2, company_phone = $3, company_email = $4, company_website = $5, company_logo = $6, company_currency = $7, smtp_server = $8, smtp_port = $9, smtp_user = $10, smtp_password = $11, smtp_security = $12, company_registration = $13 WHERE id = $14 RETURNING *',
+            [company_name, company_address, company_phone, company_email, company_website, company_logo, company_currency, smtp_server, smtp_port, smtp_user, smtp_password, smtp_security, company_registration, id]
         );
         const setting = result.rows[0];
         res.status(201).json(setting);

@@ -11,7 +11,7 @@ const UserList2 = () => {
   return (
     <Container>
       <div className="breadcrumb">
-        <Breadcrumb routeSegments={[{ name: "Pages", path: "/pages" }, { name: "User List 2" }]} />
+        <Breadcrumb routeSegments={[{ name: "User List 2" }]} />
       </div>
 
       <Grid container spacing={3}>

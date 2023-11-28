@@ -49,7 +49,7 @@ const initialValues = {
   company_currency: "FCFA",
   smtp_server: "",
   smtp_port: "",
-  smtp_username: "",
+  smtp_user: "",
   smtp_password: "",
   smtp_security: "SSL",
 
@@ -395,14 +395,14 @@ const JwtRegister = () => {
                         fullWidth
                         size="small"
                         type="text"
-                        name="smtp_username"
+                        name="smtp_user"
                         label={t('register.smtp username')}
                         variant="outlined"
                         onBlur={handleBlur}
-                        value={values.smtp_username}
+                        value={values.smtp_user}
                         onChange={handleChange}
-                        helperText={touched.smtp_username && errors.smtp_username}
-                        error={Boolean(errors.smtp_username && touched.smtp_username)}
+                        helperText={touched.smtp_user && errors.smtp_user}
+                        error={Boolean(errors.smtp_user && touched.smtp_user)}
                         sx={{ mb: 3 }}
                         style={{width: "calc(50% - 10px)"}}
                       />

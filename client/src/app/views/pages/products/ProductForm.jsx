@@ -52,7 +52,7 @@ const ProductForm = () => {
   return (
     <Container>
       <div className="breadcrumb">
-        <Breadcrumb routeSegments={[{ name: "Pages", path: "/pages" }, { name: "New Product" }]} />
+        <Breadcrumb routeSegments={[{ name: "New Product" }]} />
       </div>
 
       <Card elevation={3}>

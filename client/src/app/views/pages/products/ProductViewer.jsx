@@ -47,7 +47,7 @@ const ProductViewer = () => {
   return (
     <Container>
       <Container>
-        <Breadcrumb routeSegments={[{ name: "Pages", path: "/pages" }, { name: "View Product" }]} />
+        <Breadcrumb routeSegments={[{ name: "View Product" }]} />
       </Container>
 
       <Card sx={{ px: 4, py: 4 }} elevation={3}>

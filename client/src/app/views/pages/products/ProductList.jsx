@@ -105,7 +105,7 @@ const ProductList = () => {
   return (
     <Container>
       <div className="breadcrumb">
-        <Breadcrumb routeSegments={[{ name: "Pages", path: "/pages" }, { name: "Product List" }]} />
+        <Breadcrumb routeSegments={[{ name: "Product List" }]} />
       </div>
 
       <Paper sx={{ width: "100%", mb: 2 }}>
