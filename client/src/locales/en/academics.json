@@ -9,12 +9,18 @@
             "end date": "End Date",
             "grade total": "Grade Total",
             "active": "Currently Active",
+            "name": "Name",
             "name en": "Name (English)",
             "name fr": "Name (French)",
             "actions": "Actions",
             "cycle": "Academic Cycle",
             "price": "Tuition Price",
-            "head": "Head of Program"
+            "head": "Head of Program",
+            "program": "Programs",
+            "coefficient": "Coefficient",
+            "description": "Description",
+            "excluded academic year": "Excluded Years",
+            "course head": "Teacher"
         },
         "dialog title": "Add Academic Year",
         "dialog title edit": "Edit Academic Year",
@@ -35,6 +41,12 @@
         "dialod program title": "Add Program",
         "dialod program title edit": "Edit Program",
         "select cycle": "Select Academic Cycle",
-        "select employee": "Select Employee"
+        "select employee": "Select Employee",
+        "no program": "No Programs",
+        "no excluded academic year": "-",
+        "select academic year": "Select Academic Year",
+        "select programs": "Select Programs",
+        "courses": "Courses",
+        "all courses": "All Courses"
     }
 }
