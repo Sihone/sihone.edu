@@ -148,3 +148,16 @@ REFERENCES academic_years (id);
 ALTER TABLE settings
 ADD COLUMN current_academic_cycle INTEGER
 REFERENCES academic_cycles (id);
+
+CREATE TABLE academic_programs (
+    id SERIAL PRIMARY KEY,
+    name_en VARCHAR(255) NOT NULL,
+    name_fr VARCHAR(255) NOT NULL,
+    cycle INTEGER NOT NULL,
+    price VARCHAR(255) NOT NULL,
+    head INTEGER NOT NULL,
+    company_id INTEGER NOT NULL,
+    CONSTRAINT fk_company FOREIGN KEY (company_id) REFERENCES settings (id),
+    CONSTRAINT fk_cycle FOREIGN KEY (cycle) REFERENCES academic_cycles (id),
+    CONSTRAINT fk_head FOREIGN KEY (head) REFERENCES employees (id)
+);
