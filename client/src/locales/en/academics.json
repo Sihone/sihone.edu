@@ -20,7 +20,8 @@
             "coefficient": "Coefficient",
             "description": "Description",
             "excluded academic year": "Excluded Years",
-            "course head": "Teacher"
+            "course head": "Teacher",
+            "course": "Courses"
         },
         "dialog title": "Add Academic Year",
         "dialog title edit": "Edit Academic Year",
@@ -47,6 +48,17 @@
         "select academic year": "Select Academic Year",
         "select programs": "Select Programs",
         "courses": "Courses",
-        "all courses": "All Courses"
+        "all courses": "All Courses",
+        "modules": "Modules",
+        "all modules": "All Modules",
+        "no course": "No Courses",
+        "delete course title": "Delete Course",
+        "delete course content": "Are you sure you want to delete this course?",
+        "delete module title": "Delete Module",
+        "delete module content": "Are you sure you want to delete this module?",
+        "dialog course title": "Add Course",
+        "dialog course title edit": "Edit Course",
+        "dialog module title": "Add Module",
+        "dialog module title edit": "Edit Module"
     }
 }

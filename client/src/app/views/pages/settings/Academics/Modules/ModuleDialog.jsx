@@ -1,27 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem } from '@mui/material';
 
-const ProgramDialog = ({ open, onClose, save, update, course, t, i18n, employees, programs, academic_years }) => {
+const CourseDialog = ({ open, onClose, save, update, module, t, i18n, employees, courses }) => {
   const [name_en, setNameEn] = useState('');
   const [name_fr, setNameFr] = useState('');
-  const [selectedPrograms, setSelectedPrograms] = useState([]);
+  const [selectedCourses, setSelectedCourses] = useState([]);
   const [coefficient, setCoefficient] = useState(null);
   const [description, setDescription] = useState(null);
   const [employee, setEmployee] = useState(null);
-  const [excludedAcademicYears, setExcludedAcademicYears] = useState([]);
 
   useEffect(() => {
-    if (open && course) {
-        const _employee = employees.find((item) => item.id == course.employee_id);
-        setNameEn(course.name_en);
-        setNameFr(course.name_fr);
-        setSelectedPrograms(JSON.parse(course.program_ids || '[]'));
-        setCoefficient(course.coefficient);
-        setDescription(course.description);
+    if (open && module) {
+        const _employee = employees.find((item) => item.id == module.employee_id);
+        setNameEn(module.name_en);
+        setNameFr(module.name_fr);
+        setSelectedCourses(JSON.parse(module.course_ids || '[]'));
+        setCoefficient(module.coefficient);
+        setDescription(module.description);
         setEmployee(_employee);
-        setExcludedAcademicYears(JSON.parse(course.exempted_academic_years || '[]'));
     }
-  }, [course]);
+  }, [module]);
 
   useEffect(() => {
     if (!open) {
@@ -30,26 +28,24 @@ const ProgramDialog = ({ open, onClose, save, update, course, t, i18n, employees
   }, [open]);
 
   const handleSave = () => {
-    if (course) {
+    if (module) {
       update({
-        id: course.id,
+        id: module.id,
         name_en,
         name_fr,
-        program_ids: JSON.stringify(selectedPrograms),
+        course_ids: JSON.stringify(selectedCourses),
         coefficient,
         description,
-        employee_id: employee && employee.id,
-        exempted_academic_years: JSON.stringify(excludedAcademicYears)
+        employee_id: employee && employee.id
       });
     } else {
         save({
             name_en,
             name_fr,
-            program_ids: JSON.stringify(selectedPrograms),
+            course_ids: JSON.stringify(selectedCourses),
             coefficient,
             description,
-            employee_id: employee && employee.id,
-            exempted_academic_years: JSON.stringify(excludedAcademicYears)
+            employee_id: employee && employee.id
         });
     }
     resetForm();
@@ -57,17 +53,16 @@ const ProgramDialog = ({ open, onClose, save, update, course, t, i18n, employees
   }
 
   const disableSubmitButton = () => {
-    return !name_en || !name_fr || selectedPrograms.length === 0 || !coefficient;
+    return !name_en || !name_fr || !coefficient;
   }
 
   const resetForm = () => {
     setNameEn('');
     setNameFr('');
-    setSelectedPrograms([]);
+    setSelectedCourses([]);
     setDescription(null);
     setEmployee(null);
     setCoefficient(null);
-    setExcludedAcademicYears([]);
   }
 
   const handleClose = () => {
@@ -75,16 +70,14 @@ const ProgramDialog = ({ open, onClose, save, update, course, t, i18n, employees
     onClose();
   }
 
-  const handleProgramChange = (e) => {
-    let _selectedPrograms = e.target.value;
-    _selectedPrograms = _selectedPrograms.filter((item) => item);
-    setSelectedPrograms(_selectedPrograms);
-  }
-
-  const handleExcludedAcademicYearChange = (e) => {
-    let _excludedAcademicYears = e.target.value;
-    _excludedAcademicYears = _excludedAcademicYears.filter((item) => item);
-    setExcludedAcademicYears(_excludedAcademicYears);
+  const handleCourseChange = (e) => {
+    let _selectedCourses = e.target.value;
+    _selectedCourses.forEach((item, index) => {
+      if (item == null) {
+        _selectedCourses = [];
+      }
+    });
+    setSelectedCourses(_selectedCourses);
   }
 
   const handlEmployeeChange = (e) => {
@@ -94,7 +87,7 @@ const ProgramDialog = ({ open, onClose, save, update, course, t, i18n, employees
 
   return (
     <Dialog open={open} onClose={handleClose} minWidth="md">
-      <DialogTitle>{course ? t("academics.dialog course title edit") : t("academics.dialog course title")}</DialogTitle>
+      <DialogTitle>{module ? t("academics.dialog module title edit") : t("academics.dialog module title")}</DialogTitle>
       <DialogContent style={{display: "flex", flexDirection: "column", gap: "16px"}}>
         <TextField
           autoFocus
@@ -116,30 +109,6 @@ const ProgramDialog = ({ open, onClose, save, update, course, t, i18n, employees
           onChange={(e) => setNameFr(e.target.value)}
         />
         <TextField
-          select
-          size="small"
-          name="role"
-          label={t("academics.table header.program")}
-          variant="outlined"
-          fullWidth
-          value={selectedPrograms}
-          onChange={handleProgramChange}
-          InputLabelProps={{
-            shrink: selectedPrograms.length > 0,
-          }}
-          SelectProps={{multiple: true}}
-        >
-          <MenuItem value={null}>{t("academics.select programs")}</MenuItem>
-          {programs?.map((item) => {
-            const _name = i18n.language == "en" ? item.name_en : item.name_fr;
-            return (
-              <MenuItem value={item.id} key={item.id}>
-                {_name}
-              </MenuItem>
-            )
-          })}
-        </TextField>
-        <TextField
           margin="dense"
           id="coefficient"
           label={t("academics.table header.coefficient")}
@@ -148,6 +117,30 @@ const ProgramDialog = ({ open, onClose, save, update, course, t, i18n, employees
           value={coefficient}
           onChange={(e) => setCoefficient(e.target.value)}
         />
+        <TextField
+          select
+          size="small"
+          name="role"
+          label={t("academics.table header.course")}
+          variant="outlined"
+          fullWidth
+          value={selectedCourses}
+          onChange={handleCourseChange}
+          InputLabelProps={{
+            shrink: selectedCourses.length > 0,
+          }}
+          SelectProps={{multiple: true}}
+        >
+          <MenuItem value={null}>{t("academics.select courses")}</MenuItem>
+          {courses?.map((item) => {
+            const _name = i18n.language == "en" ? item.name_en : item.name_fr;
+            return (
+              <MenuItem value={item.id} key={item.id}>
+                {_name}
+              </MenuItem>
+            )
+          })}
+        </TextField>
         <TextField
           margin="dense"
           id="description"
@@ -180,29 +173,6 @@ const ProgramDialog = ({ open, onClose, save, update, course, t, i18n, employees
             )
           })}
         </TextField>
-        <TextField
-          select
-          size="small"
-          name="role"
-          label={t("academics.table header.excluded academic year")}
-          variant="outlined"
-          fullWidth
-          value={excludedAcademicYears}
-          onChange={handleExcludedAcademicYearChange}
-          InputLabelProps={{
-            shrink: excludedAcademicYears.length > 0,
-          }}
-          SelectProps={{multiple: true}}
-        >
-          <MenuItem value={null}>{t("academics.select academic year")}</MenuItem>
-          {academic_years?.map((item) => {
-            return (
-              <MenuItem value={item.id} key={item.id}>
-                {item.name}
-              </MenuItem>
-            )
-          })}
-        </TextField>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="secondary">
@@ -216,4 +186,4 @@ const ProgramDialog = ({ open, onClose, save, update, course, t, i18n, employees
   );
 };
 
-export default ProgramDialog;
+export default CourseDialog;
