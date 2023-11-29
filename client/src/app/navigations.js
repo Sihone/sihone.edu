@@ -37,6 +37,7 @@ export const useNavigations = () => {
         name: t('main.menu.academics'),
         icon: "business",
         children: [
+          { name: t('main.menu.academic years'), path: "/years-cycles", iconText: "AY" },
           { name: t('main.menu.programs'), path: "/programs", iconText: "PR"},
           { name: t('main.menu.courses'), path: "/courses", iconText: "CR" },
           { name: t('main.menu.classes'), path: "/classes", iconText: "CL" },
@@ -62,13 +63,12 @@ export const useNavigations = () => {
           { name: t('main.menu.transactions'), path: "/transactions", iconText: "TR" },
         ],
       },
-      (hasAccess(user.permissions, sections.settings.id) || hasAccess(user.permissions, sections.reports.id) || hasAccess(user.permissions, sections.academics.id)) && {
+      (hasAccess(user.permissions, sections.settings.id) || hasAccess(user.permissions, sections.reports.id)) && {
         name: t('main.menu.control panel'),
         icon: "settings",
         children: [
           { name: t('main.menu.settings'), path: "/settings/general", iconText: "ST" },
           { name: t('main.menu.settings roles'), path: "/settings/roles", iconText: "EM" },
-          hasAccess(user.permissions, sections.academics.id) && { name: t('main.menu.settings academics'), path: "/settings/academics", iconText: "US" },
           hasAccess(user.permissions, sections.reports.id) && { name: t('main.menu.reports'), path: "/reports", iconText: "RP" },
         ],
       },

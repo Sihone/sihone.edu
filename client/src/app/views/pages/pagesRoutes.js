@@ -23,6 +23,7 @@ const Payroll = Loadable(lazy(() => import("./payroll/Payroll")));
 const PaySlip = Loadable(lazy(() => import("./payroll/PaySlip")));
 const General = Loadable(lazy(() => import("./settings/General")));
 const Roles = Loadable(lazy(() => import("./settings/Roles")));
+const YearsCycles = Loadable(lazy(() => import("./settings/Academics/YearsCycles")));
 
 const pagesRoutes = [
   { path: "/user-list-1", element: <UserList1 /> },
@@ -46,6 +47,8 @@ const pagesRoutes = [
   { path: "/attendance", element: <AttendanceList />},
   { path: "/payroll/payments", element: <Payroll />},
   { path: "/payroll/payslip", element: <PaySlip />},
+
+  { path: "/years-cycles", element: <YearsCycles />},
   
   { path: "/settings/general", element: <General />},
   { path: "/settings/roles", element: <Roles />},

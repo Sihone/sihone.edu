@@ -52,6 +52,22 @@ app.post('/api/payroll', payrollPostRouter);
 app.put('/api/payroll', payrollPutRouter);
 app.delete('/api/payroll/:id', payrollDeleteRouter);
 
+// academic years routes
+const { academicYearsGetAllRouter, academicYearGetRouter, academicYearsPostRouter, academicYearsPutRouter, academicYearsDeleteRouter } = require('./server/academic_years');
+app.get('/api/academic_years/:company_id/:id', academicYearGetRouter);
+app.get('/api/academic_years/:company_id', academicYearsGetAllRouter);
+app.post('/api/academic_years', academicYearsPostRouter);
+app.put('/api/academic_years', academicYearsPutRouter);
+app.delete('/api/academic_years/:id', academicYearsDeleteRouter);
+
+// academic cycles routes
+const { academicCycleGetAllRouter, academicCycleGetRouter, academicCyclePostRouter, academicCyclePutRouter, academicCycleDeleteRouter } = require('./server/academic_cycles');
+app.get('/api/academic_cycles/:company_id/:id', academicCycleGetRouter);
+app.get('/api/academic_cycles/:company_id', academicCycleGetAllRouter);
+app.post('/api/academic_cycles', academicCyclePostRouter);
+app.put('/api/academic_cycles', academicCyclePutRouter);
+app.delete('/api/academic_cycles/:id', academicCycleDeleteRouter);
+
 // let the react app to handle any unknown routes 
 // serve up the index.html if express does'nt recognize the route
 app.get('*', function(req, res) {

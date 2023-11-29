@@ -60,7 +60,7 @@ const useData = (type, company_id, id) => {
 
   const updateData = async (updatedData) => {
     const itemId = updatedData.id;
-    updateData.company_id = company_id;
+    updatedData.company_id = company_id;
     console.log("updateData: " + JSON.stringify(updatedData));
     try {
       const response = await fetch(`/api/${type}`, {

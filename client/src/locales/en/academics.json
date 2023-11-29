@@ -1,0 +1,29 @@
+{
+    "academics": {
+        "title": "Years & Cycles",
+        "table year": "Academic Years",
+        "table cycle": "Academic Cycles",
+        "table header": {
+            "academic year": "Academic Year",
+            "start date": "Start Date",
+            "end date": "End Date",
+            "grade total": "Grade Total",
+            "active": "Currently Active",
+            "name en": "Name (English)",
+            "name fr": "Name (French)",
+            "actions": "Actions"
+        },
+        "dialog title": "Add Academic Year",
+        "dialog title edit": "Edit Academic Year",
+        "delete year title": "Delete Academic Year",
+        "delete year content": "Are you sure you want to delete this academic year?",
+        "delete cycle title": "Delete Academic Cycle",
+        "delete cycle content": "Are you sure you want to delete this academic cycle?",
+        "dialog cycle title": "Add Academic Cycle",
+        "dialog cycle title edit": "Edit Academic Cycle",
+        "long name en": "Long Name (English)",
+        "long name fr": "Long Name (French)",
+        "short name en": "Short Name (English)",
+        "short name fr": "Short Name (French)"
+    }
+}

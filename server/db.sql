@@ -112,3 +112,39 @@ CREATE TABLE payroll (
 ALTER TABLE payroll
 ADD COLUMN pay_date VARCHAR(255);
 
+CREATE TABLE academic_years (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    start_date VARCHAR(255) NOT NULL,
+    end_date VARCHAR(255) NOT NULL,
+    grade_total INTEGER NOT NULL DEFAULT 20,
+    company_id INTEGER NOT NULL,
+    CONSTRAINT fk_company FOREIGN KEY (company_id) REFERENCES settings (id)
+);
+
+CREATE TABLE academic_cycles (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    company_id INTEGER NOT NULL,
+    CONSTRAINT fk_company FOREIGN KEY (company_id) REFERENCES settings (id)
+);
+
+ALTER TABLE academic_cycles
+RENAME COLUMN name to long_name_en;
+
+ALTER TABLE academic_cycles
+ADD COLUMN short_name_en VARCHAR(255);
+
+ALTER TABLE academic_cycles
+ADD COLUMN long_name_fr VARCHAR(255);
+
+ALTER TABLE academic_cycles
+ADD COLUMN short_name_fr VARCHAR(255);
+
+ALTER TABLE settings
+ADD COLUMN current_academic_year INTEGER
+REFERENCES academic_years (id);
+
+ALTER TABLE settings
+ADD COLUMN current_academic_cycle INTEGER
+REFERENCES academic_cycles (id);
