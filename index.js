@@ -84,6 +84,14 @@ app.post('/api/academic_courses', academicCoursePostRouter);
 app.put('/api/academic_courses', academicCoursePutRouter);
 app.delete('/api/academic_courses/:id', academicCourseDeleteRouter);
 
+// academic modules routes
+const { academicModuleGetAllRouter, academicModuleGetRouter, academicModulePostRouter, academicModulePutRouter, academicModuleDeleteRouter } = require('./server/academic_modules');
+app.get('/api/academic_modules/:company_id/:id', academicModuleGetRouter);
+app.get('/api/academic_modules/:company_id', academicModuleGetAllRouter);
+app.post('/api/academic_modules', academicModulePostRouter);
+app.put('/api/academic_modules', academicModulePutRouter);
+app.delete('/api/academic_modules/:id', academicModuleDeleteRouter);
+
 // let the react app to handle any unknown routes 
 // serve up the index.html if express does'nt recognize the route
 app.get('*', function(req, res) {

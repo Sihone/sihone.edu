@@ -166,14 +166,25 @@ CREATE TABLE academic_courses (
     id SERIAL PRIMARY KEY,
     name_en VARCHAR(255) NOT NULL,
     name_fr VARCHAR(255) NOT NULL,
-    program_ids VARCHAR(255) NOT NULL,
-    description VARCHAR(255) NOT NULL,
+    program_ids VARCHAR(255),
+    description VARCHAR(255),
     coefficient DECIMAL NOT NULL, 
-    employee_id INTEGER NOT NULL,
+    employee_id INTEGER,
+    exempted_academic_years VARCHAR(255)
     company_id INTEGER NOT NULL,
     CONSTRAINT fk_company FOREIGN KEY (company_id) REFERENCES settings (id),
-    CONSTRAINT fk_program FOREIGN KEY (program) REFERENCES academic_programs (id)
+    CONSTRAINT fk_employee FOREIGN KEY (employee_id) REFERENCES employees (id)
 );
 
-ALTER TABLE academic_courses
-ADD COLUMN exempted_academic_years VARCHAR(255);
+CREATE TABLE academic_modules (
+    id SERIAL PRIMARY KEY,
+    name_en VARCHAR(255) NOT NULL,
+    name_fr VARCHAR(255) NOT NULL,
+    course_ids VARCHAR(255),
+    description VARCHAR(255),
+    coefficient DECIMAL,
+    employee_id INTEGER,
+    company_id INTEGER NOT NULL,
+    CONSTRAINT fk_company FOREIGN KEY (company_id) REFERENCES settings (id),
+    CONSTRAINT fk_employee FOREIGN KEY (employee_id) REFERENCES employees (id)
+);
