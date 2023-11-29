@@ -11,12 +11,17 @@
             "active": "Currently Active",
             "name en": "Name (English)",
             "name fr": "Name (French)",
-            "actions": "Actions"
+            "actions": "Actions",
+            "cycle": "Academic Cycle",
+            "price": "Tuition Price",
+            "head": "Head of Program"
         },
         "dialog title": "Add Academic Year",
         "dialog title edit": "Edit Academic Year",
         "delete year title": "Delete Academic Year",
         "delete year content": "Are you sure you want to delete this academic year?",
+        "delete program title": "Delete Program",
+        "delete program content": "Are you sure you want to delete this program?",
         "delete cycle title": "Delete Academic Cycle",
         "delete cycle content": "Are you sure you want to delete this academic cycle?",
         "dialog cycle title": "Add Academic Cycle",
@@ -24,6 +29,12 @@
         "long name en": "Long Name (English)",
         "long name fr": "Long Name (French)",
         "short name en": "Short Name (English)",
-        "short name fr": "Short Name (French)"
+        "short name fr": "Short Name (French)",
+        "all programs": "All Programs",
+        "programs": "Programs",
+        "dialod program title": "Add Program",
+        "dialod program title edit": "Edit Program",
+        "select cycle": "Select Academic Cycle",
+        "select employee": "Select Employee"
     }
 }
