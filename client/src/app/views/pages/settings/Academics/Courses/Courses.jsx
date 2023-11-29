@@ -1,5 +1,5 @@
 import { AddCircle, Delete, Edit } from "@mui/icons-material";
-import { Box, Paper, styled, Table, TableBody, TableCell, TableRow } from "@mui/material";
+import { Box, Button, Chip, Paper, Popover, styled, Table, TableBody, TableCell, TableRow, Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
@@ -12,7 +12,7 @@ import { useAuth } from "app/hooks/useAuth";
 import { useTranslation } from 'react-i18next';
 import { useState } from "react";
 import { useSnackbar } from "notistack";
-import ProgramDialog from "./ProgramDialog";
+import CourseDialog from "./CourseDialog";
 
 // styled components
 const FlexBox = styled(Box)({ display: "flex", alignItems: "center" });
@@ -44,43 +44,48 @@ const AcademicsList = () => {
 
   const { user } = useAuth();
 
-  const { data, saveData, updateData, deleteData } = useData("academic_programs", user.company_id);
+  const { data, saveData, updateData, deleteData } = useData("academic_courses", user.company_id);
   const { data: employees } = useData("employees", user.company_id);
-  const { data: cycles } = useData("academic_cycles", user.company_id);
+  const { data: programs } = useData("academic_programs", user.company_id);
+  const { data: academic_years } = useData("academic_years", user.company_id);
   const { t, i18n } = useTranslation();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const [open, setOpen] = useState(false);
-  const [program, setProgram] = useState(null);
+  const [course, setCourse] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [program_ids_show, setProgramIdsShow] = useState(null);
 
   // TABLE HEADER COLUMN LIST
   const columns = [
-    { id: "name_en", align: "left", disablePadding: true, label: t("academics.table header.name") },
-    { id: "cycle", align: "left", disablePadding: false, label: t("academics.table header.cycle") },
-    { id: "price", align: "left", disablePadding: false, label: t("academics.table header.price") },
-    { id: "head", align: "left", disablePadding: false, label: t("academics.table header.head") },
+    { id: "name", align: "left", disablePadding: true, label: t("academics.table header.name") },
+    { id: "program", align: "left", disablePadding: false, label: t("academics.table header.program") },
+    { id: "coefficient", align: "left", disablePadding: false, label: t("academics.table header.coefficient") },
+    { id: "description", align: "left", disablePadding: false, label: t("academics.table header.description") },
+    { id: "exluded_academic_year", align: "left", disablePadding: false, label: t("academics.table header.excluded academic year") },
+    { id: "head", align: "left", disablePadding: false, label: t("academics.table header.course head") },
     { id: "edit", align: "center", disablePadding: false, label: t("academics.table header.actions") },
   ];
 
   const handleClose = () => {
     setOpen(false);
-    setProgram(null);
+    setCourse(null);
   }
 
   const handleEdit = (row) => {
-    setProgram(row);
+    setCourse(row);
     setOpen(true);
   }
 
   const handleDeleteClick = (row) => {
-    setProgram(row);
+    setCourse(row);
     setConfirmDelete(true);
   }
 
   const handleDelete = () => {
-    deleteData(program.id)
+    deleteData(course.id)
     .then(() => {
       enqueueSnackbar(t("academics.delete success"), { variant: "success" });
     })
@@ -89,7 +94,7 @@ const AcademicsList = () => {
       enqueueSnackbar(t("academics.delete error"), { variant: "error" });
     });
     setConfirmDelete(false);
-    setProgram(null);
+    setCourse(null);
   }
 
   const onSave = async (data) => {
@@ -116,18 +121,30 @@ const AcademicsList = () => {
     setOpen(false);
   }
 
+  const handleShowPrograms = (event, program_ids_show) => {
+    setProgramIdsShow(program_ids_show);
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClosePrograms = () => {
+    setAnchorEl(null);
+  };
+
+  const openShowPrograms = Boolean(anchorEl);
+  const showProgramsId = openShowPrograms ? 'simple-popover' : undefined;
+
   return (
     <Container>
       <div className="breadcrumb" style={{display: "flex", justifyContent: "space-between"}}>
         <Breadcrumb
-          routeSegments={[{ name: t("academics.programs") }]}
+          routeSegments={[{ name: t("academics.courses") }]}
         />
       </div>
 
       <Paper sx={{ width: "100%", mb: 2 }}>
         
         <div style={{display: "flex", justifyContent: "space-between"}}>
-         <TableToolbar title={t("academics.all programs")} numSelected={selected.length} />
+         <TableToolbar title={t("academics.all courses")} numSelected={selected.length} />
           <IconButton onClick={() => setOpen(true)} style={{padding: "8px 20px"}}>
             <AddCircle />
           </IconButton>
@@ -148,7 +165,8 @@ const AcademicsList = () => {
               {stableSort(data, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
-                  const _cycle = cycles?.find((item) => item.id == row.cycle_id)
+                  const program_ids = JSON.parse(row.program_ids || '[]');
+                  const excluded_academic_years = JSON.parse(row.exempted_academic_years || '[]');
                   return (
                     <TableRow
                       hover
@@ -157,7 +175,7 @@ const AcademicsList = () => {
                       role="checkbox"
                     >
                       {
-                        i18n.language === "en" ? (
+                        i18n.language == "en" ? (
                           <TableCell align="left" style={{paddingLeft: "16px"}}>
                             {row.name_en}
                           </TableCell>
@@ -169,10 +187,38 @@ const AcademicsList = () => {
                       }
 
                       <TableCell align="left">
-                        { i18n.language === "en" ? _cycle?.long_name_en : _cycle?.long_name_fr }
+                        {
+                          program_ids.length > 0 ? (
+                            <FlexBox>
+                              <Button onClick={(event) => handleShowPrograms(event, program_ids)}>
+                                {program_ids.length} {t("academics.programs")}
+                              </Button>
+                            </FlexBox>
+                          ) : (
+                            <FlexBox>
+                              {t("academics.no program")}
+                            </FlexBox>
+                          )
+                        }
                       </TableCell>
 
-                      <TableCell align="left">{row.price}</TableCell>
+                      <TableCell align="left">{row.coefficient}</TableCell>
+
+                      <TableCell align="left">{row.description}</TableCell>
+
+                      <TableCell align="left">
+                        {
+                          excluded_academic_years.length > 0 ? (
+                            excluded_academic_years.map((academic_year) => (
+                              <Chip color="error" label={academic_years?.find((item) => item.id == academic_year)?.name} />
+                            ))
+                          ) : (
+                            <FlexBox>
+                              {t("academics.no excluded academic year")}
+                            </FlexBox>
+                          )
+                        }
+                      </TableCell>
 
                       <TableCell align="left">
                         {employees?.find((item) => item.id == row.employee_id)?.first_name + " " + employees?.find((item) => item.id == row.employee_id)?.last_name}
@@ -203,23 +249,54 @@ const AcademicsList = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <ProgramDialog
+      <CourseDialog
         open={open}
         onClose={handleClose}
         save={onSave}
         update={onUpdate}
-        program={program}
+        course={course}
         employees={employees}
-        cycles={cycles}
+        programs={programs}
+        academic_years={academic_years}
         t={t}
       />
       <ConfirmationDialog
         open={confirmDelete}
-        title={t("academics.delete program title")}
-        text={t("academics.delete program content")}
+        title={t("academics.delete course title")}
+        text={t("academics.delete course content")}
         onConfirmDialogClose={() => setConfirmDelete(false)}
-        onYesClick={() => handleDelete(program.id)}
+        onYesClick={() => handleDelete(course.id)}
       />
+      <Popover
+        id={showProgramsId}
+        open={openShowPrograms}
+        anchorEl={anchorEl}
+        onClose={handleClosePrograms}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+        <Box sx={{ p: 2 }}>
+          {
+            program_ids_show?.map((program_id) => {
+              const _program = programs?.find((item) => item.id == program_id);
+              return (
+                <Typography key={program_id} sx={{ mb: 1.5 }}>
+                  {
+                    i18n.language == "en" ? (
+                      _program?.short_name_en + " - " + _program?.name_en
+                    ) : (
+                      _program?.short_name_fr + " - " + _program?.name_fr
+                    )
+                  }
+                </Typography>
+              )
+            })
+          }
+        </Box>
+
+      </Popover>
     </Container>
   );
 };

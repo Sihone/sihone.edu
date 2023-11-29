@@ -153,11 +153,27 @@ CREATE TABLE academic_programs (
     id SERIAL PRIMARY KEY,
     name_en VARCHAR(255) NOT NULL,
     name_fr VARCHAR(255) NOT NULL,
-    cycle INTEGER NOT NULL,
+    cycle_id INTEGER NOT NULL,
     price VARCHAR(255) NOT NULL,
-    head INTEGER NOT NULL,
+    employee_id INTEGER NOT NULL,
     company_id INTEGER NOT NULL,
     CONSTRAINT fk_company FOREIGN KEY (company_id) REFERENCES settings (id),
     CONSTRAINT fk_cycle FOREIGN KEY (cycle) REFERENCES academic_cycles (id),
     CONSTRAINT fk_head FOREIGN KEY (head) REFERENCES employees (id)
 );
+
+CREATE TABLE academic_courses (
+    id SERIAL PRIMARY KEY,
+    name_en VARCHAR(255) NOT NULL,
+    name_fr VARCHAR(255) NOT NULL,
+    program_ids VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    coefficient DECIMAL NOT NULL, 
+    employee_id INTEGER NOT NULL,
+    company_id INTEGER NOT NULL,
+    CONSTRAINT fk_company FOREIGN KEY (company_id) REFERENCES settings (id),
+    CONSTRAINT fk_program FOREIGN KEY (program) REFERENCES academic_programs (id)
+);
+
+ALTER TABLE academic_courses
+ADD COLUMN exempted_academic_years VARCHAR(255);

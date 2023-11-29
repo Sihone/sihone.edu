@@ -5,7 +5,8 @@ async function academicProgramGetAllRouter(req, res) {
     const { company_id } = req.params;
     try {
         const result = await db.query(`
-            SELECT * FROM academic_programs
+            SELECT *, academic_programs.id AS id FROM academic_programs
+            LEFT JOIN academic_cycles ON academic_programs.cycle_id = academic_cycles.id
             WHERE academic_programs.company_id = $1
         `, [company_id]);
         res.json(result.rows);
@@ -20,8 +21,9 @@ async function academicProgramGetRouter(req, res) {
     const { company_id, id } = req.params;
     try {
         const result = await db.query(`
-            SELECT * FROM academic_programs
-            WHERE company_id = $1 AND id = $2
+            SELECT *, academic_programs.id AS id FROM academic_programs
+            LEFT JOIN academic_cycles ON academic_programs.cycle_id = academic_cycles.id
+            WHERE academic_programs.company_id = $1 AND id = $2
         `, [company_id, id]);
         const academic_program = result.rows[0];
         res.json(academic_program);
