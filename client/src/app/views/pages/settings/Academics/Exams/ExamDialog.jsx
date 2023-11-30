@@ -32,9 +32,9 @@ const CourseDialog = ({ open, onClose, save, update, exam, t, i18n, employees, c
         setEmployee(_employee);
 
         const _course = courses.find((item) => item.id == exam.course_id);
-        const _module = modules.find((item) => item.id == _course.module_id);
-        const _program = programs.find((item) => item.id == _module.program_id);
-        const _cycle = cycles.find((item) => item.id == _program.cycle_id);
+        const _module = modules.find((item) => item.id == exam.module_id);
+        const _program = programs.find((item) => item.id == exam.program_id);
+        const _cycle = cycles.find((item) => item.id == exam.cycle_id);
         setCourse(_course);
         setModule(_module);
         setProgram(_program);
@@ -79,11 +79,11 @@ const CourseDialog = ({ open, onClose, save, update, exam, t, i18n, employees, c
         id: exam.id,
         name_en,
         name_fr,
-        course_id: course && course.id,
-        module_id: module && module.id,
-        program_id: program && program.id,
-        cycle_id: cycle && cycle.id,
-        employee_id: employee && employee.id,
+        course_id: course && course.id || null,
+        module_id: module && module.id || null,
+        program_id: program && program.id || null,
+        cycle_id: cycle && cycle.id || null,
+        employee_id: employee && employee.id || null,
         date,
         duration,
         total_mark,
@@ -93,11 +93,11 @@ const CourseDialog = ({ open, onClose, save, update, exam, t, i18n, employees, c
         save({
             name_en,
             name_fr,
-            course_id: course && course.id,
-            module_id: module && module.id,
-            program_id: program && program.id,
-            cycle_id: cycle && cycle.id,
-            employee_id: employee && employee.id,
+            course_id: course && course.id || null,
+            module_id: module && module.id || null,
+            program_id: program && program.id || null,
+            cycle_id: cycle && cycle.id || null,
+            employee_id: employee && employee.id || null,
             date,
             duration,
             total_mark,
@@ -191,7 +191,7 @@ const CourseDialog = ({ open, onClose, save, update, exam, t, i18n, employees, c
           select
           size="small"
           name="role"
-          label={t("academics.cycle")}
+          label={t("academics.table header.cycle")}
           variant="outlined"
           fullWidth
           value={cycle ? cycle.id : null}
@@ -215,7 +215,7 @@ const CourseDialog = ({ open, onClose, save, update, exam, t, i18n, employees, c
           select
           size="small"
           name="role"
-          label={t("academics.program")}
+          label={t("academics.table header.program")}
           variant="outlined"
           fullWidth
           value={program ? program.id : null}
@@ -250,7 +250,7 @@ const CourseDialog = ({ open, onClose, save, update, exam, t, i18n, employees, c
           }}
           disabled={!program}
         >
-          <MenuItem value={null}>{t("academics.select courses")}</MenuItem>
+          <MenuItem value={null}>{t("academics.select course")}</MenuItem>
           {filteredCourses?.map((item) => {
             const _name = i18n.language == "en" ? item.name_en : item.name_fr;
             return (
@@ -265,7 +265,7 @@ const CourseDialog = ({ open, onClose, save, update, exam, t, i18n, employees, c
           select
           size="small"
           name="role"
-          label={t("academics.module")}
+          label={t("academics.table header.module")}
           variant="outlined"
           fullWidth
           value={module ? module.id : null}
@@ -289,7 +289,7 @@ const CourseDialog = ({ open, onClose, save, update, exam, t, i18n, employees, c
         <TextField
           margin="dense"
           id="name_fr"
-          label={t("academics.table header.exam name fr")}
+          label={t("academics.exam name fr")}
           type="text"
           fullWidth
           value={name_fr}
@@ -298,7 +298,7 @@ const CourseDialog = ({ open, onClose, save, update, exam, t, i18n, employees, c
         <TextField
           margin="dense"
           id="name_en"
-          label={t("academics.table header.exam name en")}
+          label={t("academics.exam name en")}
           type="text"
           sx={{ minWidth: 388 }}
           value={name_en}
@@ -321,7 +321,7 @@ const CourseDialog = ({ open, onClose, save, update, exam, t, i18n, employees, c
           InputLabelProps={{ shrink: !!duration }}
         />
         <TextField
-          label={t("academics.table header.exam total mark")}
+          label={t("academics.table header.exam total")}
           value={total_mark}
           onChange={(event) => setTotalMark(event.target.value)}
           fullWidth

@@ -67,9 +67,10 @@ const AcademicsList = () => {
     { id: "program", align: "left", disablePadding: false, label: t("academics.table header.program") },
     { id: "course", align: "left", disablePadding: false, label: t("academics.course")},
     { id: "module", align: "left", disablePadding: false, label: t("academics.table header.module")},
-    { id: "date", align: "left", disablePadding: false, label: t("academics.table header.date")},
-    { id: "duration", align: "left", disablePadding: false, label: t("academics.table header.duration")},
-    { id: "total", align: "left", disablePadding: false, label: t("academics.table header.total")},
+    { id: "date", align: "left", disablePadding: false, label: t("academics.table header.exam date")},
+    { id: "duration", align: "left", disablePadding: false, label: t("academics.table header.exam duration")},
+    { id: "total", align: "left", disablePadding: false, label: t("academics.table header.exam total")},
+    { id: 'graded', align: 'left', disablePadding: false, label: t("academics.table header.graded")},
     { id: "examiner", align: "left", disablePadding: false, label: t("academics.table header.examiner")},
     { id: "edit", align: "center", disablePadding: false, label: t("academics.table header.actions") },
   ];
@@ -204,9 +205,11 @@ const AcademicsList = () => {
 
                       <TableCell align="left">{row.total_mark}</TableCell>
 
+                      <TableCell align="left">{ t("academics.graded", { num: 8, count: 10}) }</TableCell>
+
                       <TableCell align="left">
                         {
-                          employees?.find((item) => item.id == row.examiner_id)?.first_name + " " + employees?.find((item) => item.id == row.examiner_id)?.last_name
+                          employees?.find((item) => item.id == row.employee_id)?.first_name + " " + employees?.find((item) => item.id == row.employee_id)?.last_name
                         }
                       </TableCell>
 
