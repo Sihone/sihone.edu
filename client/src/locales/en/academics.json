@@ -81,6 +81,7 @@
         "exams": "Academic Exams",
         "all exams": "All Exams",
         "dialog program title": "Add Program",
-        "dialog program title edit": "Edit Program"
+        "dialog program title edit": "Edit Program",
+        "exam duration": "Exam Duration (minutes)"
     }
 }

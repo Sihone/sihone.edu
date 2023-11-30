@@ -201,7 +201,7 @@ const AcademicsList = () => {
 
                       <TableCell align="left">{row.date}</TableCell>
 
-                      <TableCell align="left">{row.duration}</TableCell>
+                      <TableCell align="left">{row.duration || 0} mins</TableCell>
 
                       <TableCell align="left">{row.total_mark}</TableCell>
 

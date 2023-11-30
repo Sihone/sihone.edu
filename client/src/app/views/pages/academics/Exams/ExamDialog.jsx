@@ -313,7 +313,7 @@ const CourseDialog = ({ open, onClose, save, update, exam, t, i18n, employees, c
           InputLabelProps={{ shrink: !!date }}
         />
         <TextField
-          label={t("academics.table header.exam duration")}
+          label={t("academics.exam duration")}
           value={duration}
           onChange={(event) => setDuration(event.target.value)}
           fullWidth
