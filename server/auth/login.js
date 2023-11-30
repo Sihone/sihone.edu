@@ -37,6 +37,7 @@ const loginRouter = async (req, res) => {
                     company_phone: settings.rows[0].company_phone,
                     company_registration: settings.rows[0].company_registration,
                     permissions: JSON.parse(userDb.permissions),
+                    currentAcademicYearId: settings.rows[0].current_academic_year,
                 },
                 accessToken: accessToken
             });
@@ -79,6 +80,7 @@ const profileRouter = async (req, res) => {
                     company_phone: settings.rows[0].company_phone,
                     company_registration: settings.rows[0].company_registration,
                     permissions: JSON.parse(user.permissions),
+                    currentAcademicYearId: settings.rows[0].current_academic_year,
                 },
                 accessToken: accessToken
             });
@@ -183,6 +185,7 @@ const registerRouter = async (req, res) => {
             company_phone: settings.rows[0].company_phone,
             company_registration: settings.rows[0].company_registration,
             permissions: JSON.parse(role.rows[0].permissions),
+            currentAcademicYearId: settings.rows[0].current_academic_year,
         },
         accessToken: accessToken
     });
