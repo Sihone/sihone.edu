@@ -18,8 +18,9 @@ import { Span } from "app/components/Typography";
 import { useAuth } from "app/hooks/useAuth";
 import useSettings from "app/hooks/useSettings";
 import { topBarHeight } from "app/utils/constant";
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import useData from "app/hooks/useData";
 
 // styled components
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
@@ -84,10 +85,19 @@ const Layout1Topbar = () => {
   const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const { t, i18n } = useTranslation();
+  const { data: academic_years } = useData("academic_years", user.company_id);
+  const [academicYear, setAcademicYear] = React.useState(null);
 
   const updateSidebarMode = (sidebarSettings) => {
     updateSettings({ layout1Settings: { leftSidebar: { ...sidebarSettings } } });
   };
+
+  useEffect(() => {
+    if (academic_years) {
+      const currentYear = academic_years.find((year) => year.id == user.currentAcademicYearId);
+      setAcademicYear(currentYear);
+    }
+  }, [academic_years]);
 
   const handleSidebarToggle = () => {
     let { layout1Settings } = settings;
@@ -122,6 +132,11 @@ const Layout1Topbar = () => {
           <NotificationBar />
 
           <ShoppingCart /> */}
+
+          <Box ml={2} mr={3}>
+            {t('main.academic year')}:{" "}
+            <b>{academicYear?.name}</b>
+          </Box>
 
           <MatxMenu
             menuButton={

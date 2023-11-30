@@ -54,6 +54,13 @@
         "website": "Website",
         "registration": "Registration Number",
         "delete": "Delete",
-        "success": "Success"
+        "success": "Success",
+        "academic year": "Academic Year",
+        "male": "Male",
+        "female": "Female",
+        "active": "Active",
+        "inactive": "Inactive",
+        "status": "Status",
+        "actions": "Actions"
     }
 }

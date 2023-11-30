@@ -1,0 +1,25 @@
+{
+    "students": {
+        "new": "Add new",
+        "edit": "Edit",
+        "title": "Students",
+        "student id": "Student ID",
+        "full name": "Full Name",
+        "email": "Student Email",
+        "gender": "Gender",
+        "tuition": "Tuition Details",
+        "emmergency": "Emmergency Contact",
+        "table header": {
+            "name": "Student Name & ID",
+            "phone": "Student Contact",
+            "parent phone": "Parent Contact",
+            "gender": "Gender",
+            "program": "Academic Program",
+            "status": "Status",
+            "balance": "Tuition Balance"
+        },
+        "table title": "Student List",
+        "dialog title": "Delete Student",
+        "dialog content": "Are you sure you want to delete this student?"
+    }
+}

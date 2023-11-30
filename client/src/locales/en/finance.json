@@ -2,15 +2,29 @@
     "finance": {
         "accounts": "Accounts",
         "all accounts": "All Accounts",
+        "transactions": "Transactions",
+        "all transactions": "All Transactions",
         "table header": {
             "name": "Account Name",
             "description": "Description",
             "balance": "Balance",
-            "actions": "Actions"
+            "actions": "Actions",
+            "date": "Date",
+            "amount": "Amount",
+            "account": "Account",
+            "type": "Type",
+            "employee": "Employee"
         },
         "dialog account title": "New Account",
         "dialog account title edit": "Edit Account",
         "delete account title": "Delete Account",
-        "delete account content": "Are you sure you want to delete this account?"
+        "delete account content": "Are you sure you want to delete this account?",
+        "dialog transaction title": "New Transaction",
+        "dialog transaction title edit": "Edit Transaction",
+        "delete transaction title": "Delete Transaction",
+        "delete transaction content": "Are you sure you want to delete this transaction?",
+        "select account": "Select Account",
+        "select type": "Select Type",
+        "select employee": "Select Employee"
     }
 }
