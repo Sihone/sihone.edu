@@ -23,11 +23,12 @@ const Payroll = Loadable(lazy(() => import("./payroll/Payroll")));
 const PaySlip = Loadable(lazy(() => import("./payroll/PaySlip")));
 const General = Loadable(lazy(() => import("./settings/General")));
 const Roles = Loadable(lazy(() => import("./settings/Roles")));
-const YearsCycles = Loadable(lazy(() => import("./settings/Academics/YearsCycles")));
-const Programs = Loadable(lazy(() => import("./settings/Academics/Programs")));
-const Courses = Loadable(lazy(() => import("./settings/Academics/Courses")));
-const Modules = Loadable(lazy(() => import("./settings/Academics/Modules")));
-const Exams = Loadable(lazy(() => import("./settings/Academics/Exams")));
+
+const YearsCycles = Loadable(lazy(() => import("./academics/YearsCycles")));
+const Programs = Loadable(lazy(() => import("./academics/Programs")));
+const Courses = Loadable(lazy(() => import("./academics/Courses")));
+const Modules = Loadable(lazy(() => import("./academics/Modules")));
+const Exams = Loadable(lazy(() => import("./academics/Exams")));
 
 const pagesRoutes = [
   { path: "/user-list-1", element: <UserList1 /> },
