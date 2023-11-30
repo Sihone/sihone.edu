@@ -188,3 +188,27 @@ CREATE TABLE academic_modules (
     CONSTRAINT fk_company FOREIGN KEY (company_id) REFERENCES settings (id),
     CONSTRAINT fk_employee FOREIGN KEY (employee_id) REFERENCES employees (id)
 );
+
+CREATE TABLE academic_exams (
+    id SERIAL PRIMARY KEY,
+    name_en VARCHAR(255) NOT NULL,
+    name_fr VARCHAR(255) NOT NULL,
+    module_id INTEGER,
+    course_id INTEGER,
+    program_id INTEGER,
+    cycle_id INTEGER,
+    employee_id INTEGER,
+    date VARCHAR(255) NOT NULL,
+    duration VARCHAR(255),
+    total_mark INTEGER,
+    academic_year_id INTEGER,
+    company_id INTEGER NOT NULL,
+    CONSTRAINT fk_company FOREIGN KEY (company_id) REFERENCES settings (id),
+    CONSTRAINT fk_employee FOREIGN KEY (employee_id) REFERENCES employees (id),
+    CONSTRAINT fk_module FOREIGN KEY (module_id) REFERENCES academic_modules (id),
+    CONSTRAINT fk_course FOREIGN KEY (course_id) REFERENCES academic_courses (id),
+    CONSTRAINT fk_program FOREIGN KEY (program_id) REFERENCES academic_programs (id),
+    CONSTRAINT fk_academic_year FOREIGN KEY (academic_year_id) REFERENCES academic_years (id),
+    CONSTRAINT fk_cycle FOREIGN KEY (cycle_id) REFERENCES academic_cycles (id)
+);
+

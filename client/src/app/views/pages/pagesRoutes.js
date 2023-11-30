@@ -27,6 +27,7 @@ const YearsCycles = Loadable(lazy(() => import("./settings/Academics/YearsCycles
 const Programs = Loadable(lazy(() => import("./settings/Academics/Programs")));
 const Courses = Loadable(lazy(() => import("./settings/Academics/Courses")));
 const Modules = Loadable(lazy(() => import("./settings/Academics/Modules")));
+const Exams = Loadable(lazy(() => import("./settings/Academics/Exams")));
 
 const pagesRoutes = [
   { path: "/user-list-1", element: <UserList1 /> },
@@ -55,6 +56,7 @@ const pagesRoutes = [
   { path: "/programs", element: <Programs />},
   { path: "/courses", element: <Courses />},
   { path: "/modules", element: <Modules />},
+  { path: "/exams", element: <Exams />},
   
   { path: "/settings/general", element: <General />},
   { path: "/settings/roles", element: <Roles />},
