@@ -66,15 +66,26 @@ function academicExamsPutRouter(req, res) {
         `UPDATE academic_exams SET
             name_en = ?, name_fr = ?, module_id = ?, course_id = ?, program_id = ?, cycle_id = ?,
             employee_id = ?, date = ?, duration = ?, total_mark = ?, academic_year_id = ?
-        WHERE id = ? RETURNING *`,
+        WHERE id = ?`,
         [name_en, name_fr, module_id, course_id, program_id, cycle_id, employee_id, date, duration, total_mark, academic_year_id, id],
         (result, error) => {
             if (error) {
                 console.log(error);
                 res.status(500).json(error);
             } else {
-                const academic_exam = result.rows[0];
-                res.status(201).json(academic_exam);
+                db.query(
+                    'SELECT * FROM academic_exams WHERE id = ?',
+                    [id],
+                    (result, error) => {
+                        if (error) {
+                            console.log(error);
+                            res.status(500).json(error);
+                        } else {
+                            const academic_exam = result.rows[0];
+                            res.status(201).json(academic_exam);
+                        }
+                    }
+                );
             }
         }
     );
@@ -91,8 +102,7 @@ function academicExamsDeleteRouter(req, res) {
                 console.log(error);
                 res.status(500).json(error);
             } else {
-                const academic_exam = result.rows[0];
-                res.status(201).json(academic_exam);
+                res.status(201).json({ id });
             }
         }
     );
