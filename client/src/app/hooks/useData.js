@@ -108,7 +108,7 @@ const useData = (type, company_id, id) => {
         setTimeout(function(){
           setSuccess(null);
         }, 5000);
-        const returnData = data.filter(item => item.id !== responseData.id);
+        const returnData = data.filter(item => item.id != responseData.id);
         setData(returnData);
         return responseData;
       }
