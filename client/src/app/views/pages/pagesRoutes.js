@@ -30,6 +30,9 @@ const Courses = Loadable(lazy(() => import("./academics/Courses")));
 const Modules = Loadable(lazy(() => import("./academics/Modules")));
 const Exams = Loadable(lazy(() => import("./academics/Exams")));
 
+const Accounts = Loadable(lazy(() => import("./finance/Accounts")));
+const Transactions = Loadable(lazy(() => import("./finance/Transactions")));
+
 const pagesRoutes = [
   { path: "/user-list-1", element: <UserList1 /> },
   { path: "/user-list-2", element: <UserList2 /> },
@@ -61,6 +64,9 @@ const pagesRoutes = [
   
   { path: "/settings/general", element: <General />},
   { path: "/settings/roles", element: <Roles />},
+
+  { path: "/accounts", element: <Accounts />},
+  { path: "/transactions", element: <Transactions />},
 ];
 
 export default pagesRoutes;

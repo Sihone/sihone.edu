@@ -213,6 +213,24 @@ CREATE TABLE academic_exams (
     CONSTRAINT fk_cycle_exams FOREIGN KEY (cycle_id) REFERENCES academic_cycles (id)
 );
 
+CREATE TABLE finance_accounts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description VARCHAR(255),
+    company_id INTEGER NOT NULL,
+    CONSTRAINT fk_company_accounts FOREIGN KEY (company_id) REFERENCES settings (id)
+);
 
-
-
+CREATE TABLE finance_transactions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    account_id INTEGER NOT NULL,
+    type VARCHAR(255) NOT NULL,
+    date VARCHAR(255) NOT NULL,
+    amount INTEGER NOT NULL,
+    description VARCHAR(255),
+    employee_id INTEGER NOT NULL,
+    company_id INTEGER NOT NULL,
+    CONSTRAINT fk_company_transactions FOREIGN KEY (company_id) REFERENCES settings (id),
+    CONSTRAINT fk_account_transactions FOREIGN KEY (account_id) REFERENCES finance_accounts (id),
+    CONSTRAINT fk_employee_transactions FOREIGN KEY (employee_id) REFERENCES employees (id)
+);
