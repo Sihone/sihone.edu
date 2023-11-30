@@ -1,0 +1,16 @@
+{
+    "finance": {
+        "accounts": "Accounts",
+        "all accounts": "All Accounts",
+        "table header": {
+            "name": "Account Name",
+            "description": "Description",
+            "balance": "Balance",
+            "actions": "Actions"
+        },
+        "dialog account title": "New Account",
+        "dialog account title edit": "Edit Account",
+        "delete account title": "Delete Account",
+        "delete account content": "Are you sure you want to delete this account?"
+    }
+}
