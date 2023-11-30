@@ -25,7 +25,7 @@ function academicYearGetRouter(req, res) {
     db.query(`
         SELECT academic_years.id AS id, name, start_date, end_date, grade_total, current_academic_year FROM academic_years
         LEFT JOIN settings ON company_id = settings.id
-        WHERE company_id = ? AND id = ?
+        WHERE company_id = ? AND academic_years.id = ?
     `,
     [company_id, id],
     async (result, error) => {

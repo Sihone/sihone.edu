@@ -234,3 +234,25 @@ CREATE TABLE finance_transactions (
     CONSTRAINT fk_account_transactions FOREIGN KEY (account_id) REFERENCES finance_accounts (id),
     CONSTRAINT fk_employee_transactions FOREIGN KEY (employee_id) REFERENCES employees (id)
 );
+
+CREATE TABLE students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id VARCHAR(255) NOT NULL,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    gender VARCHAR(255) NOT NULL,
+    email VARCHAR(255),
+    phone VARCHAR(255),
+    program_id INTEGER NOT NULL,
+    parent_phone VARCHAR(255),
+    status VARCHAR(255) NOT NULL,
+    emmergency_contact_name VARCHAR(255),
+    emmergency_contact_phone VARCHAR(255),
+    emmergency_contact_relation VARCHAR(255),
+    password VARCHAR(255),
+    company_id INTEGER NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_company_students FOREIGN KEY (company_id) REFERENCES settings (id),
+    CONSTRAINT fk_program_students FOREIGN KEY (program_id) REFERENCES academic_programs (id)
+)

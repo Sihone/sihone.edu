@@ -6,6 +6,7 @@ import payroll from './payroll.json';
 import settings from './settings.json';
 import academics from './academics.json';
 import finance from './finance.json';
+import students from './students.json';
 
 export const en = {
     ...register,
@@ -16,4 +17,5 @@ export const en = {
     ...settings,
     ...academics,
     ...finance,
+    ...students,
 };

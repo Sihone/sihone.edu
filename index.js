@@ -116,6 +116,14 @@ app.post('/api/finance_transactions', financeTransactionsPostRouter);
 app.put('/api/finance_transactions', financeTransactionsPutRouter);
 app.delete('/api/finance_transactions/:id', financeTransactionsDeleteRouter);
 
+// students routes
+const { studentsGetAllRouter, studentGetRouter, studentsPostRouter, studentsPutRouter, studentsDeleteRouter } = require('./server-mysql/students');
+app.get('/api/students/:company_id/:id', studentGetRouter);
+app.get('/api/students/:company_id', studentsGetAllRouter);
+app.post('/api/students', studentsPostRouter);
+app.put('/api/students', studentsPutRouter);
+app.delete('/api/students/:id', studentsDeleteRouter);
+
 // let the react app to handle any unknown routes 
 // serve up the index.html if express does'nt recognize the route
 app.get('*', function(req, res) {

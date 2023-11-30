@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Checkbox, Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, FormControlLabel } from '@mui/material';
 import { use } from 'i18next';
+import { useAuth } from 'app/hooks/useAuth';
 
 const YearDialog = ({ open, onClose, save, update, academicYear, currentAcademicYear, t }) => {
   const [name, setName] = useState('');
@@ -8,6 +9,8 @@ const YearDialog = ({ open, onClose, save, update, academicYear, currentAcademic
   const [end_date, setEndDate] = useState(new Date().getFullYear() + 1 + "-06-30");
   const [grade_total, setGradeTotal] = useState(20);
   const [active, setActive] = useState(false);
+
+  const { user } = useAuth();
 
   useEffect(() => {
     if (open && academicYear) {
@@ -25,9 +28,9 @@ const YearDialog = ({ open, onClose, save, update, academicYear, currentAcademic
     }
   }, [open]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (academicYear) {
-      update({
+      await update({
         id: academicYear.id,
         name,
         start_date,
@@ -35,14 +38,22 @@ const YearDialog = ({ open, onClose, save, update, academicYear, currentAcademic
         grade_total,
         active
       });
+      if (active) {
+        // refresh page
+        window.location.reload();
+      }
     } else {
-        save({
+      await save({
             name,
             start_date,
             end_date,
             grade_total,
             active
-        });
+      });
+      if (active) {
+        // refresh page
+        window.location.reload();
+      }
     }
     resetForm();
     onClose();
@@ -110,6 +121,7 @@ const YearDialog = ({ open, onClose, save, update, academicYear, currentAcademic
               onChange={(event) => setActive(event.target.checked)}
               fullWidth
               type='checkbox'
+              disabled={academicYear && currentAcademicYear == academicYear.id}
             />
           }
         />
