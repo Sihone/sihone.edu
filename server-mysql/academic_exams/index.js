@@ -23,15 +23,14 @@ function academicExamsGetRouter(req, res) {
     const { company_id, id } = req.params;
     db.query(`
         SELECT * FROM academic_exams
-        WHERE company_id = ? AND id = ?
+        WHERE company_id = ? AND academic_year_id = ?
     `, [company_id, id],
         (result, error) => {
             if (error) {
                 console.log(error);
                 res.status(500).json(error);
             } else {
-                const academic_exam = result.rows[0];
-                res.status(201).json(academic_exam);
+                res.status(201).json(result.rows);
             }
         }
     );
@@ -61,13 +60,13 @@ function academicExamsPostRouter(req, res) {
 
 function academicExamsPutRouter(req, res) {
     console.log('academicExamsPutRouter');
-    const { id, name_en, name_fr, module_id, course_id, program_id, cycle_id, employee_id, date, duration, total_mark, academic_year_id } = req.body;
+    const { id, name_en, name_fr, module_id, course_id, program_id, cycle_id, employee_id, date, duration, total_mark, academic_year_id, grades } = req.body;
     db.query(
         `UPDATE academic_exams SET
             name_en = ?, name_fr = ?, module_id = ?, course_id = ?, program_id = ?, cycle_id = ?,
-            employee_id = ?, date = ?, duration = ?, total_mark = ?, academic_year_id = ?
+            employee_id = ?, date = ?, duration = ?, total_mark = ?, academic_year_id = ?, grades = ?
         WHERE id = ?`,
-        [name_en, name_fr, module_id, course_id, program_id, cycle_id, employee_id, date, duration, total_mark, academic_year_id, id],
+        [name_en, name_fr, module_id, course_id, program_id, cycle_id, employee_id, date, duration, total_mark, academic_year_id, grades, id],
         (result, error) => {
             if (error) {
                 console.log(error);

@@ -4,11 +4,13 @@
         "edit": "Edit",
         "title": "Students",
         "student id": "Student ID",
+        "student name": "Student Name",
         "full name": "Full Name",
         "email": "Student Email",
         "gender": "Gender",
         "tuition": "Tuition Details",
         "emmergency": "Emmergency Contact",
+        "parent phone": "Parent Phone",
         "table header": {
             "name": "Student Name & ID",
             "phone": "Student Contact",

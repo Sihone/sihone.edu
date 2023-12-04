@@ -46,6 +46,8 @@ const CustomerForm = () => {
   const { user } = useAuth();
   const {data: _student, updateData, saveData, error} = useData("students", user.company_id, studentId);
   const {data: programs} = useData("academic_programs", user.company_id);
+  const {data: academicYears} = useData("academic_years", user.company_id);
+  const {data: settings} = useData("settings", user.company_id);
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -118,6 +120,7 @@ const CustomerForm = () => {
     program_id: student?.program_id || "",
     parent_phone: student?.parent_phone || "",
     status: student?.status || "active",
+    academic_year_id: student?.academic_year_id || settings?.current_academic_year,
     
     emmergency_contact_name: student?.emmergency_contact_name || "",
     emmergency_contact_phone: student?.emmergency_contact_phone || "",
@@ -133,6 +136,7 @@ const CustomerForm = () => {
     email: Yup.string().email(t("students.invalid email")).required(t("main.required")),
     phone: Yup.string().required(t("main.required")),
     program_id: Yup.string().required(t("main.required")),
+    academic_year_id: Yup.string().required(t("main.required")),
     parent_phone: Yup.number().required(t("main.required")),
     status: Yup.string().required(t("main.required")),
     gender: Yup.string().nullable().required(t("main.required")),
@@ -284,6 +288,36 @@ const CustomerForm = () => {
                 </Grid>
 
                 <Grid item md={2} sm={4} xs={12}>
+                  {t("academics.table header.academic year")}
+                </Grid>
+
+                <Grid item md={10} sm={8} xs={12}>
+                  <Box m={-1} display="flex" flexWrap="wrap">
+                    <StyledTextField
+                      select
+                      size="small"
+                      name="academic_year_id"
+                      label={t("academics.table header.academic year")}
+                      variant="outlined"
+                      sx={{ minWidth: 208 }}
+                      value={values.academic_year_id || ""}
+                      onChange={handleChange}
+                      InputLabelProps={{ shrink: !!values.academic_year_id }}
+                      helperText={touched.academic_year_id && errors.academic_year_id}
+                      error={Boolean(errors.academic_year_id && touched.academic_year_id)}
+                    >
+                      {academicYears?.map((item, ind) => {
+                        return (
+                          <MenuItem value={item.id} key={item.name}>
+                            {item.name}
+                          </MenuItem>
+                        )
+                      })}
+                    </StyledTextField>
+                  </Box>
+                </Grid>
+
+                <Grid item md={2} sm={4} xs={12}>
                   {t("main.phone")}
                 </Grid>
 
@@ -305,7 +339,7 @@ const CustomerForm = () => {
                 </Grid>
 
                 <Grid item md={2} sm={4} xs={12}>
-                  {t("students.parent_phone")}
+                  {t("students.parent phone")}
                 </Grid>
 
                 <Grid item md={10} sm={8} xs={12}>

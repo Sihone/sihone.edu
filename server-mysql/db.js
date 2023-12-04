@@ -39,7 +39,7 @@ module.exports = {
       params.forEach(element => {
         // check if element is a string
         if (typeof element === 'string' || element instanceof String) {
-          element = "'" + element + "'";
+          element = pool.escape(element);
         }
         query = query.replace("?", element);
       });

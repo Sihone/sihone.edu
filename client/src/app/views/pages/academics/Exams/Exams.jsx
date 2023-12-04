@@ -1,4 +1,4 @@
-import { AddCircle, Delete, Edit } from "@mui/icons-material";
+import { AddCircle, Delete, Edit, Grading, HistoryEdu } from "@mui/icons-material";
 import { Box, Button, Chip, Paper, Popover, styled, Table, TableBody, TableCell, TableRow, Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import TableContainer from "@mui/material/TableContainer";
@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from "react";
 import { useSnackbar } from "notistack";
 import ExamDialog from "./ExamDialog";
+import GradingDialog from "./Grading";
 
 // styled components
 const FlexBox = styled(Box)({ display: "flex", alignItems: "center" });
@@ -44,12 +45,11 @@ const AcademicsList = () => {
 
   const { user } = useAuth();
 
-  const { data, saveData, updateData, deleteData } = useData("academic_exams", user.company_id);
+  const { data, saveData, updateData, deleteData } = useData("academic_exams", user.company_id, user.currentAcademicYearId);
   const { data: employees } = useData("employees", user.company_id);
   const { data: courses } = useData("academic_courses", user.company_id);
-  const { data: modules } = useData("academic_modules", user.company_id);
+  const { data: students } = useData("students", user.company_id);
   const { data: programs } = useData("academic_programs", user.company_id);
-  const { data: cycles } = useData("academic_cycles", user.company_id);
 
   const { t, i18n } = useTranslation();
 
@@ -59,17 +59,18 @@ const AcademicsList = () => {
   const [exam, setExam] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [course_ids_show, setCourseIdsShow] = useState(null);
+  const [program_ids_show, setProgramIdsShow] = useState(null);
+  const [grading, setGrading] = useState(null);
+  const [gradingStudents, setGradingStudents] = useState(null);
 
   // TABLE HEADER COLUMN LIST
   const columns = [
     { id: "name", align: "left", disablePadding: true, label: t("academics.table header.name") },
-    { id: "program", align: "left", disablePadding: false, label: t("academics.table header.program") },
     { id: "course", align: "left", disablePadding: false, label: t("academics.course")},
-    { id: "module", align: "left", disablePadding: false, label: t("academics.table header.module")},
+    { id: "program", align: "left", disablePadding: false, label: t("academics.table header.programs") },
     { id: "date", align: "left", disablePadding: false, label: t("academics.table header.exam date")},
     { id: "duration", align: "left", disablePadding: false, label: t("academics.table header.exam duration")},
-    { id: "total", align: "left", disablePadding: false, label: t("academics.table header.exam total")},
+    { id: "average", align: "left", disablePadding: false, label: t("academics.table header.class average")},
     { id: 'graded', align: 'left', disablePadding: false, label: t("academics.table header.graded")},
     { id: "examiner", align: "left", disablePadding: false, label: t("academics.table header.examiner")},
     { id: "edit", align: "center", disablePadding: false, label: t("academics.table header.actions") },
@@ -127,14 +128,32 @@ const AcademicsList = () => {
     setOpen(false);
   }
 
-  const handleShowCourses = (event, course_ids_show) => {
-    setCourseIdsShow(course_ids_show);
+  const handleShowPrograms = (event, program_ids_show) => {
+    setProgramIdsShow(program_ids_show);
     setAnchorEl(event.currentTarget);
   };
 
   const handleCloseCourses = () => {
     setAnchorEl(null);
   };
+
+  const handleGrading = (row) => {
+    setGrading(row);
+  };
+
+  const handleCloseGrading = () => {
+    setGrading(null);
+    setGradingStudents(null);
+  };
+
+  useEffect(() => {
+    if (grading) {
+      const course = courses?.find((item) => item.id == grading.course_id);
+      const program_ids = JSON.parse(course?.program_ids || '[]');
+      const _students = students?.filter((item) => program_ids?.includes(item.program_id));
+      setGradingStudents(_students);
+    }
+  }, [grading]);
 
   const openShowCourses = Boolean(anchorEl);
   const showCoursesId = openShowCourses ? 'simple-popover' : undefined;
@@ -171,9 +190,13 @@ const AcademicsList = () => {
               {stableSort(data, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
-                  const program_name = i18n.language == "en" ? programs?.find((item) => item.id == row.program_id)?.name_en : programs?.find((item) => item.id == row.program_id)?.name_fr;
-                  const course_name = i18n.language == "en" ? courses?.find((item) => item.id == row.course_id)?.name_en : courses?.find((item) => item.id == row.course_id)?.name_fr;
-                  const module_name = i18n.language == "en" ? modules?.find((item) => item.id == row.module_id)?.name_en : modules?.find((item) => item.id == row.module_id)?.name_fr;
+                  const course = courses?.find((item) => item.id == row.course_id);
+                  const course_name = i18n.language == "en" ? course?.name_en : course?.name_fr;
+                  const _grades = JSON.parse(row.grades || '[]');
+                  const program_ids = JSON.parse(course?.program_ids || '[]');
+                  const _students = students?.filter((item) => program_ids?.includes(item.program_id));
+                  const _graded = _students?.filter((item) => _grades[item.id] != undefined && _grades[item.id] != null && _grades[item.id] != "");
+                  const classAverage = _graded?.reduce((acc, item) => acc + parseInt(_grades[item.id]), 0) / _graded?.length;
                   return (
                     <TableRow
                       hover
@@ -193,19 +216,31 @@ const AcademicsList = () => {
                         )
                       }
 
-                      <TableCell align="left">{program_name}</TableCell>
-
                       <TableCell align="left">{course_name}</TableCell>
 
-                      <TableCell align="left">{module_name}</TableCell>
+                      <TableCell align="left">
+                        {
+                          program_ids.length > 0 ? (
+                            <FlexBox>
+                              <Button onClick={(event) => handleShowPrograms(event, program_ids)}>
+                                {program_ids.length} {t("academics.programs")}
+                              </Button>
+                            </FlexBox>
+                          ) : (
+                            <FlexBox>
+                              {t("academics.no program")}
+                            </FlexBox>
+                          )
+                        }
+                      </TableCell>
 
                       <TableCell align="left">{row.date}</TableCell>
 
                       <TableCell align="left">{row.duration || 0} mins</TableCell>
 
-                      <TableCell align="left">{row.total_mark}</TableCell>
+                      <TableCell align="left">{classAverage ? classAverage.toFixed(2) : "-"} / {row.total_mark || "-"}</TableCell>
 
-                      <TableCell align="left">{ t("academics.graded", { num: 8, count: 10}) }</TableCell>
+                      <TableCell align="left">{ t("academics.graded", { num: _graded.length, count: _students.length}) }</TableCell>
 
                       <TableCell align="left">
                         {
@@ -214,6 +249,9 @@ const AcademicsList = () => {
                       </TableCell>
 
                       <TableCell align="center">
+                        <IconButton onClick={() => handleGrading(row)}>
+                          <HistoryEdu />
+                        </IconButton>
                         <IconButton onClick={() => handleEdit(row)}>
                           <Edit />
                         </IconButton>
@@ -245,12 +283,18 @@ const AcademicsList = () => {
         update={onUpdate}
         exam={exam}
         employees={employees}
-        courses={courses}
-        modules={modules}
-        programs={programs}
-        cycles={cycles}
+        courses={courses.filter((item) => !JSON.parse(item.exempted_academic_years).includes(user.currentAcademicYearId))}
         t={t}
         i18n={i18n}
+      />
+      <GradingDialog
+        open={grading}
+        onClose={handleCloseGrading}
+        exam={grading}
+        t={t}
+        i18n={i18n}
+        students={gradingStudents || []}
+        updateData={onUpdate}
       />
       <ConfirmationDialog
         open={confirmDelete}
@@ -271,15 +315,15 @@ const AcademicsList = () => {
       >
         <Box sx={{ p: 2 }}>
           {
-            course_ids_show?.map((course_id) => {
-              const _course = courses?.find((item) => item.id == course_id);
+            program_ids_show?.map((program_id) => {
+              const _program = programs?.find((item) => item.id == program_id);
               return (
-                <Typography key={course_id} sx={{ mb: 1.5 }}>
+                <Typography key={program_id} sx={{ mb: 1.5 }}>
                   {
                     i18n.language == "en" ? (
-                      _course?.name_en
+                      _program?.short_name_en + " - " + _program?.name_en
                     ) : (
-                      _course?.name_fr
+                      _program?.short_name_fr + " - " + _program?.name_fr
                     )
                   }
                 </Typography>

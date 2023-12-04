@@ -48,6 +48,7 @@ const AcademicsList = () => {
   const { data: employees } = useData("employees", user.company_id);
   const { data: programs } = useData("academic_programs", user.company_id);
   const { data: academic_years } = useData("academic_years", user.company_id);
+  const { data: students } = useData("students", user.company_id);
   const { t, i18n } = useTranslation();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -62,8 +63,9 @@ const AcademicsList = () => {
   const columns = [
     { id: "name", align: "left", disablePadding: true, label: t("academics.table header.name") },
     { id: "program", align: "left", disablePadding: false, label: t("academics.table header.program") },
+    { id: "students", align: "left", disablePadding: false, label: t("academics.table header.students") },
     { id: "coefficient", align: "left", disablePadding: false, label: t("academics.table header.coefficient") },
-    { id: "description", align: "left", disablePadding: false, label: t("academics.table header.description") },
+    { id: "description", align: "left", disablePadding: false, label: t("academics.table header.semester") },
     { id: "exluded_academic_year", align: "left", disablePadding: false, label: t("academics.table header.excluded academic year") },
     { id: "head", align: "left", disablePadding: false, label: t("academics.table header.course head") },
     { id: "edit", align: "center", disablePadding: false, label: t("academics.table header.actions") },
@@ -133,6 +135,13 @@ const AcademicsList = () => {
   const openShowPrograms = Boolean(anchorEl);
   const showProgramsId = openShowPrograms ? 'simple-popover' : undefined;
 
+  const semesters = [
+    {id: 1, name: t("academics.semester 1")},
+    {id: 2, name: t("academics.semester 2")},
+    {id: 3, name: t("academics.semester 3")},
+    {id: 4, name: t("academics.semester 4")},
+  ];
+
   return (
     <Container>
       <div className="breadcrumb" style={{display: "flex", justifyContent: "space-between"}}>
@@ -167,6 +176,7 @@ const AcademicsList = () => {
                 .map((row) => {
                   const program_ids = JSON.parse(row.program_ids || '[]');
                   const excluded_academic_years = JSON.parse(row.exempted_academic_years || '[]');
+                  const numberOfStudents = students?.filter((item) => program_ids.includes(item.program_id)).length;
                   return (
                     <TableRow
                       hover
@@ -202,21 +212,23 @@ const AcademicsList = () => {
                         }
                       </TableCell>
 
+                      <TableCell align="left">{numberOfStudents}</TableCell>
+
                       <TableCell align="left">{row.coefficient}</TableCell>
 
-                      <TableCell align="left">{row.description || "-"}</TableCell>
+                      <TableCell align="left">
+                        {
+                          semesters?.find((item) => item.id == row.semester)?.name || "-"
+                        }
+                      </TableCell>
 
                       <TableCell align="left">
                         {
                           excluded_academic_years.length > 0 ? (
                             excluded_academic_years.map((academic_year) => (
-                              <Chip color="error" label={academic_years?.find((item) => item.id == academic_year)?.name} />
+                              <Chip color={academic_year == user.currentAcademicYearId ? "error" : "default"} label={academic_years?.find((item) => item.id == academic_year)?.name} />
                             ))
-                          ) : (
-                            <FlexBox>
-                              {t("academics.no excluded academic year")}
-                            </FlexBox>
-                          )
+                          ) : "-"
                         }
                       </TableCell>
 
@@ -258,6 +270,7 @@ const AcademicsList = () => {
         employees={employees}
         programs={programs}
         academic_years={academic_years}
+        semesters={semesters}
         t={t}
         i18n={i18n}
       />

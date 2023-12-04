@@ -28,7 +28,10 @@
             "exam duration": "Duration",
             "exam total": "Total Mark",
             "examiner": "Examiner",
-            "graded": "Graded"
+            "graded": "Graded",
+            "class average": "Class Average",
+            "students": "Students",
+            "semester": "Semester"
         },
         "dialog title": "Add Academic Year",
         "dialog title edit": "Edit Academic Year",
@@ -51,7 +54,6 @@
         "select cycle": "Select Academic Cycle",
         "select employee": "Select Employee",
         "no program": "No Programs",
-        "no excluded academic year": "-",
         "select academic year": "Select Academic Year",
         "select programs": "Select Programs",
         "select program": "Select Program",
@@ -82,6 +84,18 @@
         "all exams": "All Exams",
         "dialog program title": "Add Program",
         "dialog program title edit": "Edit Program",
-        "exam duration": "Exam Duration (minutes)"
+        "exam duration": "Exam Duration (minutes)",
+        "exam grading": "Exam Grading",
+        "exam mark on": "Exam Mark on {{value}}",
+        "exam mark": "Mark",
+        "select semester": "Select Semester",
+        "semester 1": "Semester 1",
+        "semester 2": "Semester 2",
+        "semester 3": "Semester 3",
+        "semester 4": "Semester 4",
+        "semester 5": "Semester 5",
+        "semester 6": "Semester 6",
+        "semester 7": "Semester 7",
+        "semester 8": "Semester 8"
     }
 }

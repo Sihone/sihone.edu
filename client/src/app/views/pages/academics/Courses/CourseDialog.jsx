@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem } from '@mui/material';
 
-const ProgramDialog = ({ open, onClose, save, update, course, t, i18n, employees, programs, academic_years }) => {
+const ProgramDialog = ({ open, onClose, save, update, course, t, i18n, employees, programs, academic_years, semesters }) => {
   const [name_en, setNameEn] = useState('');
   const [name_fr, setNameFr] = useState('');
   const [selectedPrograms, setSelectedPrograms] = useState([]);
@@ -9,6 +9,8 @@ const ProgramDialog = ({ open, onClose, save, update, course, t, i18n, employees
   const [description, setDescription] = useState(null);
   const [employee, setEmployee] = useState(null);
   const [excludedAcademicYears, setExcludedAcademicYears] = useState([]);
+  const [semester, setSemester] = useState(null);
+  const [semesterPerYear, setSemesterPerYear] = useState([]);
 
   useEffect(() => {
     if (open && course) {
@@ -20,6 +22,8 @@ const ProgramDialog = ({ open, onClose, save, update, course, t, i18n, employees
         setDescription(course.description);
         setEmployee(_employee);
         setExcludedAcademicYears(JSON.parse(course.exempted_academic_years || '[]'));
+        setSemester(course.semester);
+        setSemesterPerYear(JSON.parse(course.semester_per_year || '[]'));
     }
   }, [course]);
 
@@ -39,7 +43,9 @@ const ProgramDialog = ({ open, onClose, save, update, course, t, i18n, employees
         coefficient,
         description,
         employee_id: employee && employee.id,
-        exempted_academic_years: JSON.stringify(excludedAcademicYears)
+        exempted_academic_years: JSON.stringify(excludedAcademicYears),
+        semester,
+        semester_per_year: JSON.stringify(semesterPerYear)
       });
     } else {
         save({
@@ -49,7 +55,9 @@ const ProgramDialog = ({ open, onClose, save, update, course, t, i18n, employees
             coefficient,
             description,
             employee_id: employee && employee.id,
-            exempted_academic_years: JSON.stringify(excludedAcademicYears)
+            exempted_academic_years: JSON.stringify(excludedAcademicYears),
+            semester,
+            semester_per_year: JSON.stringify(semesterPerYear)
         });
     }
     resetForm();
@@ -68,6 +76,8 @@ const ProgramDialog = ({ open, onClose, save, update, course, t, i18n, employees
     setEmployee(null);
     setCoefficient(null);
     setExcludedAcademicYears([]);
+    setSemester(null);
+    setSemesterPerYear([]);
   }
 
   const handleClose = () => {
@@ -131,13 +141,36 @@ const ProgramDialog = ({ open, onClose, save, update, course, t, i18n, employees
         >
           <MenuItem value={null}>{t("academics.select programs")}</MenuItem>
           {programs?.map((item) => {
-            const _name = i18n.language == "en" ? item.name_en : item.name_fr;
+            const _name = i18n.language == "en" ? item.short_name_en + " - " + item.name_en : item.short_name_fr + " - " + item.name_fr;
             return (
               <MenuItem value={item.id} key={item.id}>
                 {_name}
               </MenuItem>
             )
           })}
+        </TextField>
+        <TextField
+          select
+          size="small"
+          name="role"
+          label={t("academics.table header.semester")}
+          variant="outlined"
+          fullWidth
+          value={semester}
+          onChange={(e) => setSemester(e.target.value)}
+          InputLabelProps={{
+            shrink: semester,
+          }}
+        >
+          <MenuItem value={null}>{t("academics.select semester")}</MenuItem>
+          {semesters.map((item) => {
+            return (
+              <MenuItem value={item.id} key={item.id}>
+                {item.name}
+              </MenuItem>
+            )
+          }
+          )}
         </TextField>
         <TextField
           margin="dense"
