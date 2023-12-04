@@ -63,7 +63,6 @@ const StudentList = () => {
     { id: "name", align: "left", disablePadding: true, label: t("students.table header.name") },
     { id: "phone", align: "left", disablePadding: false, label: t("students.table header.phone") },
     { id: "parent-phone", align: "left", disablePadding: false, label: t("students.table header.parent phone") },
-    { id: "gender", align: "left", disablePadding: false, label: t("students.table header.gender") },
     { id: "program", align: "left", disablePadding: false, label: t("students.table header.program") },
     { id: "status", align: "left", disablePadding: false, label: t("students.table header.status") },
     { id: "balance", align: "left", disablePadding: false, label: t("students.table header.balance") },
@@ -118,6 +117,11 @@ const StudentList = () => {
                   const program = programs.find((item) => item.id == row.program_id);
                   const programName = i18n.language == "en" ? (program?.short_name_en + " - " + program?.name_en) : (program?.short_name_fr + " - " + program?.name_fr);
                   const showBalance = showBalanceId == row.id;
+
+                  let _gender = row.gender === "male" ? "M" : "F";
+                  if (i18n.language == "fr") {
+                    _gender = row.gender === "male" ? "H" : "F";
+                  }
                   return (
                     <TableRow
                       hover
@@ -128,7 +132,7 @@ const StudentList = () => {
                       aria-checked={isItemSelected}
                     >
                       <TableCell align="left" component="th" scope="row" padding="checkbox" style={{paddingLeft: "16px"}}>
-                          <H5 fontSize={15}>{row.first_name + " " + row.last_name}</H5>
+                          <H5 fontSize={15}>{row.first_name + " " + row.last_name} ({_gender})</H5>
                           <p style={{margin: "0"}}>#{row.student_id}</p>
                       </TableCell>
 
@@ -138,8 +142,6 @@ const StudentList = () => {
                       </TableCell>
 
                       <TableCell align="left">{row.parent_phone}</TableCell>
-
-                      <TableCell align="left">{t("main."+row.gender)}</TableCell>
 
                       <TableCell align="left">
                         {programName}

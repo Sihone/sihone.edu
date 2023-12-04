@@ -47,6 +47,7 @@ const AcademicsList = () => {
   const { data, saveData, updateData, deleteData } = useData("academic_programs", user.company_id);
   const { data: employees } = useData("employees", user.company_id);
   const { data: cycles } = useData("academic_cycles", user.company_id);
+  const { data: students } = useData("students", user.company_id);
   const { t, i18n } = useTranslation();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -59,6 +60,7 @@ const AcademicsList = () => {
   const columns = [
     { id: "name_en", align: "left", disablePadding: true, label: t("academics.table header.name") },
     { id: "cycle", align: "left", disablePadding: false, label: t("academics.table header.cycle") },
+    { id: "students", align: "left", disablePadding: false, label: t("academics.table header.students") },
     { id: "price", align: "left", disablePadding: false, label: t("academics.table header.price") },
     { id: "head", align: "left", disablePadding: false, label: t("academics.table header.head") },
     { id: "edit", align: "center", disablePadding: false, label: t("academics.table header.actions") },
@@ -149,6 +151,7 @@ const AcademicsList = () => {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
                   const _cycle = cycles?.find((item) => item.id == row.cycle_id)
+                  const numberOfStudents = students?.filter((item) => item.program_id == row.id).length;
                   return (
                     <TableRow
                       hover
@@ -172,10 +175,12 @@ const AcademicsList = () => {
                         { i18n.language === "en" ? _cycle?.long_name_en : _cycle?.long_name_fr }
                       </TableCell>
 
+                      <TableCell align="left">{numberOfStudents}</TableCell>
+
                       <TableCell align="left">{row.price}</TableCell>
 
                       <TableCell align="left">
-                        {employees?.find((item) => item.id == row.employee_id)?.first_name + " " + employees?.find((item) => item.id == row.employee_id)?.last_name}
+                        {employees?.find((item) => item.id == row.employee_id)?.first_name || "-" + " " + (employees?.find((item) => item.id == row.employee_id)?.last_name || "-")}
                       </TableCell>
 
                       <TableCell align="center">

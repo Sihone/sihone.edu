@@ -34,7 +34,7 @@ const CycleDialog = ({ open, onClose, save, update, program, t, employees, cycle
         name_fr,
         cycle_id: cycle.id,
         price,
-        employee_id: employee.id
+        employee_id: employee && employee.id
       });
     } else {
         save({
@@ -42,7 +42,7 @@ const CycleDialog = ({ open, onClose, save, update, program, t, employees, cycle
             name_fr,
             cycle_id: cycle.id,
             price,
-            employee_id: employee.id
+            employee_id: employee && employee.id
         });
     }
     resetForm();
@@ -50,7 +50,7 @@ const CycleDialog = ({ open, onClose, save, update, program, t, employees, cycle
   }
 
   const disableSubmitButton = () => {
-    return !name_en || !name_fr || !cycle || !price || !employee;
+    return !name_en || !name_fr || !cycle || !price;
   }
 
   const resetForm = () => {

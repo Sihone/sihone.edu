@@ -36,10 +36,10 @@ function academicCourseGetRouter(req, res) {
 
 function academicCoursePostRouter(req, res) {
     console.log('academicCoursePostRouter');
-    const { company_id, name_en, name_fr, program_ids, description, coefficient, employee_id, exempted_academic_years } = req.body;
+    const { company_id, name_en, name_fr, program_ids, description, coefficient, employee_id, exempted_academic_years, semester, semester_per_year } = req.body;
     db.query(
-        'INSERT INTO academic_courses (company_id, name_en, name_fr, program_ids, description, coefficient, employee_id, exempted_academic_years) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING *',
-        [company_id, name_en, name_fr, program_ids, description, coefficient, employee_id || null, exempted_academic_years],
+        'INSERT INTO academic_courses (company_id, name_en, name_fr, program_ids, description, coefficient, employee_id, exempted_academic_years, semester, semester_per_year) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *',
+        [company_id, name_en, name_fr, program_ids, description, coefficient, employee_id || null, exempted_academic_years, semester, semester_per_year],
         async (result, err) => {
             if (err) {
                 console.log(err);
@@ -53,10 +53,10 @@ function academicCoursePostRouter(req, res) {
 
 function academicCoursePutRouter(req, res) {
     console.log('academicCoursePutRouter');
-    const { id, name_en, name_fr, program_ids, description, employee_id, coefficient, exempted_academic_years } = req.body;
+    const { id, name_en, name_fr, program_ids, description, employee_id, coefficient, exempted_academic_years, semester, semester_per_year } = req.body;
     db.query(
-        'UPDATE academic_courses SET name_en = ?, name_fr = ?, program_ids = ?, description = ?, employee_id = ?, coefficient = ?, exempted_academic_years = ? WHERE id = ?',
-        [name_en, name_fr, program_ids, description, employee_id || null, coefficient, exempted_academic_years, id],
+        'UPDATE academic_courses SET name_en = ?, name_fr = ?, program_ids = ?, description = ?, employee_id = ?, coefficient = ?, exempted_academic_years = ?, semester = ?, semester_per_year = ? WHERE id = ?',
+        [name_en, name_fr, program_ids, description, employee_id || null, coefficient, exempted_academic_years, semester, semester_per_year, id],
         async (result, err) => {
             if (err) {
                 console.log(err);

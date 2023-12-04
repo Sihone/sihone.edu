@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem } from '@mui/material';
 import { useAuth } from 'app/hooks/useAuth';
 
-const CourseDialog = ({ open, onClose, save, update, exam, t, i18n, employees, courses, modules, programs, cycles }) => {
+const CourseDialog = ({ open, onClose, save, update, exam, t, i18n, employees, courses }) => {
 
   const { user } = useAuth();
 
@@ -11,17 +11,12 @@ const CourseDialog = ({ open, onClose, save, update, exam, t, i18n, employees, c
   const [employee, setEmployee] = useState(null);
 
   const [course, setCourse] = useState(null);
-  const [module, setModule] = useState(null);
-  const [program, setProgram] = useState(null);
-  const [cycle, setCycle] = useState(null);
 
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [duration, setDuration] = useState(null);
-  const [total_mark, setTotalMark] = useState(null);
+  const [total_mark, setTotalMark] = useState(20);
 
-  const [filteredPrograms, setFilteredPrograms] = useState([]);
-  const [filteredModules, setFilteredModules] = useState([]);
-  const [filteredCourses, setFilteredCourses] = useState([]);
+  const [filteredCourses, setFilteredCourses] = useState(courses);
 
 
   useEffect(() => {
@@ -32,46 +27,25 @@ const CourseDialog = ({ open, onClose, save, update, exam, t, i18n, employees, c
         setEmployee(_employee);
 
         const _course = courses.find((item) => item.id == exam.course_id);
-        const _module = modules.find((item) => item.id == exam.module_id);
-        const _program = programs.find((item) => item.id == exam.program_id);
-        const _cycle = cycles.find((item) => item.id == exam.cycle_id);
         setCourse(_course);
-        setModule(_module);
-        setProgram(_program);
-        setCycle(_cycle);
 
         setDate(exam.date);
         setDuration(exam.duration);
-        setTotalMark(exam.total_mark);
+        setTotalMark(exam.total_mark || null);
     }
   }, [exam]);
-
-  useEffect(() => {
-    if (cycle) {
-      const _programs = programs.filter((item) => item.cycle_id == cycle.id);
-      setFilteredPrograms(_programs);
-    }
-  }, [cycle]);
-
-  useEffect(() => {
-    if (program) {
-      const _courses = courses.filter((item) => JSON.parse(item.program_ids).includes(program.id) && !JSON.parse(item.exempted_academic_years).includes(user.currentAcademicYearId));
-      setFilteredCourses(_courses);
-    }
-  }, [program]);
-
-  useEffect(() => {
-    if (course) {
-      const _modules = modules.filter((item) => JSON.parse(item.course_ids).includes(course.id));
-      setFilteredModules(_modules);
-    }
-  }, [course]);
 
   useEffect(() => {
     if (!open) {
         resetForm();
     }
   }, [open]);
+
+  useEffect(() => {
+    if (courses) {
+      setFilteredCourses(courses);
+    }
+  }, [courses]);
 
   const handleSave = () => {
     if (exam) {
@@ -80,23 +54,24 @@ const CourseDialog = ({ open, onClose, save, update, exam, t, i18n, employees, c
         name_en,
         name_fr,
         course_id: course && course.id || null,
-        module_id: module && module.id || null,
-        program_id: program && program.id || null,
-        cycle_id: cycle && cycle.id || null,
+        module_id: null,
+        program_id: null,
+        cycle_id: null,
         employee_id: employee && employee.id || null,
         date,
         duration,
         total_mark,
-        academic_year_id: user.currentAcademicYearId
+        academic_year_id: user.currentAcademicYearId,
+        grades: exam.grades
       });
     } else {
         save({
             name_en,
             name_fr,
             course_id: course && course.id || null,
-            module_id: module && module.id || null,
-            program_id: program && program.id || null,
-            cycle_id: cycle && cycle.id || null,
+            module_id: null,
+            program_id: null,
+            cycle_id: null,
             employee_id: employee && employee.id || null,
             date,
             duration,
@@ -109,7 +84,7 @@ const CourseDialog = ({ open, onClose, save, update, exam, t, i18n, employees, c
   }
 
   const disableSubmitButton = () => {
-    return !name_en || !name_fr || !course ||  !program || !cycle || !employee || !date;
+    return !name_en || !name_fr || !course || !employee || !date;
   }
 
   const resetForm = () => {
@@ -118,13 +93,10 @@ const CourseDialog = ({ open, onClose, save, update, exam, t, i18n, employees, c
     setEmployee(null);
 
     setCourse(null);
-    setModule(null);
-    setProgram(null);
-    setCycle(null);
 
     setDate(new Date().toISOString().slice(0, 10));
     setDuration(null);
-    setTotalMark(null);
+    setTotalMark(20);
   }
 
   const handleClose = () => {
@@ -135,22 +107,6 @@ const CourseDialog = ({ open, onClose, save, update, exam, t, i18n, employees, c
   const handleCourseChange = (e) => {
     let _course = courses.find((item) => item.id == e.target.value);
     setCourse(_course);
-    setModule(null);
-  }
-
-  const handleProgramChange = (e) => {
-    let _program = programs.find((item) => item.id == e.target.value);
-    setProgram(_program);
-    setCourse(null);
-    setModule(null);
-  }
-
-  const handleCycleChange = (e) => {
-    let _cycle = cycles.find((item) => item.id == e.target.value);
-    setCycle(_cycle);
-    setProgram(null);
-    setCourse(null);
-    setModule(null);
   }
 
   const handlEmployeeChange = (e) => {
@@ -191,55 +147,6 @@ const CourseDialog = ({ open, onClose, save, update, exam, t, i18n, employees, c
           select
           size="small"
           name="role"
-          label={t("academics.table header.cycle")}
-          variant="outlined"
-          fullWidth
-          value={cycle ? cycle.id : null}
-          onChange={handleCycleChange}
-          InputLabelProps={{
-            shrink: !!cycle,
-          }}
-        >
-          <MenuItem value={null}>{t("academics.select cycle")}</MenuItem>
-          {cycles?.map((item) => {
-            const _name = i18n.language == "en" ? item.long_name_en + " (" + item.short_name_en + ")" : item.name_fr + " (" + item.short_name_fr + ")";
-            return (
-              <MenuItem value={item.id} key={item.id}>
-                {_name}
-              </MenuItem>
-            )
-          })}
-        </TextField>
-
-        <TextField
-          select
-          size="small"
-          name="role"
-          label={t("academics.table header.program")}
-          variant="outlined"
-          fullWidth
-          value={program ? program.id : null}
-          onChange={handleProgramChange}
-          InputLabelProps={{
-            shrink: !!program,
-          }}
-          disabled={!cycle}
-        >
-          <MenuItem value={null}>{t("academics.select program")}</MenuItem>
-          {filteredPrograms?.map((item) => {
-            const _name = i18n.language == "en" ? item.name_en : item.name_fr;
-            return (
-              <MenuItem value={item.id} key={item.id}>
-                {_name}
-              </MenuItem>
-            )
-          })}
-        </TextField>
-
-        <TextField
-          select
-          size="small"
-          name="role"
           label={t("academics.course")}
           variant="outlined"
           fullWidth
@@ -248,35 +155,9 @@ const CourseDialog = ({ open, onClose, save, update, exam, t, i18n, employees, c
           InputLabelProps={{
             shrink: !!course,
           }}
-          disabled={!program}
         >
           <MenuItem value={null}>{t("academics.select course")}</MenuItem>
           {filteredCourses?.map((item) => {
-            const _name = i18n.language == "en" ? item.name_en : item.name_fr;
-            return (
-              <MenuItem value={item.id} key={item.id}>
-                {_name}
-              </MenuItem>
-            )
-          })}
-        </TextField>
-
-        <TextField
-          select
-          size="small"
-          name="role"
-          label={t("academics.table header.module")}
-          variant="outlined"
-          fullWidth
-          value={module ? module.id : null}
-          onChange={(e) => setModule(modules.find((item) => item.id == e.target.value))}
-          InputLabelProps={{
-            shrink: !!module,
-          }}
-          disabled={!course}
-        >
-          <MenuItem value={null}>{t("academics.select module")}</MenuItem>
-          {filteredModules?.map((item) => {
             const _name = i18n.language == "en" ? item.name_en : item.name_fr;
             return (
               <MenuItem value={item.id} key={item.id}>
