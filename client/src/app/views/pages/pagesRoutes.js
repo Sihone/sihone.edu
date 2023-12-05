@@ -29,6 +29,7 @@ const Programs = Loadable(lazy(() => import("./academics/Programs")));
 const Courses = Loadable(lazy(() => import("./academics/Courses")));
 const Modules = Loadable(lazy(() => import("./academics/Modules")));
 const Exams = Loadable(lazy(() => import("./academics/Exams")));
+const Transcripts = Loadable(lazy(() => import("./academics/Transcripts")));
 
 const Accounts = Loadable(lazy(() => import("./finance/Accounts")));
 const Transactions = Loadable(lazy(() => import("./finance/Transactions")));
@@ -64,6 +65,7 @@ const pagesRoutes = [
   { path: "/courses", element: <Courses />},
   { path: "/modules", element: <Modules />},
   { path: "/exams", element: <Exams />},
+  { path: "/transcripts", element: <Transcripts />},
   
   { path: "/settings/general", element: <General />},
   { path: "/settings/roles", element: <Roles />},

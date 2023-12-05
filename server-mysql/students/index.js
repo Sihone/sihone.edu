@@ -21,6 +21,26 @@ function studentsGetAllRouter(req, res) {
     })
 }
 
+function studentsGetAllByAcademicYearRouter(req, res) {
+    console.log('studentsGetRouter');
+    const { company_id, academic_year_id } = req.params;
+    db.query(`
+        SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id FROM students
+        LEFT JOIN academic_programs ON students.program_id = academic_programs.id
+        WHERE students.company_id = ? AND students.academic_year_id = ?
+        ORDER BY students.first_name ASC
+    `,
+    [company_id, academic_year_id],
+    async (result, error) => {
+        if (error) {
+            console.log(error);
+            res.status(500).json(error);
+        } else {
+            res.json(result.rows.map(row => delete row.password && row));
+        }
+    })
+}
+
 function studentGetRouter(req, res) {
     console.log('studentGetRouter');
     const { company_id, id } = req.params;
@@ -208,4 +228,5 @@ module.exports = {
     studentsDeleteRouter,
     passwordRouter,
     studentGetRouter,
+    studentsGetAllByAcademicYearRouter
 };

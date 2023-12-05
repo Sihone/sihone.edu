@@ -41,7 +41,7 @@ export const useNavigations = () => {
           { name: t('main.menu.programs'), path: "/programs", iconText: "PR"},
           { name: t('main.menu.courses'), path: "/courses", iconText: "CR" },
           { name: t('main.menu.exams'), path: "/exams", iconText: "EX" },
-          { name: t('main.menu.grading'), path: "/grading", iconText: "GD" },
+          { name: t('main.menu.grading'), path: "/transcripts", iconText: "GD" },
         ],
       },
       hasAccess(user.permissions, sections.students.id) && {

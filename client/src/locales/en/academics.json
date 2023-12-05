@@ -27,6 +27,7 @@
             "exam date": "Exam Date",
             "exam duration": "Duration",
             "exam total": "Total Mark",
+            "exam score": "Total Score",
             "examiner": "Examiner",
             "graded": "Graded",
             "class average": "Class Average",
@@ -96,6 +97,11 @@
         "semester 5": "Semester 5",
         "semester 6": "Semester 6",
         "semester 7": "Semester 7",
-        "semester 8": "Semester 8"
+        "semester 8": "Semester 8",
+        "year admitted": "Admitted Year",
+        "overall average": "Overall Average",
+        "average": "Average",
+        "transcript": "Transcript",
+        "select year and student": "Select Academic Year and Student"
     }
 }
