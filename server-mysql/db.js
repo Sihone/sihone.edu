@@ -4,7 +4,6 @@ let env = process.env;
 if (process.env.NODE_ENV !== 'production') {
   env = require('./db-mysql.json');
 }
-
 const sqlOptions = {
   connectionLimit: 10,
   host: env.DB_HOST,
