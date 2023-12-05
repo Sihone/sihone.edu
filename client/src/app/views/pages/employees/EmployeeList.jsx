@@ -1,9 +1,9 @@
-import { Edit, TrendingFlat } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import { Box, Checkbox, Paper, styled, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
-import { Breadcrumb } from "app/components";
+import { Breadcrumb, ConfirmationDialog } from "app/components";
 import { TableHead, TableToolbar } from "app/components/data-table";
 import { getComparator, stableSort } from "app/components/data-table/utils";
 import { H5 } from "app/components/Typography";
@@ -12,6 +12,8 @@ import useData from "app/hooks/useData";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "app/hooks/useAuth";
 import { useTranslation } from 'react-i18next';
+import { useSnackbar } from "notistack";
+import { useEffect, useState } from "react";
 
 // styled components
 const FlexBox = styled(Box)({ display: "flex", alignItems: "center" });
@@ -46,8 +48,12 @@ const EmployeeList = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  const { data: users } = useData("employees", user.company_id);
+  const { data: users, deleteData } = useData("employees", user.company_id);
   const { t } = useTranslation();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const [deleteId, setDeleteId] = useState(null);
+  const [filteredEmployees, setFilteredEmployees] = useState([]);
 
   // TABLE HEADER COLUMN LIST
   const columns = [
@@ -63,13 +69,39 @@ const EmployeeList = () => {
     handleSelectAllClick(event.target.checked, newSelected);
   };
 
-  const filteredUsers = users?.map((item) => ({
-    id: item.id,
-    name: item.first_name + " " + item.last_name,
-    phone: item.phone,
-    email: item.email,
-    role: item.role_name + " - " + item.role_description ,
-  }));
+  useEffect(() => {
+    if (users) {
+      const _employees = users?.map((item) => {
+        if (item.super == 1) return null;
+        return {
+          id: item.id,
+          name: item.first_name + " " + item.last_name,
+          phone: item.phone,
+          email: item.email,
+          role: item.role_name + " - " + item.role_description ,
+          super: item.super,
+        }
+      });
+      setFilteredEmployees(_employees.filter((item) => item));
+    }
+  }, [users]);
+
+  const handleDelete = (id) => {
+    setDeleteId(id);
+  };
+
+  const onDelete = async () => {
+    await deleteData(deleteId)
+      .then(() => {
+        setDeleteId(null);
+        enqueueSnackbar(t("main.success"), { variant: "success" });
+      })
+      .catch((err) => {
+        console.error(err);
+        enqueueSnackbar(err.message || err.detail || err, { variant: "error" });
+      });
+  }
+    
 
   return (
     <Container>
@@ -89,32 +121,29 @@ const EmployeeList = () => {
               orderBy={orderBy}
               headCells={columns}
               numSelected={selected.length}
-              rowCount={filteredUsers.length}
+              rowCount={filteredEmployees.length}
               onRequestSort={handleRequestSort}
               onSelectAllClick={handleSelectAllRows}
+              showSelect={false}
             />
 
             <TableBody>
-              {stableSort(filteredUsers, getComparator(order, orderBy))
+              {stableSort(filteredEmployees, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
                   const isItemSelected = isSelected(row.name);
+
+                  if (row.super == 1) {
+                    return null;
+                  }
 
                   return (
                     <TableRow
                       hover
                       tabIndex={-1}
                       key={row.name}
-                      role="checkbox"
-                      selected={isItemSelected}
-                      aria-checked={isItemSelected}
-                      onClick={(event) => handleClick(event, row.name)}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox color="primary" checked={isItemSelected} />
-                      </TableCell>
-
-                      <TableCell component="th" scope="row" padding="none">
+                      <TableCell component="th" scope="row" style={{paddingLeft: "16px"}}>
                         <FlexBox gap={1}>
                           <H5 fontSize={15}>{row.name}</H5>
                         </FlexBox>
@@ -131,9 +160,13 @@ const EmployeeList = () => {
                           <Edit />
                         </IconButton>
 
-                        <IconButton onClick={() => navigate("/pages/new-customer")}>
-                          <TrendingFlat />
-                        </IconButton>
+                        {
+                          row.super == 0 && (
+                            <IconButton onClick={() => handleDelete(row.id)}>
+                              <Delete />
+                            </IconButton>
+                          )
+                        }
                       </TableCell>
                     </TableRow>
                   );
@@ -141,12 +174,18 @@ const EmployeeList = () => {
             </TableBody>
           </Table>
         </TableContainer>
-
+        <ConfirmationDialog
+          open={!!deleteId}
+          title={t("employees.dialog title")}
+          text={t("employees.dialog content")}
+          onConfirmDialogClose={() => setDeleteId(null)}
+          onYesClick={onDelete}
+        />
         <TablePagination
           page={page}
           component="div"
           rowsPerPage={rowsPerPage}
-          count={filteredUsers.length}
+          count={filteredEmployees.length}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 25]}
           onRowsPerPageChange={handleChangeRowsPerPage}
