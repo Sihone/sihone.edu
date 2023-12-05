@@ -15,7 +15,7 @@ if (process.env.NODE_ENV !== 'production') {
 //   database: env.DB_DATABASE,
 // });
 
-const pool = mysql.createPool({
+const sqlOptions = {
   connectionLimit: 10,
   host: env.DB_HOST,
   user: env.DB_USER,
@@ -23,7 +23,10 @@ const pool = mysql.createPool({
   database: env.DB_DATABASE,
   port: env.DB_PORT,
   multipleStatements: true
-});
+};
+const pool = mysql.createPool(sqlOptions);
+
+console.log({sqlOptions});
 
 // module.exports = {
 //   query: (text, params) => pool.query(text, params)
@@ -33,6 +36,7 @@ module.exports = {
   query: (query, params, callBack) => {
     pool.getConnection(function(err,connection){
       if (err) {
+        console.error(err);
         connection.release(error => error ? reject(error) : resolve());
         // throw err;
       }
