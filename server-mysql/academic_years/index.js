@@ -7,6 +7,7 @@ function academicYearsGetAllRouter(req, res) {
         SELECT academic_years.id AS id, name, start_date, end_date, grade_total, current_academic_year FROM academic_years
         LEFT JOIN settings ON company_id = settings.id
         WHERE company_id = ?
+        ORDER BY academic_years.id DESC
     `,
     [company_id],
     async (result, error) => {
