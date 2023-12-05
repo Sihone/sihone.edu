@@ -125,6 +125,35 @@ app.post('/api/students', studentsPostRouter);
 app.put('/api/students', studentsPutRouter);
 app.delete('/api/students/:id', studentsDeleteRouter);
 
+// tuition routes
+const { tuitionGetAllRouter, tuitionGetRouter, tuitionPutRouter } = require('./server-mysql/tuition');
+app.get('/api/tuitions/:company_id/:id', tuitionGetRouter);
+app.get('/api/tuitions/:company_id', tuitionGetAllRouter);
+app.put('/api/tuitions', tuitionPutRouter);
+
+// tuition items routes
+const { tuitionItemsGetAllRouter, tuitionItemsGetRouter, tuitionItemsPostRouter, tuitionItemsDeleteRouter } = require('./server-mysql/tuition_items');
+app.get('/api/tuition_items/:company_id/:id', tuitionItemsGetRouter);
+app.get('/api/tuition_items/:company_id', tuitionItemsGetAllRouter);
+app.post('/api/tuition_items', tuitionItemsPostRouter);
+app.delete('/api/tuition_items/:id', tuitionItemsDeleteRouter);
+
+// items routes
+const { itemsGetAllRouter, itemGetRouter, itemsPostRouter, itemsPutRouter, itemsDeleteRouter } = require('./server-mysql/items');
+app.get('/api/items/:company_id/:id', itemGetRouter);
+app.get('/api/items/:company_id', itemsGetAllRouter);
+app.post('/api/items', itemsPostRouter);
+app.put('/api/items', itemsPutRouter);
+app.delete('/api/items/:id', itemsDeleteRouter);
+
+// tuition payments routes
+const { tuitionPaymentsGetAllRouter, tuitionPaymentsGetRouter, tuitionPaymentsPostRouter, tuitionPaymentsPutRouter, tuitionPaymentsDeleteRouter } = require('./server-mysql/tuition_payments');
+app.get('/api/tuition_payments/:company_id/:id', tuitionPaymentsGetRouter);
+app.get('/api/tuition_payments/:company_id', tuitionPaymentsGetAllRouter);
+app.post('/api/tuition_payments', tuitionPaymentsPostRouter);
+app.put('/api/tuition_payments', tuitionPaymentsPutRouter);
+app.delete('/api/tuition_payments/:id', tuitionPaymentsDeleteRouter);
+
 // let the react app to handle any unknown routes 
 // serve up the index.html if express does'nt recognize the route
 app.get('*', function(req, res) {

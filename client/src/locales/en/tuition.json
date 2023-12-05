@@ -1,0 +1,33 @@
+{
+    "tuition": {
+        "summary": "Tuition Summary",
+        "title": "Tuition",
+        "pay": "Add Payment",
+        "add item": "Add Item",
+        "add rebate": "Add Rebate",
+        "date": "Invoice Date",
+        "item": "Items",
+        "amount": "Amount",
+        "payment info": "Payment Details",
+        "subtotal": "Subtotal",
+        "total": "Tuition Balance",
+        "rebate": "Rebate",
+        "payments": "Total Paid",
+        "dialog delete pay title": "Delete Payment",
+        "dialog delete pay content": "Are you sure you want to delete this payment?",
+        "dialog delete item title": "Delete Item",
+        "dialog delete item content": "Are you sure you want to delete this item?",
+        "dialog payment title": "Add Payment",
+        "payment date": "Payment Date",
+        "dialog add item title": "Add Item",
+        "existing items": "Existing Items",
+        "new item": "New Item",
+        "dialog rebate title": "Add Rebate",
+        "rebate amount": "Rebate Amount",
+        "select item": "Select Item",
+        "paid": "Paid",
+        "unpaid": "Unpaid",
+        "overpaid": "Overpaid",
+        "partial paid": "Partially Paid"
+    }
+}

@@ -44,7 +44,7 @@ const StatCard3 = () => {
     },
     {
       icon: "people",
-      amount: employees.length,
+      amount: employees.filter((employee) => employee.super == 0).length,
       title: t("employees.name")
     },
   ];
