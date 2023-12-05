@@ -1,27 +1,51 @@
 import { Box, Card, Grid, Icon, IconButton, useTheme } from "@mui/material";
 import { H3, Paragraph } from "app/components/Typography";
+import { useAuth } from "app/hooks/useAuth";
+import useData from "app/hooks/useData";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import _ from "lodash";
 
 const StatCard3 = () => {
+
+  const [academicYear, setAcademicYear] = useState(null);
+  const [activePrograms, setActivePrograms] = useState(0);
+  const { t } = useTranslation();
+  const { user } = useAuth();
+  const { data: students } = useData('students_ay', user.company_id, user.currentAcademicYearId);
+  const { data: academicYears } = useData('academic_years', user.company_id);
+  const { data: employees } = useData('employees', user.company_id);
+
+  useEffect(() => {
+    if (academicYears) {
+      setAcademicYear(academicYears.find((ay) => ay.id === user.currentAcademicYearId));
+    }
+
+    if (students) {
+      setActivePrograms(Object.keys(_.groupBy(students, 'program_id')).length);
+    }
+  }, [academicYears, user.currentAcademicYearId, students]);
+
   const statList = [
     {
+      icon: "calendar_today",
+      amount: academicYear?.name || "",
+      title: t("academics.table header.academic year"),
+    },
+    {
+      icon: "school",
+      amount: students.length,
+      title: t("students.title"),
+    },
+    {
+      icon: "book",
+      amount: activePrograms || 0,
+      title: t("academics.active programs"),
+    },
+    {
       icon: "people",
-      amount: 10495,
-      title: "New Members",
-    },
-    {
-      icon: "location_on_outlined",
-      amount: 30942,
-      title: "Places added",
-    },
-    {
-      icon: "keyboard_voice",
-      amount: 45269,
-      title: "Support Members",
-    },
-    {
-      icon: "card_giftcard",
-      amount: 20965,
-      title: "Tags Used",
+      amount: employees.length,
+      title: t("employees.name")
     },
   ];
   const { palette } = useTheme();

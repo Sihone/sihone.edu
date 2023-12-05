@@ -1,6 +1,7 @@
 {
     "employees": {
         "title": "Employee List",
+        "name": "Employees",
         "table title": "All Employees",
         "table header": {
             "name": "Name",
