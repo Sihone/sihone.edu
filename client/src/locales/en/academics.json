@@ -102,6 +102,8 @@
         "overall average": "Overall Average",
         "average": "Average",
         "transcript": "Transcript",
-        "select year and student": "Select Academic Year and Student"
+        "select year and student": "Select Academic Year and Student",
+        "active programs": "Active Programs",
+        "program statistics": "Program Statistics"
     }
 }

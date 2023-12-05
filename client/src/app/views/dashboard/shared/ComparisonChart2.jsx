@@ -1,9 +1,47 @@
 import { useTheme } from "@mui/material";
+import { useAuth } from "app/hooks/useAuth";
+import useData from "app/hooks/useData";
 import ReactEcharts from "echarts-for-react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const ComparisonChart2 = ({ height }) => {
   const { palette } = useTheme();
+
+  const { user } = useAuth();
+  const { data: programs } = useData("academic_programs", user.company_id);
+  const { data: academicYears } = useData("academic_years", user.company_id);
+  const { data: students } = useData("students", user.company_id);
+  const { i18n } = useTranslation();
+
+  const [source, setSource] = React.useState([]);
+  const [series, setSeries] = React.useState([]);
+
+  React.useEffect(() => {
+    if (students.length > 0 && academicYears.length > 0 && programs.length > 0) {
+      let _source = [];
+      let _sourceVal = ["Month"];
+      let _series = [];
+      programs.forEach((program) => {
+        _sourceVal.push(i18n.language == "en" ? program.short_name_en + " - " + program.name_en : (program.short_name_fr + " - " + program.name_fr));
+        _series.push({
+          type: "bar",
+          itemStyle: { borderRadius: [10, 10, 0, 0] },
+        });
+      });
+      _source.push(_sourceVal);
+      academicYears.forEach((ay) => {
+        let _ay = [ay.name];
+        programs.forEach((program) => {
+          const _students = students.filter((student) => student.program_id == program.id && student.academic_year_id == ay.id);
+          _ay.push(_students.length);
+        });
+        _source.push(_ay);
+      });
+      setSource(_source);
+      setSeries(_series);
+    }
+  }, [students, academicYears, programs, i18n.language]);
 
   const option = {
     grid: { left: "6%", bottom: "10%", right: "1%" },
@@ -25,15 +63,7 @@ const ComparisonChart2 = ({ height }) => {
     barMaxWidth: 13,
     tooltip: {},
     dataset: {
-      source: [
-        ["Month", "Website", "App", "Linux", "Windows"],
-        ["Jan", 2200, 1200, 950, 800],
-        ["Feb", 800, 500, 1500, 600],
-        ["Mar", 700, 1350, 800, 700],
-        ["Apr", 1500, 1250, 950, 900],
-        ["May", 2450, 450, 950, 500],
-        ["June", 1700, 1250, 1500, 800],
-      ],
+      source,
     },
     xAxis: {
       type: "category",
@@ -64,24 +94,7 @@ const ComparisonChart2 = ({ height }) => {
     },
     // Declare several bar series, each will be mapped
     // to a column of dataset.source by default.
-    series: [
-      {
-        type: "bar",
-        itemStyle: { borderRadius: [10, 10, 0, 0] },
-      },
-      {
-        type: "bar",
-        itemStyle: { borderRadius: [10, 10, 0, 0] },
-      },
-      {
-        type: "bar",
-        itemStyle: { borderRadius: [10, 10, 0, 0] },
-      },
-      {
-        type: "bar",
-        itemStyle: { borderRadius: [10, 10, 0, 0] },
-      },
-    ],
+    series,
   };
 
   return <ReactEcharts style={{ height: height }} option={option} />;

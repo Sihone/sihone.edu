@@ -119,11 +119,11 @@ const Layout1Topbar = () => {
             <Icon>menu</Icon>
           </StyledIconButton>
 
-          <IconBox>
+          {/* <IconBox>
             <StyledIconButton>
               <Icon>mail_outline</Icon>
             </StyledIconButton>
-          </IconBox>
+          </IconBox> */}
         </Box>
 
         <Box display="flex" alignItems="center">
@@ -151,22 +151,22 @@ const Layout1Topbar = () => {
           >
             <StyledItem onClick={() => navigate("/")}>
               <Home fontSize="small" />
-              <Span> Home </Span>
+              <Span> {t("main.menu.dashboard")} </Span>
             </StyledItem>
 
-            <StyledItem onClick={() => navigate("/page-layouts/user-profile")}>
+            {/* <StyledItem onClick={() => navigate("/page-layouts/user-profile")}>
               <Person fontSize="small" />
               <Span> Profile </Span>
-            </StyledItem>
+            </StyledItem> */}
 
             <StyledItem onClick={() => navigate("/page-layouts/account")}>
               <Settings fontSize="small" />
-              <Span> Settings </Span>
+              <Span> {t("settings.general title")} </Span>
             </StyledItem>
 
             <StyledItem onClick={logout}>
               <PowerSettingsNew fontSize="small" />
-              <Span> Logout </Span>
+              <Span> {t("main.logout")} </Span>
             </StyledItem>
           </MatxMenu>
           <Select
