@@ -50,6 +50,8 @@
         "salutation": "Salutation",
         "weekly": "Weekly",
         "biweekly": "Biweekly",
-        "monthly": "Monthly"
+        "monthly": "Monthly",
+        "dialog title": "Delete Employee",
+        "dialog content": "Are you sure you want to delete this employee?"
     }
 }
