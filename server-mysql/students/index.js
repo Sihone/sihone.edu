@@ -91,19 +91,32 @@ async function studentsPostRouter(req, res) {
                             } else {
                                 db.query(
                                     `
-                                    SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id FROM students
-                                    LEFT JOIN academic_programs ON students.program_id = academic_programs.id
-                                    WHERE students.company_id = ?
+                                        INSERT INTO tuition (student_id, company_id) VALUES (?, ?)
                                     `,
-                                    [company_id, result.rows[0].id],
+                                    [result.rows[0].id, company_id],
                                     async (result3, error) => {
                                         if (error) {
                                             console.log(error);
                                             res.status(500).json(error);
                                         } else {
-                                            const student = result3.rows[0];
-                                            delete student.password;
-                                            res.status(201).json(student);
+                                            db.query(
+                                                `
+                                                    SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id FROM students
+                                                    LEFT JOIN academic_programs ON students.program_id = academic_programs.id
+                                                    WHERE students.company_id = ?
+                                                `,
+                                                [company_id, result.rows[0].id],
+                                                async (result3, error) => {
+                                                    if (error) {
+                                                        console.log(error);
+                                                        res.status(500).json(error);
+                                                    } else {
+                                                        const student = result3.rows[0];
+                                                        delete student.password;
+                                                        res.status(201).json(student);
+                                                    }
+                                                }
+                                            );
                                         }
                                     }
                                 );

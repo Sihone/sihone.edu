@@ -11,7 +11,7 @@ import dragAndDropRoute from "./views/Drag&Drop/DragAndDropRoute";
 import ecommerceRoutes from "./views/ecommerce/EcommerceRoutes";
 import formsRoutes from "./views/forms/FormsRoutes";
 import inboxRoute from "./views/inbox/InboxRoutes";
-import invoiceRoutes from "./views/invoice/InvoioceRoutes";
+import invoiceRoutes from "./views/pages/tuition/InvoioceRoutes";
 import ListRoute from "./views/list/ListRoute";
 import mapRoutes from "./views/map/MapRoutes";
 import materialRoutes from "./views/material-kit/MaterialRoutes";

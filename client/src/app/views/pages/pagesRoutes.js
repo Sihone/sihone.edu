@@ -36,6 +36,7 @@ const Transactions = Loadable(lazy(() => import("./finance/Transactions")));
 
 const StudentList = Loadable(lazy(() => import("./students/StudentList")));
 const StudentForm = Loadable(lazy(() => import("./students/customer-form/CustomerForm")));
+const Tuition = Loadable(lazy(() => import("./tuition/InvoiceList")));
 
 const pagesRoutes = [
   { path: "/user-list-1", element: <UserList1 /> },
@@ -76,6 +77,7 @@ const pagesRoutes = [
   { path: "/students", element: <StudentList />},
   { path: "/students/:id", element: <StudentForm />},
   { path: "/new-student", element: <StudentForm />},
+  { path: "/tuition", element: <Tuition />}
 ];
 
 export default pagesRoutes;
