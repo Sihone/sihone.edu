@@ -84,7 +84,7 @@ const CourseDialog = ({ open, onClose, save, update, exam, t, i18n, employees, c
   }
 
   const disableSubmitButton = () => {
-    return !name_en || !name_fr || !course || !employee || !date;
+    return !name_en || !name_fr || !course || !employee || !date || !total_mark;
   }
 
   const resetForm = () => {

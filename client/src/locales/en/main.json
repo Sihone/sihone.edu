@@ -61,6 +61,7 @@
         "active": "Active",
         "inactive": "Inactive",
         "status": "Status",
-        "actions": "Actions"
+        "actions": "Actions",
+        "date printed": "Date Printed"
     }
 }

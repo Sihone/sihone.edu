@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useState } from "react";
 import { useSnackbar } from "notistack";
 import CourseDialog from "./CourseDialog";
+import { semesters } from "app/utils/constant";
 
 // styled components
 const FlexBox = styled(Box)({ display: "flex", alignItems: "center" });
@@ -135,13 +136,6 @@ const AcademicsList = () => {
   const openShowPrograms = Boolean(anchorEl);
   const showProgramsId = openShowPrograms ? 'simple-popover' : undefined;
 
-  const semesters = [
-    {id: 1, name: t("academics.semester 1")},
-    {id: 2, name: t("academics.semester 2")},
-    {id: 3, name: t("academics.semester 3")},
-    {id: 4, name: t("academics.semester 4")},
-  ];
-
   return (
     <Container>
       <div className="breadcrumb" style={{display: "flex", justifyContent: "space-between"}}>
@@ -218,7 +212,7 @@ const AcademicsList = () => {
 
                       <TableCell align="left">
                         {
-                          semesters?.find((item) => item.id == row.semester)?.name || "-"
+                          semesters(t).find((item) => item.id == row.semester)?.name || "-"
                         }
                       </TableCell>
 
@@ -270,7 +264,7 @@ const AcademicsList = () => {
         employees={employees}
         programs={programs}
         academic_years={academic_years}
-        semesters={semesters}
+        semesters={semesters(t)}
         t={t}
         i18n={i18n}
       />

@@ -117,9 +117,10 @@ app.put('/api/finance_transactions', financeTransactionsPutRouter);
 app.delete('/api/finance_transactions/:id', financeTransactionsDeleteRouter);
 
 // students routes
-const { studentsGetAllRouter, studentGetRouter, studentsPostRouter, studentsPutRouter, studentsDeleteRouter } = require('./server-mysql/students');
+const { studentsGetAllRouter, studentGetRouter, studentsPostRouter, studentsPutRouter, studentsDeleteRouter, studentsGetAllByAcademicYearRouter } = require('./server-mysql/students');
 app.get('/api/students/:company_id/:id', studentGetRouter);
 app.get('/api/students/:company_id', studentsGetAllRouter);
+app.get('/api/students_ay/:company_id/:academic_year_id', studentsGetAllByAcademicYearRouter);
 app.post('/api/students', studentsPostRouter);
 app.put('/api/students', studentsPutRouter);
 app.delete('/api/students/:id', studentsDeleteRouter);
