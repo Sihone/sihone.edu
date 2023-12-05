@@ -27,5 +27,5 @@ yarn-error.log*
 .lh
 
 /server/db.json
-/server/db-mysql.json
+/server-mysql/db-mysql.json
 /client/node_modules

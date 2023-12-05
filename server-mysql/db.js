@@ -1,19 +1,9 @@
-// const { Pool } = require('pg');
 const mysql = require("mysql");
 
 let env = process.env;
 if (process.env.NODE_ENV !== 'production') {
-  // env = require('./db.json');
   env = require('./db-mysql.json');
 }
-
-// const pool = new Pool({
-//   user: env.DB_USER,
-//   password: env.DB_PASSWORD,
-//   host: env.DB_HOST,
-//   port: env.DB_PORT,
-//   database: env.DB_DATABASE,
-// });
 
 const sqlOptions = {
   connectionLimit: 10,
@@ -25,12 +15,6 @@ const sqlOptions = {
   multipleStatements: true
 };
 const pool = mysql.createPool(sqlOptions);
-
-console.log({sqlOptions});
-
-// module.exports = {
-//   query: (text, params) => pool.query(text, params)
-// };
 
 module.exports = {
   query: (query, params, callBack) => {
