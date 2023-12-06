@@ -1,5 +1,5 @@
-import { AddCircle, Delete, Edit, TrendingFlat } from "@mui/icons-material";
-import { Box, Paper, styled, Table, TableBody, TableCell, TableRow } from "@mui/material";
+import { AddCircle, CancelOutlined, Delete, Edit, TrendingFlat } from "@mui/icons-material";
+import { Autocomplete, Box, Icon, InputAdornment, Paper, styled, Table, TableBody, TableCell, TableRow, TextField } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
@@ -48,6 +48,8 @@ const AttendanceList = () => {
   const { data, saveData, updateData, deleteData } = useData("attendance", user.company_id);
   const { data: employees } = useData("employees", user.company_id);
   const { t } = useTranslation();
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
+  const [selectedMonthYear, setSelectedMonthYear] = useState("");
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -68,7 +70,7 @@ const AttendanceList = () => {
 
   useEffect(() => {
     if (data) {
-      const _data = data.map((item) => ({
+      let _data = data.map((item) => ({
         id: item.id,
         name: item.first_name + " " + item.last_name,
         attendance_date: item.attendance_date,
@@ -77,9 +79,15 @@ const AttendanceList = () => {
         total: item.total_time / 60 / 60,
         employee_id: item.employees_id
       }));
-      setFilteredData(_data.reverse());
+      if (selectedEmployeeId) {
+        _data = _data.filter((item) => item.employee_id === selectedEmployeeId);
+      }
+      if (selectedMonthYear) {
+        _data = _data.filter((item) => item.attendance_date.includes(selectedMonthYear));
+      }
+      setFilteredData(_data);
     }
-  }, [data]);
+  }, [data, selectedEmployeeId, employees, selectedMonthYear]);
 
   const handleClose = () => {
     setOpen(false);
@@ -109,6 +117,11 @@ const AttendanceList = () => {
     setAttendance(null);
   }
 
+  const employeesOptions = [
+    {id: null, label: t("payroll.table filter all")},
+    ...employees?.map((employee) => ({...employee, label: employee.first_name + " " + employee.last_name}))
+  ];
+
   return (
     <Container>
       <div className="breadcrumb" style={{display: "flex", justifyContent: "space-between"}}>
@@ -121,6 +134,40 @@ const AttendanceList = () => {
           </IconButton>
         </div>
       </div>
+
+      <Paper sx={{ width: "100%", mb: 2 }}>
+        <TableContainer style={{display: "flex", gap: "16px", padding: "32px 16px"}}>
+          <Autocomplete
+              disablePortal
+              id="combo-box-demo"
+              fullWidth
+              options={employeesOptions}
+              renderInput={(params) => <TextField {...params} label={t("attendance.table header.employee")} />}
+              onChange={(event, value) => setSelectedEmployeeId(value ? value.id : null)}
+              value={employeesOptions.find((item) => item.id === selectedEmployeeId)}
+          />
+          <TextField
+            fullWidth
+            label={t("payroll.table year month")}
+            value={selectedMonthYear}
+            onChange={(e) => setSelectedMonthYear(e.target.value)}
+            type="month"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            InputProps={{
+              endAdornment: selectedMonthYear && (
+                <InputAdornment position="start">
+                  <IconButton onClick={() => setSelectedMonthYear("")}>
+                    <CancelOutlined />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </TableContainer>
+
+      </Paper>
 
       <Paper sx={{ width: "100%", mb: 2 }}>
         <TableToolbar title={t("attendance.table title")} numSelected={selected.length} />
@@ -137,9 +184,7 @@ const AttendanceList = () => {
             />
 
             <TableBody>
-              {stableSort(filteredData, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
+              {filteredData.map((row) => {
                   const isItemSelected = isSelected(row.name);
 
                   return (
