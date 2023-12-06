@@ -4,7 +4,7 @@ function tuitionGetAllRouter(req, res) {
     console.log('tuitionGetRouter');
     const { company_id } = req.params;
     db.query(`
-        SELECT *, tuition.id AS id, academic_years.name AS ay_name, tuition.status AS status, tuition.student_id AS student_id, students.student_id AS studentId FROM tuition
+        SELECT *, tuition.id AS id, academic_years.name AS ay_name, tuition.status AS status, students.status AS student_status, tuition.student_id AS student_id, students.student_id AS studentId FROM tuition
         LEFT JOIN students ON tuition.student_id = students.id
         LEFT JOIN academic_years ON students.academic_year_id = academic_years.id
         LEFT JOIN academic_programs ON students.program_id = academic_programs.id
@@ -26,7 +26,7 @@ function tuitionGetRouter(req, res) {
     console.log('tuitionGetRouter');
     const { company_id, id } = req.params;
     db.query(`
-        SELECT *, tuition.id AS id, academic_years.name AS ay_name, tuition.status AS status, tuition.student_id AS student_id, students.student_id AS studentId FROM tuition
+        SELECT *, tuition.id AS id, academic_years.name AS ay_name, tuition.status AS status, students.status AS student_status, tuition.student_id AS student_id, students.student_id AS studentId FROM tuition
         LEFT JOIN students ON tuition.student_id = students.id
         LEFT JOIN academic_years ON students.academic_year_id = academic_years.id
         LEFT JOIN academic_programs ON students.program_id = academic_programs.id
@@ -58,7 +58,7 @@ function tuitionPutRouter(req, res) {
             } else {
                 db.query(
                     `
-                        SELECT *, tuition.id AS id, academic_years.name AS ay_name, tuition.status AS status, tuition.student_id AS student_id, students.student_id AS studentId FROM tuition
+                        SELECT *, tuition.id AS id, academic_years.name AS ay_name, tuition.status AS status, students.status AS student_status, tuition.student_id AS student_id, students.student_id AS studentId FROM tuition
                         LEFT JOIN students ON tuition.student_id = students.id
                         LEFT JOIN academic_years ON students.academic_year_id = academic_years.id
                         LEFT JOIN academic_programs ON students.program_id = academic_programs.id
