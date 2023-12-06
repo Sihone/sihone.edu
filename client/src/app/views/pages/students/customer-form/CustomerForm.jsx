@@ -115,6 +115,7 @@ const CustomerForm = () => {
     first_name: student?.first_name || "",
     last_name: student?.last_name || "",
     gender: student?.gender || "",
+    dob: student?.dob ? new Date(student?.dob).toISOString().split("T")[0] : "",
     email: student?.email || "",
     phone: student?.phone || "",
     program_id: student?.program_id || "",
@@ -136,6 +137,7 @@ const CustomerForm = () => {
     email: Yup.string().email(t("students.invalid email")).required(t("main.required")),
     phone: Yup.string().required(t("main.required")),
     program_id: Yup.string().required(t("main.required")),
+    dob: Yup.string().required(t("main.required")),
     academic_year_id: Yup.string().required(t("main.required")),
     parent_phone: Yup.number().required(t("main.required")),
     status: Yup.string().required(t("main.required")),
@@ -255,6 +257,25 @@ const CustomerForm = () => {
                       error={Boolean(errors.last_name && touched.last_name)}
                     />
                   </Box>
+                </Grid>
+
+                <Grid item md={2} sm={4} xs={12}>
+                  {t("students.date of birth")}
+                </Grid>
+                <Grid item md={10} sm={8} xs={12}>
+                  <TextField
+                    name="dob"
+                    size="small"
+                    type="date"
+                    variant="outlined"
+                    value={values.dob}
+                    label={t("students.date of birth")}
+                    onChange={handleChange}
+                    InputLabelProps={{ shrink: true }}
+                    sx={{ minWidth: 208 }}
+                    helperText={touched.dob && errors.dob}
+                    error={Boolean(errors.dob && touched.dob)}
+                  />
                 </Grid>
 
                 <Grid item md={2} sm={4} xs={12}>
