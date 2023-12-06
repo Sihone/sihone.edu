@@ -5,4 +5,6 @@ export const fr = {
 
     // Overrides
     "register.register": "S'inscrire",
+    "academics.transcript": "Relevé de notes",
+    "main.menu.grading": "Relevé de notes",
 };

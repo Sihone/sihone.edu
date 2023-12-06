@@ -8,10 +8,12 @@ const targetLanguage = 'FR';
 
 fs.readdir('client/src/locales/en', (err, files) => {
     let totalContent = {};
+    let done = [];
     for (let i = 0; i < files.length; i++) {
         console.log(files[i]);
         // Read the source JSON file
         if (files[i] === 'index.js') {
+            done.push(files[i]);
             continue;
         }
         fs.readFile('client/src/locales/en/' + files[i], 'utf8', (err, data) => {
@@ -21,8 +23,6 @@ fs.readdir('client/src/locales/en', (err, files) => {
             }
         
             const content = unwrap(JSON.parse(data));
-        
-            console.log("Intitial content", content);
         
             const requestData = JSON.stringify({text: Object.values(content), "target_lang":targetLanguage, "source_lang":"EN"});
             
@@ -42,20 +42,22 @@ fs.readdir('client/src/locales/en', (err, files) => {
         
                 const responseArr = JSON.parse(response.body).translations;
         
-                console.log("Response array", typeof responseArr);
-        
                 for (let i = 0; i < responseArr.length; i++) {
                     content[Object.keys(content)[i]] = responseArr[i].text;
                 }
         
-                console.log("Final content", content);
+                //console.log("Final content", content);
                 totalContent = {...totalContent, ...content};
 
-                if (i === files.length - 1) {
+                done.push(files[i]);
+
+                if (done.length === files.length) {
                     console.log("Done");
+
+                    console.log("Total content", totalContent);
         
                     // Write the translated text to the target JSON file
-                    fs.writeFile('client/src/locales/fr/translation.json', JSON.stringify(totalContent), err => {
+                    fs.writeFile('client/src/locales/fr/translation.json', JSON.stringify(totalContent, null, 4), err => {
                         if (err) {
                             console.error(err);
                             return;

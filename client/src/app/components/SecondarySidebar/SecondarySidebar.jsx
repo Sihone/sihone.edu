@@ -12,7 +12,6 @@ const SecondarySidebar = () => {
   return (
     <SecondarySidenavTheme theme={secondarySidebarTheme}>
       {settings.secondarySidebar.open && <SecondarySidebarContent chatTheme={theme} />}
-      <SecondarySidebarToggle />
     </SecondarySidenavTheme>
   );
 };

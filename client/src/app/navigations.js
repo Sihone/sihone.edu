@@ -19,9 +19,9 @@ export const useNavigations = () => {
         name: t('main.menu.employees'),
         icon: "people",
         children: [
-          hasAccess(user.permissions, sections.delete_employee.id) && { name: "Employee List", path: "/employees", iconText: "EL" },
-          hasAccess(user.permissions, sections.add_employee.id) && { name: "New Employee", path: "/new-employee", iconText: "NE" },
-          hasAccess(user.permissions, sections.attendance.id) && { name: "Attendance", path: "/attendance", iconText: "AT" },
+          hasAccess(user.permissions, sections.delete_employee.id) && { name: t('main.menu.employees list'), path: "/employees", iconText: "EL" },
+          hasAccess(user.permissions, sections.add_employee.id) && { name: t('main.menu.new employee'), path: "/new-employee", iconText: "NE" },
+          hasAccess(user.permissions, sections.attendance.id) && { name: t('main.menu.attendance'), path: "/attendance", iconText: "AT" },
         ],
       },
       hasAccess(user.permissions, sections.payroll.id) && {
