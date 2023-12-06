@@ -10,10 +10,11 @@ import { H5 } from "app/components/Typography";
 import useTable from "app/hooks/useTable";
 import useData from "app/hooks/useData";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "app/hooks/useAuth";
+import { getSections, useAuth } from "app/hooks/useAuth";
 import { useTranslation } from 'react-i18next';
 import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
+import { hasAccess } from "app/utils/utils";
 
 // styled components
 const FlexBox = styled(Box)({ display: "flex", alignItems: "center" });
@@ -50,6 +51,7 @@ const EmployeeList = () => {
 
   const { data: users, deleteData } = useData("employees", user.company_id);
   const { t } = useTranslation();
+  const sections = getSections(t);
   const { enqueueSnackbar } = useSnackbar();
 
   const [deleteId, setDeleteId] = useState(null);
@@ -161,7 +163,7 @@ const EmployeeList = () => {
                         </IconButton>
 
                         {
-                          row.super == 0 && (
+                          row.super == 0 && hasAccess(user.permissions, sections.delete_employee.id) && (
                             <IconButton onClick={() => handleDelete(row.id)}>
                               <Delete />
                             </IconButton>

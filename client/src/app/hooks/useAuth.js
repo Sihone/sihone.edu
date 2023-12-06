@@ -40,10 +40,6 @@ const getSections = (t) => ({
     "reports": {
         id: "reports",
         label: t("settings.permissions.reports"),
-    },
-    "admin": {
-        id: "admin",
-        label: t("settings.permissions.admin"),
     }
 });
 

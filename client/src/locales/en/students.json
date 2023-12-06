@@ -23,6 +23,12 @@
         },
         "table title": "Student List",
         "dialog title": "Delete Student",
-        "dialog content": "Are you sure you want to delete this student?"
+        "dialog content": "Are you sure you want to delete this student?",
+        "all students": "All Students",
+        "select student": "Select Student",
+        "show inactive": "Show Inactive Students",
+        "hide inactive": "Hide Inactive Students",
+        "student status": "Student Status",
+        "date of birth": "Date of Birth"
     }
 }
