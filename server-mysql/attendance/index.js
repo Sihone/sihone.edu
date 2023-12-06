@@ -7,6 +7,7 @@ function attendanceGetAllRouter(req, res) {
         SELECT *, employee_attendance.id AS id, employees.id AS employees_id FROM employee_attendance
         LEFT JOIN employees ON employee_attendance.employee_id = employees.id
         WHERE employee_attendance.company_id = ?
+        ORDER BY employee_attendance.id DESC
     `,
     [company_id],
     async (result, error) => {
