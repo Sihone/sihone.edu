@@ -138,6 +138,7 @@ const InvoiceList = () => {
                 <TableCell>{t("academics.table header.program")}</TableCell>
                 <TableCell>{t("tuition.total")}</TableCell>
                 <TableCell>{t("main.status")}</TableCell>
+                <TableCell>{t("students.student status")}</TableCell>
                 <TableCell align="center">{t("main.actions")}</TableCell>
               </TableRow>
             </TableHead>
@@ -173,13 +174,16 @@ const InvoiceList = () => {
                 }
 
                 return (
-                  <TableRow key={invoice.id}>
+                  <TableRow key={invoice.id} className={invoice.student_status == "inactive" && "student-row-inactive"}>
                     <TableCell align="left">{invoice.first_name} {invoice.last_name}</TableCell>
                     <TableCell align="left">{invoice.ay_name}</TableCell>
                     <TableCell align="left">{i18n.language == "en" ? invoice.name_en : invoice.name_fr}</TableCell>
                     <TableCell align="left">{numberWithCommas(balance)} {user.currency}</TableCell>
                     <TableCell align="left">
                       <Chip color={statusColor} label={status} />
+                    </TableCell>
+                    <TableCell align="left">
+                      <Chip color={invoice.student_status == "active" ? "success" : "error"} label={t("main." + invoice.student_status)} />
                     </TableCell>
     
                     <TableCell align="center">

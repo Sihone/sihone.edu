@@ -58,7 +58,7 @@ function studentGetRouter(req, res) {
             }
             else {
                 const student = result.rows[0];
-                delete student.password;
+                student && delete student.password;
                 res.json(student);
             }
         }
