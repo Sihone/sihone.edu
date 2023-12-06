@@ -67,13 +67,13 @@ function studentGetRouter(req, res) {
 
 async function studentsPostRouter(req, res) {
     console.log('studentsPostRouter');
-    const { first_name, last_name, gender, email, phone, program_id, parent_phone, status, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, company_id, password, academic_year_id } = req.body;
+    const { first_name, last_name, gender, email, phone, program_id, parent_phone, status, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, company_id, password, academic_year_id, dob } = req.body;
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password || 'Abcd1234', salt);
     db.query(
-        `INSERT INTO students (first_name, last_name, gender, email, phone, program_id, parent_phone, status, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, company_id, password, academic_year_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`,
-        [first_name, last_name, gender, email, phone, program_id, parent_phone, status, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, company_id, hashedPassword, academic_year_id],
+        `INSERT INTO students (first_name, last_name, gender, email, phone, program_id, parent_phone, status, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, company_id, password, academic_year_id, dob)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`,
+        [first_name, last_name, gender, email, phone, program_id, parent_phone, status, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, company_id, hashedPassword, academic_year_id, dob],
         async (result, error) => {
             if (error) {
                 console.log(error);
@@ -103,9 +103,9 @@ async function studentsPostRouter(req, res) {
                                                 `
                                                     SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id FROM students
                                                     LEFT JOIN academic_programs ON students.program_id = academic_programs.id
-                                                    WHERE students.company_id = ?
+                                                    WHERE students.id = ?
                                                 `,
-                                                [company_id, result.rows[0].id],
+                                                [result.rows[0].id],
                                                 async (result3, error) => {
                                                     if (error) {
                                                         console.log(error);
@@ -132,7 +132,7 @@ async function studentsPostRouter(req, res) {
 
 function studentsPutRouter(req, res) {
     console.log('studentsPutRouter');
-    const { id, first_name, last_name, gender, email, phone, program_id, parent_phone, status, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, company_id, academic_year_id } = req.body;
+    const { id, first_name, last_name, gender, email, phone, program_id, parent_phone, status, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, company_id, academic_year_id, dob } = req.body;
     db.query(`
         UPDATE students SET 
         first_name = ?, 
@@ -146,10 +146,11 @@ function studentsPutRouter(req, res) {
         emmergency_contact_name = ?, 
         emmergency_contact_phone = ?, 
         emmergency_contact_relation = ?,
-        academic_year_id = ?
+        academic_year_id = ?,
+        dob = ?
         WHERE id = ?
         `,
-        [first_name, last_name, gender, email, phone, program_id, parent_phone, status, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, academic_year_id, id],
+        [first_name, last_name, gender, email, phone, program_id, parent_phone, status, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, academic_year_id, dob, id],
         async (result, error) => {
             if (error) {
                 console.log(error);
