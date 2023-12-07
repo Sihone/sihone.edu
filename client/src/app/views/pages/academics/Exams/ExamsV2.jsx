@@ -223,7 +223,6 @@ const FlexBox = styled(Box)({ display: "flex", alignItems: "center" });
 
     const openShowCourses = Boolean(anchorEl);
     const showCoursesId = openShowCourses ? 'simple-popover' : undefined;
-
     useEffect(() => {
       if (grading) {
         const course = courses?.find((item) => item.id == grading.course_id);
