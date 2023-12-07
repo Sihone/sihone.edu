@@ -28,6 +28,8 @@
         "paid": "Paid",
         "unpaid": "Unpaid",
         "overpaid": "Overpaid",
-        "partial paid": "Partially Paid"
+        "partial paid": "Partially Paid",
+        "item name": "Item Name",
+        "item price": "Item Price"
     }
 }

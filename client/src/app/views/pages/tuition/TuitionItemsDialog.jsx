@@ -106,7 +106,7 @@ const TuitionItemsDialog = ({ open, onClose, saveItem, saveTuitionItem, id, t, i
               autoFocus
               margin="dense"
               id="name"
-              label={t("tuition.table header.name")}
+              label={t("tuition.item name")}
               type="text"
               sx={{ minWidth: 388 }}
               value={name}
@@ -115,7 +115,7 @@ const TuitionItemsDialog = ({ open, onClose, saveItem, saveTuitionItem, id, t, i
             <TextField
               margin="dense"
               id="price"
-              label={t("tuition.table header.price")}
+              label={t("tuition.item price")}
               type="text"
               sx={{ minWidth: 388 }}
               value={price}
