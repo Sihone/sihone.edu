@@ -1,7 +1,7 @@
 import Loadable from "app/components/Loadable";
 import { lazy } from "react";
 
-const EmployeeList = Loadable(lazy(() => import("./employees")));
+const EmployeeList = Loadable(lazy(() => import("./employees/")));
 const EmployeeForm = Loadable(lazy(() => import("./employees/customer-form")));
 
 const AttendanceList = Loadable(lazy(() => import("./attendance")));

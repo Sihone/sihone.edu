@@ -9,7 +9,7 @@ const AttendanceDialog = ({ open, onClose, employees, save, update, attendance, 
 
   useEffect(() => {
     if (open && attendance) {
-        const _employee = employees.find((employee) => employee.id === attendance.employee_id);
+        const _employee = employees.find((employee) => employee.id === attendance.employees_id);
         setClockInTime(attendance.clock_in);
         setClockOutTime(attendance.clock_out);
         setAttendanceDate(attendance.attendance_date);
@@ -21,7 +21,7 @@ const AttendanceDialog = ({ open, onClose, employees, save, update, attendance, 
     if (attendance) {
       update({
         id: attendance.id,
-        employee_id: attendance.employee_id,
+        employee_id: attendance.employees_id,
         attendance_date,
         clock_in,
         clock_out

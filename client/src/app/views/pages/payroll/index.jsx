@@ -1,5 +1,5 @@
 import { useAuth, getSections } from 'app/hooks/useAuth';
-import Payroll from './Payroll';
+import Payroll from './PayrollV2';
 import { hasAccess } from 'app/utils/utils';
 import NotAuthorized from 'app/views/sessions/NotAuthorized';
 import { useTranslation } from 'react-i18next';
