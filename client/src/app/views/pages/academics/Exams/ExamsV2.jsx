@@ -204,7 +204,7 @@ const FlexBox = styled(Box)({ display: "flex", alignItems: "center" });
           });
           setExams(_data);
         }
-    }, [_exams]);
+    }, [_exams, courses, students, employees]);
   
     const table = useMaterialReactTableV2({
         columns,
@@ -223,6 +223,15 @@ const FlexBox = styled(Box)({ display: "flex", alignItems: "center" });
 
     const openShowCourses = Boolean(anchorEl);
     const showCoursesId = openShowCourses ? 'simple-popover' : undefined;
+
+    useEffect(() => {
+      if (grading) {
+        const course = courses?.find((item) => item.id == grading.course_id);
+        const program_ids = JSON.parse(course?.program_ids || '[]');
+        const _students = students?.filter((item) => program_ids?.includes(item.program_id));
+        setGradingStudents(_students);
+      }
+    }, [grading]);
   
     return (
         <Container>
