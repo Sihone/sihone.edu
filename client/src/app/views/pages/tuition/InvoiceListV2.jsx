@@ -45,7 +45,7 @@ const Container = styled("div")(({ theme }) => ({
           size: 40,
         }),
         columnHelper.accessor('student', {
-          header: t("tuition.full name"),
+          header: t("students.full name"),
           size: 120,
         }),
         columnHelper.accessor('year', {
@@ -65,7 +65,7 @@ const Container = styled("div")(({ theme }) => ({
           size: 80,
         }),
         columnHelper.accessor('student_status', {
-          header: t("tuition.student status"),
+          header: t("students.student status"),
           size: 80,
         }),
         columnHelper.accessor('actions', {
