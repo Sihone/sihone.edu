@@ -64,6 +64,7 @@ export const useMaterialReactTableV2 = ({columns, data, options, exportedFileNam
             toggleVisibility: t("main.toggle visibility"),
             clearSearch: t("main.clear search"),
             columnActions: t("main.column actions"),
+            noRecordsToDisplay: t("main.no records to display"),
         },
         renderTopToolbarCustomActions: ({ table }) => (
           <Box

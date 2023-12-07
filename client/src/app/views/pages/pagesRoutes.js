@@ -22,7 +22,7 @@ const Transactions = Loadable(lazy(() => import("./finance/Transactions")));
 
 const StudentList = Loadable(lazy(() => import("./students")));
 const StudentForm = Loadable(lazy(() => import("./students/customer-form")));
-const Tuition = Loadable(lazy(() => import("./tuition/InvoiceList")));
+const Tuition = Loadable(lazy(() => import("./tuition/")));
 
 const pagesRoutes = [
 

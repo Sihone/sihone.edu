@@ -64,7 +64,6 @@
         "actions": "Actions",
         "date printed": "Date Printed",
         "overview": "Overview",
-
         "export all": "Export All",
         "export visible": "Export Visible Rows",
         "rows per page": "Rows Per Page",
@@ -87,6 +86,7 @@
         "clear sort": "Clear Sort",
         "toggle visibility": "Toggle Visibility",
         "clear search": "Clear Search",
-        "column actions": "Column Actions"
+        "column actions": "Column Actions",
+        "no records to display": "No Records To Display"
     }
 }
