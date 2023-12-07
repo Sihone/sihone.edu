@@ -1,5 +1,5 @@
 import { useAuth, getSections } from 'app/hooks/useAuth';
-import PaySlip from './PaySlip';
+import PaySlip from './PaySlipV2';
 import { hasAccess } from 'app/utils/utils';
 import NotAuthorized from 'app/views/sessions/NotAuthorized';
 import { useTranslation } from 'react-i18next';

@@ -1,7 +1,7 @@
 import Loadable from "app/components/Loadable";
 import { lazy } from "react";
 
-const EmployeeList = Loadable(lazy(() => import("./employees")));
+const EmployeeList = Loadable(lazy(() => import("./employees/")));
 const EmployeeForm = Loadable(lazy(() => import("./employees/customer-form")));
 
 const AttendanceList = Loadable(lazy(() => import("./attendance")));
@@ -22,7 +22,7 @@ const Transactions = Loadable(lazy(() => import("./finance/Transactions")));
 
 const StudentList = Loadable(lazy(() => import("./students")));
 const StudentForm = Loadable(lazy(() => import("./students/customer-form")));
-const Tuition = Loadable(lazy(() => import("./tuition/InvoiceList")));
+const Tuition = Loadable(lazy(() => import("./tuition/")));
 
 const pagesRoutes = [
 
