@@ -19,7 +19,7 @@
             "gender": "Gender",
             "program": "Academic Program",
             "status": "Status",
-            "balance": "Tuition Balance"
+            "balance": "Fee Balance"
         },
         "table title": "Student List",
         "dialog title": "Delete Student",

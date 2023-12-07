@@ -1,7 +1,7 @@
 import Loadable from "app/components/Loadable";
 import React, { lazy } from "react";
 
-const InvoiceList = Loadable(lazy(() => import("./InvoiceList")));
+const InvoiceList = Loadable(lazy(() => import("./InvoiceListV2")));
 const InvoiceDetails = Loadable(lazy(() => import("./InvoiceDetails")));
 const InvoiceList2 = Loadable(lazy(() => import("./InvoiceList")));
 
