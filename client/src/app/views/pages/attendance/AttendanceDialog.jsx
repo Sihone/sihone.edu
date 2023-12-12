@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Autocomplete } from '@mui/material';
 
-const AttendanceDialog = ({ open, onClose, employees, save, update, attendance, t }) => {
+const AttendanceDialog = ({ open, onClose, employees, save, update, attendance, t, enqueueSnackbar }) => {
   const [clock_in, setClockInTime] = useState('');
   const [clock_out, setClockOutTime] = useState('');
   const [attendance_date, setAttendanceDate] = useState(new Date().toISOString().slice(0, 10));
@@ -25,6 +25,13 @@ const AttendanceDialog = ({ open, onClose, employees, save, update, attendance, 
         attendance_date,
         clock_in,
         clock_out
+      })
+      .then(() => {
+        enqueueSnackbar(t("attendance.update success"), { variant: "success" });
+      })
+      .catch((error) => {
+        console.log(error);
+        enqueueSnackbar(t("attendance.update error"), { variant: "error" });
       });
     } else {
         save({
@@ -32,6 +39,13 @@ const AttendanceDialog = ({ open, onClose, employees, save, update, attendance, 
             attendance_date,
             clock_in,
             clock_out
+        })
+        .then(() => {
+          enqueueSnackbar(t("attendance.save success"), { variant: "success" });
+        })
+        .catch((error) => {
+          console.log(error);
+          enqueueSnackbar(t("attendance.save error"), { variant: "error" });
         });
     }
     resetForm();
