@@ -16,7 +16,9 @@ const useData = (type, company_id, id) => {
       .then(response => response.json())
       .then(responseData => {
         setData(responseData);
-        setLoading(false);
+        setTimeout(function(){
+          setLoading(false);
+        }, 1000);
       })
       .catch(error => {
         setError(error);
@@ -28,6 +30,7 @@ const useData = (type, company_id, id) => {
     delete requestData.id;
     requestData.company_id = company_id;
     console.log("data: " + JSON.stringify(requestData));
+    setLoading(true);
     try {
       const response = await fetch(`/api/${type}`, {
         method: 'POST',
@@ -40,6 +43,7 @@ const useData = (type, company_id, id) => {
       if (!responseData.id) {
         setError(responseData);
         setSuccess(null);
+        setLoading(false);
         return null;
       } 
       if (isArray(data)) {
@@ -51,10 +55,14 @@ const useData = (type, company_id, id) => {
       setTimeout(function(){
         setSuccess(null);
       }, 5000);
+      setTimeout(function(){
+        setLoading(false);
+      }, 1000);
       return responseData;
     } catch (error) {
       setError(error);
       setSuccess(null);
+      setLoading(false);
     }
   };
 
@@ -62,6 +70,7 @@ const useData = (type, company_id, id) => {
     const itemId = updatedData.id;
     updatedData.company_id = company_id;
     console.log("updateData: " + JSON.stringify(updatedData));
+    setLoading(true);
     try {
       const response = await fetch(`/api/${type}`, {
         method: 'PUT',
@@ -81,15 +90,20 @@ const useData = (type, company_id, id) => {
       setTimeout(function(){
         setSuccess(null);
       }, 5000);
+      setTimeout(function(){
+        setLoading(false);
+      }, 1000);
       return responseData;
     } catch (error) {
       setError(error);
       setSuccess(null);
+      setLoading(false);
     }
   };
 
   const deleteData = async (dataId) => {
     console.log(`deleteData-${type}: ` + dataId);
+    setLoading(true);
     try {
       const response = await fetch(`/api/${type}/${dataId}`, {
         method: 'DELETE',
@@ -102,6 +116,7 @@ const useData = (type, company_id, id) => {
           setError(null);
         }, 5000);
         setSuccess(null);
+        setLoading(false);
         return null;
       } else {
         setSuccess(`${type} deleted successfully`);
@@ -110,6 +125,9 @@ const useData = (type, company_id, id) => {
         }, 5000);
         const returnData = data.filter(item => item.id != responseData.id);
         setData(returnData);
+        setTimeout(function(){
+          setLoading(false);
+        }, 1000);
         return responseData;
       }
     } catch (error) {
@@ -117,6 +135,8 @@ const useData = (type, company_id, id) => {
       setTimeout(function(){
         setError(null);
       }, 5000);
+      setLoading(false);
+      setSuccess(null);
     }
   };
 

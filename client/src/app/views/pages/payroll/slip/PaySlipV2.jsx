@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { Breadcrumb } from "app/components";
 import { useMaterialReactTableV2 } from 'app/hooks/useMaterialReactTable';
 import SlipView from './SlipView';
+import { numberWithCommas } from 'app/utils/utils';
 
 const Container = styled("div")(({ theme }) => ({
   margin: "30px",
@@ -49,7 +50,7 @@ const Container = styled("div")(({ theme }) => ({
           size: 60,
         }),
         columnHelper.accessor('date', {
-          header: t("payroll.table header.date"),
+          header: t("payroll.pay dialog date"),
           size: 60,
         }),
         columnHelper.accessor('actions', {
@@ -63,7 +64,7 @@ const Container = styled("div")(({ theme }) => ({
             const _data = payrolls.map((item) => ({
                 employee: item.first_name + " " + item.last_name,
                 month: item.pay_period,
-                total: item.total_salary,
+                total: numberWithCommas(item.total_salary) + " " + user.currency,
                 date: item.pay_date,
                 actions: (
                     <Box sx={{ display: 'flex', gap: '8px' }}>
@@ -114,7 +115,7 @@ const Container = styled("div")(({ theme }) => ({
         <Container>
             <div className="breadcrumb">
                 <Breadcrumb
-                routeSegments={[{ name: t("attendance.title") }]}
+                routeSegments={[{ name: t("payroll.slip title") }]}
                 />
             </div>
 
