@@ -2,7 +2,7 @@ import {
     MaterialReactTable,
     createMRTColumnHelper,
 } from 'material-react-table';
-import { Box, Chip, IconButton, Paper, TableContainer, TextField, styled } from '@mui/material';
+import { Box, Chip, IconButton, LinearProgress, Paper, TableContainer, TextField, styled } from '@mui/material';
 import useData from 'app/hooks/useData';
 import { useAuth } from 'app/hooks/useAuth';
 import { useEffect, useState } from 'react';
@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useSnackbar } from 'notistack';
 import { Breadcrumb, ConfirmationDialog } from "app/components";
 import { useMaterialReactTableV2 } from 'app/hooks/useMaterialReactTable';
+import { numberWithCommas } from 'app/utils/utils';
 
 const Container = styled("div")(({ theme }) => ({
   margin: "30px",
@@ -29,7 +30,7 @@ const Container = styled("div")(({ theme }) => ({
     const {user} = useAuth();
     const { data: _employees } = useData("employees", user.company_id);
     const { data: attendances } = useData("attendance", user.company_id);
-    const { data: payrolls, deleteData, saveData  } = useData("payroll", user.company_id);
+    const { data: payrolls, deleteData, saveData, loading  } = useData("payroll", user.company_id);
     const [attendance, setAttendance] = useState([]);
     const { enqueueSnackbar } = useSnackbar();
 
@@ -126,9 +127,9 @@ const Container = styled("div")(({ theme }) => ({
               return {
                 employee,
                 period,
-                base,
-                hourly,
-                total,
+                base: numberWithCommas(base.toFixed(0)) + " " + user.currency,
+                hourly: numberWithCommas(hourly.toFixed(0)) + " " + user.currency,
+                total: numberWithCommas(total.toFixed(0)) + " " + user.currency,
                 status: paid ? <Chip color="success" label={t("payroll.paid")} /> : <Chip color="error" label={t("payroll.unpaid")} />,
                 actions: (
                   paid ? (
@@ -197,12 +198,13 @@ const Container = styled("div")(({ theme }) => ({
         <Container>
             <div className="breadcrumb">
                 <Breadcrumb
-                routeSegments={[{ name: t("attendance.title") }]}
+                routeSegments={[{ name: t("payroll.title") }]}
                 />
             </div>
-
+            
             <Paper sx={{ width: "100%", mb: 2 }}>
                 <TableContainer>
+                    {loading && <LinearProgress />}
                     <MaterialReactTable table={table} />
                 </TableContainer>
             </Paper>

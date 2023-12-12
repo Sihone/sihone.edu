@@ -2,7 +2,7 @@ import {
     MaterialReactTable,
     createMRTColumnHelper,
 } from 'material-react-table';
-import { Box, IconButton, Paper, TableContainer, styled } from '@mui/material';
+import { Box, IconButton, LinearProgress, Paper, TableContainer, styled } from '@mui/material';
 import useData from 'app/hooks/useData';
 import { useAuth } from 'app/hooks/useAuth';
 import { useEffect, useState } from 'react';
@@ -28,7 +28,7 @@ const Container = styled("div")(({ theme }) => ({
   
   const Example = () => {
     const {user} = useAuth();
-    const { data: _attendance, deleteData, saveData, updateData } = useData("attendance", user.company_id);
+    const { data: _attendance, deleteData, saveData, updateData, loading } = useData("attendance", user.company_id);
     const { data: employees } = useData("employees", user.company_id);
     const [attendance, setAttendance] = useState([]);
     const [selectedAttendance, setSelectedAttendance] = useState(null);
@@ -100,7 +100,7 @@ const Container = styled("div")(({ theme }) => ({
                 date: item.attendance_date,
                 clock_in: item.clock_in,
                 clock_out: item.clock_out,
-                total: item.total_time / 60 / 60,
+                total: (item.total_time / 60 / 60).toFixed(2),
                 actions: (
                     <Box sx={{ display: 'flex', gap: '8px' }}>
                         <IconButton onClick={() => handleEdit(item)}>
@@ -140,7 +140,8 @@ const Container = styled("div")(({ theme }) => ({
 
             <Paper sx={{ width: "100%", mb: 2 }}>
                 <TableContainer>
-                    <MaterialReactTable table={table} />
+                  {loading && <LinearProgress />}
+                  <MaterialReactTable table={table} />
                 </TableContainer>
                 <AttendanceDialog
                   open={open}
@@ -149,6 +150,7 @@ const Container = styled("div")(({ theme }) => ({
                   save={saveData}
                   update={updateData}
                   attendance={selectedAttendance}
+                  enqueueSnackbar={enqueueSnackbar}
                   t={t}
                 />
                 <ConfirmationDialog
