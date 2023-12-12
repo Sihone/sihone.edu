@@ -111,6 +111,11 @@ const Layout1Topbar = () => {
     updateSidebarMode({ mode });
   };
 
+  const handleLanguageChange = (lang) => {
+    i18n.changeLanguage(lang);
+    localStorage.setItem("language", lang);
+  }
+
   return (
     <TopbarRoot>
       <TopbarContainer>
@@ -174,7 +179,7 @@ const Layout1Topbar = () => {
             native
             variant="outlined"
             value={i18n.language}
-            onChange={(e) => i18n.changeLanguage(e.target.value)}
+            onChange={(e) => handleLanguageChange(e.target.value)}
             sx={{ mb: 3 }}
             style={{margin: "32px"}}
           >
