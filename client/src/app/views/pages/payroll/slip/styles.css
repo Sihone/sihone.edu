@@ -1,0 +1,135 @@
+@page {
+    size: 7in 9.25in;
+    margin: 27mm 16mm 27mm 16mm;
+}
+.slip-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.slip-logo {
+    width: 50%;
+    text-align: right;
+    padding-bottom: 16px;
+}
+
+.slip-info {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0 16px;
+    font-size: 13px;
+    gap: 24px;
+}
+
+.slip-info > div {
+    width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.slip-info > div > div {
+    width: 50%;
+    padding-bottom: 8px;
+}
+
+.slip-pay-period {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 16px;
+    background-color: #eaecf9;
+    margin: 8px 0 16px;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.slip-pay-period > div {
+    width: 33%;
+}
+
+.slip-heading {
+    font-weight: bold;
+    font-size: 14px;
+    margin: 8px 0 16px;
+}
+
+.slip-earnings-header {
+    font-weight: bold;
+}
+
+.slip-earnings-header > div:not(:first-child) {
+    background-color: #eaecf9;
+    text-align: center;
+}
+
+.slip-earnings {
+    display: flex;
+    font-size: 13px;
+    margin: 8px 0 16px;
+    gap: 4px;
+}
+
+.slip-earnings > div {
+    background-color: #fcfcfe;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.slip-earnings > div:first-child {
+    background-color: #eaecf9;
+    text-align: left;
+    padding-left: 8px;
+}
+
+.slip-list {
+    display: flex;
+    gap: 4px;
+    font-size: 13px;
+    margin: 8px 0 16px;
+}
+
+.slip-list > div {
+    width: 30%;
+    padding: 4px;
+    background-color: #fcfcfe;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.slip-list > div:first-child {
+    background-color: #eaecf9;
+    text-align: left;
+    padding-left: 8px;
+    width: 40%;
+}
+
+.slip-list-total {
+    display: flex;
+    gap: 4px;
+    font-size: 13px;
+    margin: 8px 0 16px;
+}
+
+.slip-list-total > div {
+    width: 30%;
+    padding: 4px;
+    background-color: #eaecf9;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.slip-list-total > div:first-child {
+    background-color: transparent;
+    width: 40%;
+}
+
+.slip-actions {
+    max-width: 800px;
+    margin: 0px auto;
+    width: 100%;
+    text-align: center;
+    display: block;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 16px;
+    padding: 16px;
+}

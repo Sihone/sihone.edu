@@ -1,166 +1,178 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Autocomplete } from '@mui/material';
 import { numberWithCommas } from 'app/utils/utils';
+import PdfDownloader from 'app/components/PdfDownloadButton';
+import { format } from 'date-fns';
+import "./styles.css";
 
-const SlipView = ({ open, onClose, paySlip, t, user }) => {
+const SlipView = ({ open, onClose, paySlip, t, user, payments }) => {
   const handleClose = () => {
     onClose();
   }
 
-  const styles = {
-    slipLabel: {
-      fontSize: "16px",
-      fontWeight: "bold",
-      paddingBottom: "4px",
-      borderBottom: "1px solid #ccc",
-      width: "25%",
-      marginBottom: "8px"
-    },
-    slipValue: {
-      fontSize: "16px",
-      paddingBottom: "4px",
-      borderBottom: "1px solid #ccc",
-      width: "25%",
-      marginBottom: "8px"
-    }
-  }
+  const [currentPayments, setCurrentPayments] = useState([]); // payments done in the current year
 
-  const printContent = () => {
-    const printDivCSS = new String (
-      '<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">'
-    );
-    const styles = `
-      @page { size: landscape; }
-      body {
-        font-family: 'Roboto', sans-serif;
-      }
-      .MuiButton-root {
-        display: none;
-      }
-      .MuiDialog-paper {
-        overflow: visible;
-      }
-    `;
-    const printContent = document.getElementById("printContent").innerHTML;
-    const printWindow = window.open('', '', 'height=400,width=800');
-    printWindow.document.write('<html><head><title>Print</title>');
-    printWindow.document.write(printDivCSS);
-    printWindow.document.write(`<style>${styles}</style>`);
-    printWindow.document.write(`
-    <script type="text/javascript">
-    window.onfocus=function(){ window.close();}
-    </script>
-    `);
-    printWindow.document.write('</head><body>');
-    printWindow.document.write(printContent);
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.print();
-  }
+  useEffect(() => {
+    if (open) {
+      const currentYear = new Date().getUTCFullYear();
+
+      // filter payments done in the current year before this pay slip
+      const _currentPayments = payments.filter((payment) => {
+        const paymentYear = new Date(payment.pay_period).getUTCFullYear();
+        return paymentYear === currentYear && new Date(payment.pay_period) <= new Date(paySlip.pay_period);
+      });
+      setCurrentPayments(_currentPayments);
+    }
+  }, [open, payments]);
+
+  const totalBaseSalary = currentPayments.reduce((acc, payment) => {
+    return acc + payment.base_salary;
+  }, 0);
+
+  const totalHourlySalary = currentPayments.reduce((acc, payment) => {
+    return acc + (payment.total_hours * payment.hourly_rate);
+  }, 0);
+
+  const hourlySalary = paySlip ? (paySlip.total_hours * paySlip.hourly_rate) : 0;
 
   return (
     <Dialog open={open} onClose={handleClose} fullScreen>
-      <div style={{maxWidth: "1140px", margin: "40px auto", width: "100%"}}>
-        <DialogTitle style={{display: "flex", justifyContent: "space-between"}}>
-          {t("payroll.slip dialog title")}
-          
-        </DialogTitle>
-        <DialogContent id="printContent" style={{display: "flex", flexDirection: "column", gap: "16px"}}>
+      <div>
+        <DialogActions className={'slip-actions'}>
+          <Button onClick={handleClose} color="error" variant="contained">
+            {t("main.close")}
+          </Button>
+          <PdfDownloader
+            elementId={"printContent"}
+            fileName={paySlip && paySlip.name}
+            landscape={false}
+          />
+        </DialogActions>
+        <DialogContent style={{display: "flex", flexDirection: "column", gap: "16px", marginTop: "-37mm"}}>
           {
             paySlip && (
               <>
-                <div>
-                  <div style={{display: "flex", flexWrap: "wrap", justifyContent: "space-between"}}>
+                <div id="printContent" style={{maxWidth: "800px", margin: "40px auto", width: "100%"}}>
+                  <div style={{margin: "20mm 16mm"}}>
+                    <div className={"slip-header"}>
+                      <div style={{width: "50%"}}>
+                        <div style={{fontSize: "18px", fontWeight: "bold"}}>{t("payroll.slip dialog title")}</div>
+                      </div>
+                      <div className={"slip-logo"}>
+                        
+                      </div>
+                    </div>
+                    <div className={'slip-info'}>
+                      <div>
+                        <div><b>{t("payroll.slip.company name")}</b></div>
+                        <div>{user.company_name}</div>
+                        <div><b>{t("payroll.slip.company address")}</b></div>
+                        <div>{user.company_address}</div>
+                        <div><b>{t("payroll.slip.company registration")}</b></div>
+                        <div>{user.company_registration}</div>
+                      </div>
+                      <div>
+                        <div><b>{t("payroll.slip.employee name")}</b></div>
+                        <div>{paySlip.name}</div>
+                        <div><b>{t("payroll.slip.employee id")}</b></div>
+                        <div>{paySlip.employee_id}</div>
+                        <div><b>{t("payroll.slip.employee title")}</b></div>
+                        <div>{paySlip.title}</div>
+                      </div>
+                    </div>
 
-                    <div style={{...styles.slipLabel, borderTop: "1px solid #ccc", paddingTop: "8px"}}>
-                      {t("payroll.slip.company name")}
+                    <div className={'slip-pay-period'}>
+                      <div>
+                        <div style={{fontWeight: "bold"}}>{t("payroll.slip.pay period")}</div>
+                        <div>{format(new Date(paySlip ? paySlip.pay_period + "-5" : null), "MMMM, yyyy")}</div>
+                      </div>
+                      <div>
+                        <div style={{fontWeight: "bold"}}>{t("payroll.slip.pay period to")}</div>
+                        <div>{format(new Date(paySlip?.pay_period), "MMM dd, yyyy")}</div>
+                      </div>
+                      <div>
+                        <div style={{fontWeight: "bold"}}>{t("payroll.pay dialog date")}</div>
+                        <div>{format(new Date(paySlip ? paySlip.pay_date + "T00:00:00" : null), "MMMM dd, yyyy")}</div>
+                      </div>
                     </div>
-                    <div style={{...styles.slipValue, borderTop: "1px solid #ccc", paddingTop: "8px"}}>{user.company_name}</div>
 
-                    <div style={{...styles.slipLabel, borderTop: "1px solid #ccc", paddingTop: "8px"}}>
-                      {t("payroll.slip.company address")}
-                    </div>
-                    <div style={{...styles.slipValue, borderTop: "1px solid #ccc", paddingTop: "8px"}}>{user.company_address}</div>
+                    <div className={'slip-heading'}>{t("payroll.slip.earnings")}</div>
 
-                    <div style={styles.slipLabel}>
-                      {t("payroll.slip.company phone")}
+                    <div className={'slip-earnings slip-earnings-header'}>
+                      <div style={{width: "18%", backgroundColor: "transparent"}} />
+                      <div style={{width: "12%"}}>{t("payroll.slip.rate")}</div>
+                      <div style={{width: "10%"}}>{t("payroll.slip.hours")}</div>
+                      <div style={{width: "30%"}}>{t("payroll.slip.current amount")}</div>
+                      <div style={{width: "30%"}}>{t("payroll.slip.ytd amount")}</div>
                     </div>
-                    <div style={styles.slipValue}>{user.company_phone}</div>
 
-                    <div style={styles.slipLabel}>
-                      {t("payroll.slip.company registration")}
+                    <div className={'slip-earnings'}>
+                      <div style={{width: "18%"}}><b>{t("payroll.slip.base salary")}</b></div>
+                      <div style={{width: "12%"}}>{numberWithCommas(paySlip.base_salary)}</div>
+                      <div style={{width: "10%"}}></div>
+                      <div style={{width: "30%"}}>{numberWithCommas(paySlip.base_salary) + " " + (paySlip.base_salary ? user.currency : "")}</div>
+                      <div style={{width: "30%"}}>{numberWithCommas(totalBaseSalary) + " " + (totalBaseSalary ? user.currency : "")}</div>
                     </div>
-                    <div style={styles.slipValue}>{user.company_registration}</div>
-                    <div style={{width: "100%", height: "30px"}} />
 
-                    <div style={styles.slipLabel}>
-                      {t("payroll.slip.employee name")}
+                    <div className={'slip-earnings'}>
+                      <div style={{width: "18%"}}><b>{t("payroll.slip.hourly salary")}</b></div>
+                      <div style={{width: "12%"}}>{numberWithCommas(paySlip.hourly_rate)}</div>
+                      <div style={{width: "10%"}}>{paySlip.total_hours}</div>
+                      <div style={{width: "30%"}}>{numberWithCommas(hourlySalary) + " " + (hourlySalary ? user.currency : "")}</div>
+                      <div style={{width: "30%"}}>{numberWithCommas(totalHourlySalary) + " " + (totalHourlySalary ? user.currency : "")}</div>
                     </div>
-                    <div style={styles.slipValue}>{paySlip.name}</div>
-                    <div style={styles.slipLabel}>
-                      {t("payroll.slip.employee id")}
-                    </div>
-                    <div style={styles.slipValue}>{paySlip.employee_id}</div>
-                    
-                    <div style={styles.slipLabel}>
-                      {t("payroll.slip.employee phone")}
-                    </div>
-                    <div style={styles.slipValue}>{paySlip.phone}</div>
-                    <div style={styles.slipLabel}>
-                      {t("payroll.slip.employee start date")}
-                    </div>
-                    <div style={styles.slipValue}>{paySlip.start_date}</div>
 
-                    <div style={styles.slipLabel}>
-                      {t("payroll.slip.pay period")}
-                    </div>
-                    <div style={styles.slipValue}>{paySlip.pay_period}</div>
-                    <div style={styles.slipLabel}>
-                      {t("payroll.pay dialog date")}
-                    </div>
-                    <div style={styles.slipValue}>{paySlip.pay_date}</div>
-                    <div style={{width: "100%", height: "30px"}} />
+                    <div className={'slip-heading'}>{t("payroll.slip.gross pay")}</div>
 
-                    <div style={styles.slipLabel}>
-                      {t("payroll.table header.basic salary")}
+                    <div className={'slip-list'}>
+                      <div><b>{t("payroll.slip.gross amount")}</b></div>
+                      <div>{numberWithCommas(hourlySalary + paySlip.base_salary) + " " + user.currency}</div>
+                      <div>{numberWithCommas(totalHourlySalary + totalBaseSalary) + " " + user.currency}</div>
                     </div>
-                    <div style={styles.slipValue}>{numberWithCommas(paySlip.base_salary) + " " + user.currency}</div>
+                   
+                    <div className={'slip-heading'}>{t("payroll.slip.deductions")}</div>
 
-                    <div style={styles.slipLabel}>
-                      {t("payroll.slip.deductions")}
+                    <div className={'slip-list'}>
+                      <div><b>{t("payroll.slip.social security")}</b></div>
+                      <div>{0}</div>
+                      <div>{0}</div>
                     </div>
-                    <div style={styles.slipValue}>{numberWithCommas(paySlip.deductions) + " " + user.currency}</div>
 
-                    <div style={styles.slipLabel}>
-                      {t("payroll.table header.hourly salary")}
+                    <div className={'slip-list'}>
+                      <div><b>{t("payroll.slip.insurance")}</b></div>
+                      <div>{0}</div>
+                      <div>{0}</div>
                     </div>
-                    <div style={styles.slipValue}>{numberWithCommas(paySlip.hourly_salary) + " " + user.currency}</div>
 
-                    <div style={styles.slipLabel}>
-                      {t("main.other")}
+                    <div className={'slip-list'}>
+                      <div><b>{t("payroll.slip.other")}</b></div>
+                      <div>{0}</div>
+                      <div>{0}</div>
                     </div>
-                    <div style={styles.slipValue}>{numberWithCommas(paySlip.other) + " " + user.currency}</div>
-                    <div style={{width: "100%", height: "30px"}} />
 
-                    <div style={styles.slipLabel}>
-                      {t("payroll.table header.total")}
+                    <div className={'slip-list'}>
+                      <div><b>{t("payroll.slip.total deductions")}</b></div>
+                      <div>{0}</div>
+                      <div>{0}</div>
                     </div>
-                    <div style={styles.slipValue}>{numberWithCommas(paySlip.total_salary) + " " + user.currency}</div>
-                    <div style={styles.slipValue}/>
-                    <div style={styles.slipValue}/>
+
+                    <br />
+                    <div className={'slip-list-total'}>
+                      <div></div>
+                      <div><b>{t("payroll.slip.current total")}</b></div>
+                      <div><b>{t("payroll.slip.ytd total")}</b></div>
+                    </div>
+
+                    <div className={'slip-list'}>
+                      <div><b>{t("payroll.slip.net pay")}</b></div>
+                      <div>{numberWithCommas(hourlySalary + paySlip.base_salary) + " " + user.currency}</div>
+                      <div>{numberWithCommas(totalHourlySalary + totalBaseSalary) + " " + user.currency}</div>
+                    </div>
                   </div>
                 </div>
               </>
             )
           }
-          <DialogActions>
-            <Button onClick={handleClose} color="secondary">
-              {t("main.close")}
-            </Button>
-            <Button onClick={printContent} color="primary" variant="contained">
-              {t("main.print")}
-            </Button>
-          </DialogActions>
         </DialogContent>
       </div>
     </Dialog>
