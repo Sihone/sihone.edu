@@ -12,6 +12,7 @@ import { Breadcrumb } from "app/components";
 import { useMaterialReactTableV2 } from 'app/hooks/useMaterialReactTable';
 import SlipView from './SlipView';
 import { numberWithCommas } from 'app/utils/utils';
+import _ from 'lodash';
 
 const Container = styled("div")(({ theme }) => ({
   margin: "30px",
@@ -129,6 +130,7 @@ const Container = styled("div")(({ theme }) => ({
                   paySlip={paySlip}
                   t={t}
                   user={user}
+                  payments={paySlip ? _.groupBy(payrolls, 'employees_id')[paySlip?.employees_id]: []}
                 />
             </Paper>
         </Container>

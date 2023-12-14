@@ -87,6 +87,8 @@
         "toggle visibility": "Toggle Visibility",
         "clear search": "Clear Search",
         "column actions": "Column Actions",
-        "no records to display": "No Records To Display"
+        "no records to display": "No Records To Display",
+        "download pdf": "Download PDF",
+        "download pdf success": "PDF Downloaded Successfully"
     }
 }
