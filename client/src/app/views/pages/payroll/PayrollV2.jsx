@@ -6,7 +6,7 @@ import { Box, Chip, IconButton, LinearProgress, Paper, TableContainer, TextField
 import useData from 'app/hooks/useData';
 import { useAuth } from 'app/hooks/useAuth';
 import { useEffect, useState } from 'react';
-import { Add, Delete, Edit, Money } from '@mui/icons-material';
+import { Add, Delete, Edit, Payment } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { useSnackbar } from 'notistack';
 import { Breadcrumb, ConfirmationDialog } from "app/components";
@@ -130,7 +130,7 @@ const Container = styled("div")(({ theme }) => ({
                 base: numberWithCommas(base.toFixed(0)) + " " + user.currency,
                 hourly: numberWithCommas(hourly.toFixed(0)) + " " + user.currency,
                 total: numberWithCommas(total.toFixed(0)) + " " + user.currency,
-                status: paid ? <Chip color="success" label={t("payroll.paid")} /> : <Chip color="error" label={t("payroll.unpaid")} />,
+                status: paid ? <Chip color="success" label={t("payroll.paid")} /> : (total !== 0 ? <Chip color="error" label={t("payroll.unpaid")} /> : <Chip label={t("payroll.no balance")} />),
                 actions: (
                   paid ? (
                     <IconButton onClick={() => handleDeleteClick(existingPayroll[0].id)}>
@@ -147,8 +147,9 @@ const Container = styled("div")(({ theme }) => ({
                         total_salary: total,
                         company_id: user.company_id,
                       })}
+                      disabled={total === 0}
                     >
-                      <Money />
+                      <Payment />
                     </IconButton>
                   )
                 ),

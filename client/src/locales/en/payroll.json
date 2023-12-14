@@ -19,10 +19,27 @@
             "deductions": "Deductions",
             "employee start date": "Employee Start Date",
             "employee phone": "Employee Phone",
-            "company phone": "Company Phone",
-            "company name": "Company Name",
-            "company address": "Company Address",
-            "company registration": "Company Registration"
+            "company phone": "Institution Phone",
+            "company name": "Name of Institution",
+            "company address": "Institution Address",
+            "company registration": "Institution Registration",
+            "rate": "Rate",
+            "hours": "Hours",
+            "current amount": "Current Amount",
+            "ytd amount": "YTD Amount",
+            "base salary": "Base Salary",
+            "hourly salary": "Hourly Salary",
+            "gross pay": "Gross Pay",
+            "gross amount": "Gross Amount",
+            "social security": "Social Security",
+            "insurance": "Insurance",
+            "other": "Other",
+            "total deductions": "Total Deductions",
+            "current total": "Current Total",
+            "ytd total": "YTD Total",
+            "net pay": "Net Pay",
+            "earnings": "Earnings",
+            "employee title": "Employee Title"
         },
         "paid": "Paid",
         "unpaid": "Unpaid",
@@ -38,6 +55,7 @@
         "table year month": "Select Month and Year",
         "table filter all": "All Employees",
         "slip dialog title": "Pay Slip",
-        "slip title": "Pay Slips"
+        "slip title": "Pay Slips",
+        "no balance": "No balance"
     }
 }
