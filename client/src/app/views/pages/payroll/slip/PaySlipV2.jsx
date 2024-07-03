@@ -34,6 +34,7 @@ const Container = styled("div")(({ theme }) => ({
     const [filteredPayrolls, setFilteredPayrolls] = useState([]);
     const [selectedMonthYear, setSelectedMonthYear] = useState(null);
     const [paySlip, setPaySlip] = useState(null);
+    const [totalAmount, setTotalAmount] = useState(0);
 
     const { t } = useTranslation();
 
@@ -81,8 +82,10 @@ const Container = styled("div")(({ theme }) => ({
             }));
             if (selectedMonthYear) {
                 setFilteredPayrolls(_data.filter((item) => item.month === selectedMonthYear));
+                setTotalAmount(payrolls.filter((item) => item.pay_period === selectedMonthYear).map((item) => item.total_salary).reduce((a, b) => a + b, 0));
             } else {
               setFilteredPayrolls(_data);
+              setTotalAmount(payrolls.map((item) => item.total_salary).reduce((a, b) => a + b, 0));
             }
             
         }
@@ -104,7 +107,12 @@ const Container = styled("div")(({ theme }) => ({
           InputLabelProps={{
             shrink: true,
           }}
-        />
+        />,
+        <div>
+          {t("payroll.total amount")}
+          <br />
+          {numberWithCommas(totalAmount) + " " + user.currency}
+        </div>
       ],
     })
 

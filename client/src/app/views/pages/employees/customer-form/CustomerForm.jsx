@@ -41,15 +41,27 @@ const CustomerForm = () => {
   const [tabIndex, setTabIndex] = useState(0);
   const [employee, setEmployee] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [employeeId, setEmployeeId] = useState(null);
 
-  const { id: employeeId } = useParams();
+  const { id } = useParams();
+  
   const { user } = useAuth();
-  const {data: _employee, updateData, saveData, error} = useData("employees", user.company_id, employeeId);
+  const {data: _employee, updateData, saveData, error} = useData("employees", user.company_id, id);
   const {data: roles} = useData("roles", user.company_id);
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
   const { t } = useTranslation();
+  
+  useEffect(() => {
+    if (id) {
+      setEmployeeId(id);
+      setEmployee(_employee);
+    } else {
+      setEmployeeId(null);
+      setEmployee(null);
+    }
+  }, [employeeId, _employee, id]);
 
   const handleSubmit = async (values) => {
     console.log(values);
@@ -64,7 +76,8 @@ const CustomerForm = () => {
       .then((newEmployee) => {
         if (newEmployee) {
           enqueueSnackbar(t("employees.create success"), { variant: "success" });
-          navigate("/employees/" + newEmployee.id)
+          navigate("/employees/" + newEmployee.id);
+          setEmployee(newEmployee);
         }
       })
       .catch((err) => enqueueSnackbar(err.message || err.detail || err, { variant: "error" }));
@@ -74,14 +87,6 @@ const CustomerForm = () => {
   const handleTabChange = (e, value) => {
     setTabIndex(value);
   };
-
-  useEffect(() => {
-    if (employeeId) {
-      setEmployee(_employee);
-    } else {
-      setEmployee(null);
-    }
-  }, [employeeId, _employee]);
 
   useEffect(() => {
     if (error) {
@@ -122,6 +127,11 @@ const CustomerForm = () => {
     emmergency_contact_name: employee?.emmergency_contact_name || "",
     emmergency_contact_phone: employee?.emmergency_contact_phone || "",
     emmergency_contact_relation: employee?.emmergency_contact_relation || "",
+    password: "",
+    confirm_password: "",
+  };
+  
+  const initialValuesPassword = {
     password: "",
     confirm_password: "",
   };
@@ -400,7 +410,7 @@ const CustomerForm = () => {
             <Divider sx={{ mb: 1 }} />
 
             <Formik
-              initialValues={initialValues}
+              initialValues={initialValuesPassword}
               onSubmit={handleChangePassword}
               enableReinitialize={true}
               validationSchema={validationSchemaPassword}
@@ -418,7 +428,7 @@ const CustomerForm = () => {
                 dirty,
                 resetForm,
               }) => (
-                <Form onSubmit={(e) => {handleSubmit(e); !errors.confirm_password && resetForm()}}>
+                <Form onSubmit={handleSubmit}>
                   <PasswordChangeForm t={t} values={values} handleChange={handleChange} errors={errors} touched={touched} />
                   <Box mt={3}>
                   <LoadingButton
