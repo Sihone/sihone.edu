@@ -274,5 +274,9 @@ export const useNavigations = () => {
   }
   // remove null, undefined, empty string and false items from array
   nav.navigations = nav.navigations.filter(item => item);
+  nav.navigations = nav.navigations.filter(item => {
+    item.children = item.children?.filter(child => child);
+    return item;
+  });
   return nav;
 } 
