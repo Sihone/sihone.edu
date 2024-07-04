@@ -29,6 +29,7 @@
         "show inactive": "Show Inactive Students",
         "hide inactive": "Hide Inactive Students",
         "student status": "Student Status",
-        "date of birth": "Date of Birth"
+        "date of birth": "Date of Birth",
+        "create success": "Student created successfully"
     }
 }
