@@ -2,7 +2,7 @@ import {
     MaterialReactTable,
     createMRTColumnHelper,
 } from 'material-react-table';
-import { Box, FormControlLabel, IconButton, Paper, Select, Switch, TableContainer, styled } from '@mui/material';
+import { Box, Button, FormControlLabel, IconButton, Paper, Select, Switch, TableContainer, styled } from '@mui/material';
 import useData from 'app/hooks/useData';
 import { useAuth } from 'app/hooks/useAuth';
 import { useEffect, useState } from 'react';
@@ -194,7 +194,7 @@ const Container = styled("div")(({ theme }) => ({
         columns,
         data: students,
         exportedFileName: t("students.title"),
-        otherActions: _students.length > 0 && [
+        otherActions: [
           <Select
             size="small"
             native
@@ -211,13 +211,13 @@ const Container = styled("div")(({ theme }) => ({
             })}
             <option value="all">{t("main.show all")}</option>
           </Select>,
-          <FormControlLabel
+          _students.length > 0 && <FormControlLabel
             control={
               <Switch checked={showInactive} onChange={handleInactiveToggle}  />
             }
             label={t("students.inactive")}
           />,
-          <FormControlLabel
+          _students.length > 0 && <FormControlLabel
             control={
               <Switch checked={showCompleted} onChange={handleCompletedToggle}  />
             }
@@ -232,6 +232,7 @@ const Container = styled("div")(({ theme }) => ({
                 <Breadcrumb
                 routeSegments={[{ name: t("students.title") }]}
                 />
+                <Button variant="contained" onClick={() => navigate("/new-student")}>{t("main.menu.new student")}</Button>
             </div>
 
             <Paper sx={{ width: "100%", mb: 2 }}>
