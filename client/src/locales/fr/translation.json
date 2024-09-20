@@ -134,6 +134,7 @@
     "main.female": "Femme",
     "main.active": "Actif",
     "main.inactive": "Inactif",
+    "main.completed": "Terminé",
     "main.status": "Statut",
     "main.actions": "Actions",
     "main.date printed": "Date d'impression",
@@ -463,7 +464,7 @@
     "students.parent phone": "Téléphone du parent",
     "students.table header.name": "Nom et numéro d'identification de l'étudiant",
     "students.table header.phone": "Contact étudiant",
-    "students.table header.parent phone": "Contact pour les parents",
+    "students.table header.parent phone": "Contact parent",
     "students.table header.gender": "Genre",
     "students.table header.program": "Programme académique",
     "students.table header.status": "Statut",
@@ -477,5 +478,8 @@
     "students.hide inactive": "Masquer les étudiants inactifs",
     "students.student status": "Statut de l'étudiant",
     "students.date of birth": "Date de naissance",
-    "students.create success": "Étudiant créé avec succès"
+    "students.create success": "Étudiant créé avec succès",
+    "students.update success": "Étudiant a été mis à jour avec succès",
+    "students.inactive": "Afficher les étudiants inactifs",
+    "students.completed": "Afficher les élèves ayant terminé"
 }

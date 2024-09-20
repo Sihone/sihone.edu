@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { Box, Button } from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
-export const useMaterialReactTableV2 = ({columns, data, options, exportedFileName, actions, extraComponents}) => {
+export const useMaterialReactTableV2 = ({columns, data, options, exportedFileName, actions, extraComponents, otherActions}) => {
 
     const { t } = useTranslation();
 
@@ -119,6 +119,9 @@ export const useMaterialReactTableV2 = ({columns, data, options, exportedFileNam
                 >
                 {t("main.export visible")}
                 </Button>
+                {
+                  otherActions
+                }
             </Box>
           </Box>
         ),

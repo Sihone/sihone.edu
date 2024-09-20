@@ -50,3 +50,25 @@ export function hasAccess(permissions, permission) {
   }
   return false;
 }
+
+export function inactiveStudents() {
+  const trs = document.getElementsByTagName("tr");
+  for (let i=1; i<trs.length; i++) {
+    if (trs[i].innerHTML.includes("inactive")) {
+      trs[i].classList.add("inactive");
+    } else {
+      trs[i].classList.remove("inactive");
+    }
+  }
+}
+
+export function completedStudents() {
+  const trs = document.getElementsByTagName("tr");
+  for (let i=1; i<trs.length; i++) {
+    if (trs[i].innerHTML.includes("completed")) {
+      trs[i].classList.add("completed");
+    } else {
+      trs[i].classList.remove("completed");
+    }
+  }
+}

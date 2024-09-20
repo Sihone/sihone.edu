@@ -2,7 +2,7 @@ import {
     MaterialReactTable,
     createMRTColumnHelper,
 } from 'material-react-table';
-import { Box, IconButton, Paper, TableContainer, styled } from '@mui/material';
+import { Box, FormControlLabel, IconButton, Paper, Switch, TableContainer, styled } from '@mui/material';
 import useData from 'app/hooks/useData';
 import { useAuth } from 'app/hooks/useAuth';
 import { useEffect, useState } from 'react';
@@ -13,6 +13,9 @@ import { useTranslation } from 'react-i18next';
 import { useSnackbar } from 'notistack';
 import { Breadcrumb, ConfirmationDialog } from "app/components";
 import { useMaterialReactTableV2 } from 'app/hooks/useMaterialReactTable';
+import { inactiveStudents, completedStudents } from 'app/utils/utils';
+
+import "./styles.css";
 
 const Container = styled("div")(({ theme }) => ({
   margin: "30px",
@@ -34,9 +37,12 @@ const Container = styled("div")(({ theme }) => ({
     const { data: tuitionPayments } = useData("tuition_payments", user.company_id);
     const { data: tuitionItems } = useData("tuition_items", user.company_id);
     const { data: invoiceList } = useData("tuitions", user.company_id);
+    const [studentList, setStudentList] = useState(_students);
     const [students, setStudents] = useState([]);
     const [showBalanceId, setShowBalanceId] = useState(null);
     const [item, setItem] = useState(null);
+    const [showInactive, setShowInactive] = useState(false);
+    const [showCompleted, setShowCompleted] = useState(false);
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
 
@@ -45,19 +51,19 @@ const Container = styled("div")(({ theme }) => ({
     const columns = [
         columnHelper.accessor('student_id', {
           header: 'EID',
-          size: 40,
+          size: 20,
+        }),
+        columnHelper.accessor('status', {
+          header: 'Status',
+          size: 20,
         }),
         columnHelper.accessor('student', {
           header: t("students.full name"),
-          size: 80,
-        }),
-        columnHelper.accessor('gender', {
-          header: t("students.gender"),
-          size: 40,
+          size: 100,
         }),
         columnHelper.accessor('contact', {
           header: t("students.table header.phone"),
-          size: 100,
+          size: 80,
         }),
         columnHelper.accessor('parent', {
           header: t("students.table header.parent phone"),
@@ -92,10 +98,37 @@ const Container = styled("div")(({ theme }) => ({
           enqueueSnackbar(err.message || err.detail || err, { variant: "error" });
         });
     }
+    
+    const handleInactiveToggle = () => {
+      setShowInactive(!showInactive);
+      setTimeout(inactiveStudents, 100);
+    }
+    
+    const handleCompletedToggle = () => {
+      setShowCompleted(!showCompleted);
+      setTimeout(completedStudents, 100);
+    }
+    
+    useEffect(() => {
+      const tempList = _students.filter(obj => {
+        let comparison = obj.status === "active";
+        if (showInactive && showCompleted) {
+          comparison =  obj.status === "active" || obj.status === "inactive" || obj.status === "completed";
+        } else if (!showInactive && showCompleted) {
+          comparison =  obj.status === "active" || obj.status === "completed";
+        } else if (showInactive && !showCompleted) {
+          comparison =  obj.status === "active" || obj.status === "inactive";
+        } else if (!showInactive && !showCompleted) {
+          comparison =  obj.status === "active";
+        }
+        return comparison;
+      })
+      setStudentList(tempList);
+    }, [_students, showInactive, showCompleted])
 
     useEffect(() => {
-        if (_students) {
-            const _data = _students.map((item) => {
+        if (studentList) {
+            const _data = studentList.map((item) => {
               const program = programs.find((_item) => _item.id == item.program_id);
               const programName = i18n.language == "en" ? (program?.short_name_en + " - " + program?.name_en) : (program?.short_name_fr + " - " + program?.name_fr);
               const showBalance = showBalanceId == item.id;
@@ -115,10 +148,11 @@ const Container = styled("div")(({ theme }) => ({
               let initialBalance = invoice?.price - invoice?.rebate + _totalItems;
 
               const balance = initialBalance - _totalPayments;
+              
               return {
-                student_id: item.student_id,
+                student_id: "(" + _gender + ") " + item.student_id,
+                status: item.status,
                 student: item.first_name + " " + item.last_name,
-                gender: _gender,
                 contact: <>
                   <p style={{margin: "0"}}>{item.phone}</p>
                   <p style={{margin: "0"}}>{item.email}</p>
@@ -144,14 +178,28 @@ const Container = styled("div")(({ theme }) => ({
                   ),
             }
           });
-          setStudents(_data);
+          setStudents(_data);   
         }
-    }, [_students, showBalanceId]);
+    }, [studentList, showBalanceId]);
   
     const table = useMaterialReactTableV2({
         columns,
         data: students,
         exportedFileName: t("students.title"),
+        otherActions: [
+          _students.length > 0 && <FormControlLabel
+            control={
+              <Switch checked={showInactive} onChange={handleInactiveToggle}  />
+            }
+            label={t("students.inactive")}
+          />,
+          _students.length > 0 && <FormControlLabel
+            control={
+              <Switch checked={showCompleted} onChange={handleCompletedToggle}  />
+            }
+            label={t("students.completed")}
+          />
+        ]
     })
   
     return (
