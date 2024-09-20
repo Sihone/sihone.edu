@@ -2,7 +2,7 @@ import {
     MaterialReactTable,
     createMRTColumnHelper,
 } from 'material-react-table';
-import { Box, FormControlLabel, IconButton, Paper, Switch, TableContainer, styled } from '@mui/material';
+import { Box, FormControlLabel, IconButton, Paper, Select, Switch, TableContainer, styled } from '@mui/material';
 import useData from 'app/hooks/useData';
 import { useAuth } from 'app/hooks/useAuth';
 import { useEffect, useState } from 'react';
@@ -37,12 +37,14 @@ const Container = styled("div")(({ theme }) => ({
     const { data: tuitionPayments } = useData("tuition_payments", user.company_id);
     const { data: tuitionItems } = useData("tuition_items", user.company_id);
     const { data: invoiceList } = useData("tuitions", user.company_id);
+    const {data: academicYears} = useData("academic_years", user.company_id);
     const [studentList, setStudentList] = useState(_students);
     const [students, setStudents] = useState([]);
     const [showBalanceId, setShowBalanceId] = useState(null);
     const [item, setItem] = useState(null);
     const [showInactive, setShowInactive] = useState(false);
     const [showCompleted, setShowCompleted] = useState(false);
+    const [academicYearId, setAcademicYearId] = useState(user.currentAcademicYearId);
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
 
@@ -101,17 +103,16 @@ const Container = styled("div")(({ theme }) => ({
     
     const handleInactiveToggle = () => {
       setShowInactive(!showInactive);
-      setTimeout(inactiveStudents, 100);
     }
     
     const handleCompletedToggle = () => {
       setShowCompleted(!showCompleted);
-      setTimeout(completedStudents, 100);
     }
     
     useEffect(() => {
       const tempList = _students.filter(obj => {
         let comparison = obj.status === "active";
+        
         if (showInactive && showCompleted) {
           comparison =  obj.status === "active" || obj.status === "inactive" || obj.status === "completed";
         } else if (!showInactive && showCompleted) {
@@ -121,10 +122,17 @@ const Container = styled("div")(({ theme }) => ({
         } else if (!showInactive && !showCompleted) {
           comparison =  obj.status === "active";
         }
-        return comparison;
+        if (academicYearId === "all") {
+          return comparison;
+        } else {
+          return comparison && obj.academic_year_id === Number(academicYearId);
+        }
+          
       })
       setStudentList(tempList);
-    }, [_students, showInactive, showCompleted])
+      setTimeout(inactiveStudents, 100);
+      setTimeout(completedStudents, 100);
+    }, [_students, showInactive, showCompleted, academicYearId]);
 
     useEffect(() => {
         if (studentList) {
@@ -186,14 +194,30 @@ const Container = styled("div")(({ theme }) => ({
         columns,
         data: students,
         exportedFileName: t("students.title"),
-        otherActions: [
-          _students.length > 0 && <FormControlLabel
+        otherActions: _students.length > 0 && [
+          <Select
+            size="small"
+            native
+            variant="outlined"
+            value={academicYearId}
+            onChange={(e) => setAcademicYearId(e.target.value)}
+            sx={{ mb: 3 }}
+            style={{margin: "32px"}}
+          >
+            {academicYears?.map((item, ind) => {
+              return (
+                <option value={item.id} key={item.name}>{item.name}</option>
+              )
+            })}
+            <option value="all">{t("main.show all")}</option>
+          </Select>,
+          <FormControlLabel
             control={
               <Switch checked={showInactive} onChange={handleInactiveToggle}  />
             }
             label={t("students.inactive")}
           />,
-          _students.length > 0 && <FormControlLabel
+          <FormControlLabel
             control={
               <Switch checked={showCompleted} onChange={handleCompletedToggle}  />
             }
