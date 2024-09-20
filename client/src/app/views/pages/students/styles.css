@@ -1,0 +1,11 @@
+tr.inactive {
+  background-color: rgb(244, 67, 54, 0.05) !important;
+}
+
+tr.completed {
+  background-color: rgb(0, 150, 136, 0.05) !important;
+}
+
+tr.inactive td , tr.completed td{
+  color: gray;
+}

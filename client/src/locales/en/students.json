@@ -30,6 +30,9 @@
         "hide inactive": "Hide Inactive Students",
         "student status": "Student Status",
         "date of birth": "Date of Birth",
-        "create success": "Student created successfully"
+        "create success": "Student created successfully",
+        "update success": "Student updated successfully",
+        "inactive": "Show inactive students",
+        "completed": "Show completed students"
     }
 }

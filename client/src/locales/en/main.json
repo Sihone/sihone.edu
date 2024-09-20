@@ -60,6 +60,7 @@
         "female": "Female",
         "active": "Active",
         "inactive": "Inactive",
+        "completed": "Completed",
         "status": "Status",
         "actions": "Actions",
         "date printed": "Date Printed",

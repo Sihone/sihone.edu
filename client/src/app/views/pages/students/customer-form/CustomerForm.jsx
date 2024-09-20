@@ -417,7 +417,8 @@ const CustomerForm = () => {
                   >
                     {[
                       {id: 'active', label: t("main.active")},
-                      {id: 'inactive', label: t("main.inactive")}
+                      {id: 'inactive', label: t("main.inactive")},
+                      {id: 'completed', label: t("main.completed")}
                     ].map((item, ind) => (
                       <MenuItem value={item.id} key={item.id}>
                         {item.label}
