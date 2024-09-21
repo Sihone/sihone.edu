@@ -9,3 +9,9 @@ tr.completed {
 tr.inactive td , tr.completed td{
   color: gray;
 }
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
