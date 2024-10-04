@@ -13,6 +13,8 @@ const sqlOptions = {
   port: env.DB_PORT,
   multipleStatements: true
 };
+
+console.log(sqlOptions);
 const pool = mysql.createPool(sqlOptions);
 
 module.exports = {
