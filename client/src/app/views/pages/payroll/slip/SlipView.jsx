@@ -86,10 +86,10 @@ const SlipView = ({ open, onClose, paySlip, t, user, payments }) => {
                         <div style={{fontWeight: "bold"}}>{t("payroll.slip.pay period")}</div>
                         <div>{format(new Date(paySlip ? paySlip.pay_period + "-5" : null), "MMMM, yyyy")}</div>
                       </div>
-                      <div>
+                      {/* <div>
                         <div style={{fontWeight: "bold"}}>{t("payroll.slip.pay period to")}</div>
                         <div>{format(new Date(paySlip?.pay_period), "MMM dd, yyyy")}</div>
-                      </div>
+                      </div> */}
                       <div>
                         <div style={{fontWeight: "bold"}}>{t("payroll.pay dialog date")}</div>
                         <div>{format(new Date(paySlip ? paySlip.pay_date + "T00:00:00" : null), "MMMM dd, yyyy")}</div>
