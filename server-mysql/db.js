@@ -19,29 +19,35 @@ const pool = mysql.createPool(sqlOptions);
 
 module.exports = {
   query: (query, params, callBack) => {
-    pool.getConnection(function(err,connection){
+    pool.getConnection(function(err, connection) {
       if (err) {
-        console.error(err);
-        connection.release(error => error ? reject(error) : resolve());
-        // throw err;
+        console.error("Error getting MySQL connection:", err);
+        // If there's an error getting the connection, handle it here and do not attempt to release
+        return callBack(null, err);
       }
-      params.forEach(element => {
-        // check if element is a string
+
+      // Escaping and replacing query parameters safely
+      params.forEach((element, index) => {
         if (typeof element === 'string' || element instanceof String) {
-          element = pool.escape(element);
+          params[index] = pool.escape(element); // Safely escape string parameters
         }
-        query = query.replace("?", element);
       });
-      connection.query(query, function(err,rows){
+
+      connection.query(query, params, function(err, rows) {
+        // Ensure connection release happens whether or not there's an error
         connection.release();
-        if(!err) {
-          callBack({rows: rows}, err);
+        
+        if (!err) {
+          callBack({ rows: rows }, null);
         } else {
-          console.log(err);
-        }         
+          console.log("Error executing query:", err);
+          callBack(null, err);
+        }
       });
-      connection.on('error', function(err) {      
-        console.log(err);
+
+      connection.on('error', function(err) {
+        console.log("Connection error:", err);
+        callBack(null, err); // Handle the error
       });
     });
   }
