@@ -16,10 +16,10 @@ function settingGetRouter(req, res) {
 
 function settingPutRouter(req, res) {
     console.log('settingPutRouter');
-    const { id, company_name, company_address, company_phone, company_email, company_website, company_logo, company_currency, smtp_server, smtp_port, smtp_user, smtp_password, smtp_security, company_registration } = req.body;
+    const { id, company_name, company_address, company_phone, company_email, company_website, company_logo, company_currency, smtp_server, smtp_port, smtp_user, smtp_password, smtp_security, company_registration, automatic_salary, years_experience, work_experience, transportation } = req.body;
     db.query(
-        'UPDATE settings SET company_name = ?, company_address = ?, company_phone = ?, company_email = ?, company_website = ?, company_logo = ?, company_currency = ?, smtp_server = ?, smtp_port = ?, smtp_user = ?, smtp_password = ?, smtp_security = ?, company_registration = ? WHERE id = ?',
-        [company_name, company_address, company_phone, company_email, company_website, company_logo, company_currency, smtp_server, smtp_port, smtp_user, smtp_password, smtp_security, company_registration, id],
+        'UPDATE settings SET company_name = ?, company_address = ?, company_phone = ?, company_email = ?, company_website = ?, company_logo = ?, company_currency = ?, smtp_server = ?, smtp_port = ?, smtp_user = ?, smtp_password = ?, smtp_security = ?, company_registration = ?, automatic_salary = ?, years_experience = ?, work_experience = ?, transportation = ? WHERE id = ?',
+        [company_name, company_address, company_phone, company_email, company_website, company_logo, company_currency, smtp_server, smtp_port, smtp_user, smtp_password, smtp_security, company_registration, automatic_salary, years_experience, work_experience, transportation, id],
         async (result, error) => {
             if (error) {
                 console.log(error);

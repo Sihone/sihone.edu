@@ -1,0 +1,13 @@
+ALTER TABLE `settings` ADD `automatic_salary` TINYINT(1) NOT NULL DEFAULT '1' AFTER `company_currency`;
+ALTER TABLE `settings` ADD `years_experience` TINYINT(1) NOT NULL DEFAULT '1' AFTER `automatic_salary`;
+ALTER TABLE `settings` ADD `work_experience` TINYINT(1) NOT NULL DEFAULT '1' AFTER `years_experience`;
+ALTER TABLE `settings` ADD `transportation` TINYINT(1) NOT NULL DEFAULT '1' AFTER `work_experience`;
+ALTER TABLE `employees` ADD `start_date` VARCHAR(255) NOT NULL AFTER `base_salary`;
+ALTER TABLE `employees` ADD `work_level` TINYINT(1) NOT NULL DEFAULT '1' AFTER `start_date`;
+ALTER TABLE `payroll` ADD `yearly_rate` INTEGER NOT NULL DEFAULT '0' AFTER `total_hours`;
+ALTER TABLE `payroll` ADD `transport_rate` INTEGER NOT NULL DEFAULT '0' AFTER `yearly_rate`;
+ALTER TABLE `payroll` ADD `irpp` INTEGER NOT NULL DEFAULT '0' AFTER `transport_rate`;
+ALTER TABLE `payroll` ADD `tdl` INTEGER NOT NULL DEFAULT '0' AFTER `irpp`;
+ALTER TABLE `payroll` ADD `rav` INTEGER NOT NULL DEFAULT '0' AFTER `tdl`;
+ALTER TABLE `payroll` ADD `cfc` INTEGER NOT NULL DEFAULT '0' AFTER `rav`;
+ALTER TABLE `payroll` ADD `pvid` INTEGER NOT NULL DEFAULT '0' AFTER `cfc`;

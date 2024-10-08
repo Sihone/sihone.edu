@@ -38,6 +38,11 @@
             "reports": "Reports"
         },
         "role delete title": "Delete Role",
-        "role delete text": "Are you sure you want to delete this role?"
+        "role delete text": "Are you sure you want to delete this role?",
+        "automatic salary": "Enable automatic salary calculation",
+        "years experience": "Include years of experience in salary",
+        "work experience": "Include work experience in salary",
+        "salary": "Compensation settings",
+        "transportation": "Include transport in salary"
     }
 }

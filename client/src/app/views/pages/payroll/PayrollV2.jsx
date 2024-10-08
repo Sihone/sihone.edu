@@ -31,6 +31,7 @@ const Container = styled("div")(({ theme }) => ({
     const { data: _employees } = useData("employees", user.company_id);
     const { data: attendances } = useData("attendance", user.company_id);
     const { data: payrolls, deleteData, saveData, loading  } = useData("payroll", user.company_id);
+    const { data: settings } = useData("settings", user.company_id);
     const [attendance, setAttendance] = useState([]);
     const { enqueueSnackbar } = useSnackbar();
 
@@ -43,14 +44,10 @@ const Container = styled("div")(({ theme }) => ({
 
     const { t } = useTranslation();
 
-    const columns = [
+    let columns = [
       columnHelper.accessor('employee', {
         header: t("payroll.table header.employee"),
-        size: 120,
-      }),
-      columnHelper.accessor('period', {
-        header: t("payroll.table header.pay period"),
-        size: 60,
+        size: 100,
       }),
       columnHelper.accessor('base', {
         header: t("payroll.table header.basic salary"),
@@ -58,6 +55,22 @@ const Container = styled("div")(({ theme }) => ({
       }),
       columnHelper.accessor('hourly', {
         header: t("payroll.table header.hourly salary"),
+        size: 60,
+      }),
+      // columnHelper.accessor('work_experience', {
+      //   header: t("payroll.table header.work experience"),
+      //   size: 30,
+      // }),
+      columnHelper.accessor('years_experience', {
+        header: t("payroll.table header.years experience"),
+        size: 60,
+      }),
+     columnHelper.accessor('transport', {
+        header: t("payroll.table header.transportation"),
+        size: 60,
+      }),
+      columnHelper.accessor('withholdings', {
+        header: t("payroll.table header.withholding"),
         size: 60,
       }),
       columnHelper.accessor('total', {
@@ -70,9 +83,10 @@ const Container = styled("div")(({ theme }) => ({
       }),
       columnHelper.accessor('actions', {
         header: t("main.actions"),
-        size: 80,
+        size: 40,
       }),
     ];
+    columns = columns.filter(n => n);
   
     const handleDeleteClick = (id) => {
       setDeleteId(id);
@@ -118,17 +132,72 @@ const Container = styled("div")(({ theme }) => ({
             const _data = _employees.map((row) => {
               const numberOfHours = attendances?.filter((item) => item.employees_id === row.id && item.attendance_date.includes(selectedMonthYear)).reduce((a, b) => a + b.total_time, 0) / 60 / 60;
               const employee = row.first_name + " " + row.last_name;
-              const period = row.pay_period;
               const base = row.base_salary;
               const hourly = row.hourly_rate * numberOfHours;
-              const total = base + hourly;
               const existingPayroll = payrolls?.filter((item) => item.employees_id === row.id && item.pay_period === selectedMonthYear);
               const paid = existingPayroll.length === 1 ? true : false;
+              
+              let yearsOfExperienceAmnt = 0;
+              let workLevelAmnt = 0;
+              let transportAmnt = 0;
+              
+              if (settings?.automatic_salary) {
+                const yearsOfExperience = Math.floor(row.start_date ? (new Date() - new Date(row.start_date)) / (1000 * 60 * 60 * 24 * 365) : 0);
+                yearsOfExperienceAmnt = settings?.years_experience && yearsOfExperience > 1 ? 0.02 *yearsOfExperience * base : 0;
+                workLevelAmnt = settings?.work_experience ? row.work_level * base / 100 : 0;
+                transportAmnt = settings?.transportation ? base * 0.05 : 0;
+              }
+              
+              const partialTotal = base + hourly + yearsOfExperienceAmnt + workLevelAmnt;
+              const pvid  = 0.042 * partialTotal;
+              let irpp = 0;
+              if (partialTotal < 62001) {
+                irpp = 0;
+              } else {
+                irpp = 0.1 * ((0.7 * partialTotal) - pvid - 41667);
+              }
+              const cac_irpp = 0.1 * irpp;
+              let irpp_total = irpp + cac_irpp;
+              irpp_total = irpp_total < 0 ? 0 : irpp_total;
+              const rav = 750;
+              let cfc = 0.01 * partialTotal;
+              if (partialTotal < 60000) {
+                cfc = 0.01 * 60000;
+              }
+              
+              let tdl = 0;
+              if (partialTotal < 62001) {
+                tdl = 0;
+              } else if (partialTotal < 75001) {
+                tdl = 3000;
+              } else if (partialTotal < 100001) {
+                tdl = 6000;
+              } else if (partialTotal < 125001) {
+                tdl = 9000;
+              } else if (partialTotal < 150001) {
+                tdl = 12000;
+              } else if (partialTotal < 175001) {
+                tdl = 15000;
+              } else if (partialTotal < 200001) {
+                tdl = 18000;
+              } else if (partialTotal < 250001) {
+                tdl = 22000;
+              } else {
+                tdl = 25000;
+              }
+              tdl = tdl/12;
+              const withholdings = base === 0 ? 0 : Math.floor(irpp_total) + Math.floor(rav) + Math.floor(cfc) + Math.floor(tdl) + Math.floor(pvid);
+              
+              const total = base + hourly + yearsOfExperienceAmnt + workLevelAmnt + transportAmnt - withholdings;
+              
               return {
                 employee,
-                period,
                 base: numberWithCommas(base.toFixed(0)) + " " + user.currency,
                 hourly: numberWithCommas(hourly.toFixed(0)) + " " + user.currency,
+                years_experience: numberWithCommas(yearsOfExperienceAmnt.toFixed(0)) + " " + user.currency,
+                work_experience: numberWithCommas(workLevelAmnt.toFixed(0)) + " " + user.currency,
+                transport: numberWithCommas(transportAmnt.toFixed(0)) + " " + user.currency,
+                withholdings: <span title={`irpp ${irpp_total.toFixed(0)} + rav ${rav.toFixed(0)} + cfc ${cfc.toFixed(0)} + tdl ${tdl.toFixed(0)} + pvid ${pvid.toFixed(0)}`}>{numberWithCommas(withholdings.toFixed(0)) + " " + user.currency}</span>,
                 total: numberWithCommas(total.toFixed(0)) + " " + user.currency,
                 status: paid ? <Chip color="success" label={t("payroll.paid")} /> : (total !== 0 ? <Chip color="error" label={t("payroll.unpaid")} /> : <Chip label={t("payroll.no balance")} />),
                 actions: (
@@ -144,6 +213,14 @@ const Container = styled("div")(({ theme }) => ({
                         base_salary: base,
                         total_hours: numberOfHours,
                         hourly_rate: row.hourly_rate,
+                        yearly_rate: yearsOfExperienceAmnt,
+                        transport_rate: transportAmnt,
+                        irpp: irpp_total,
+                        rav: rav,
+                        cfc: cfc,
+                        pvid: pvid,
+                        tdl: tdl,
+                        withholdings: withholdings,
                         total_salary: total,
                         company_id: user.company_id,
                       })}
@@ -165,6 +242,7 @@ const Container = styled("div")(({ theme }) => ({
       exportedFileName: t("attendance.title"),
       extraComponents: [
         <TextField
+          key="month-year"
           fullWidth
           size='small'
           label={t("payroll.table year month")}
@@ -177,6 +255,12 @@ const Container = styled("div")(({ theme }) => ({
           }}
         />
       ],
+      sorting: [
+        {
+          id: "total",
+          desc: true,
+        },
+      ]
     })
 
     const payContent = (

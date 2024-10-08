@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { Box, Button } from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
-export const useMaterialReactTableV2 = ({columns, data, options, exportedFileName, actions, extraComponents, otherActions}) => {
+export const useMaterialReactTableV2 = ({columns, data, options, exportedFileName, actions, extraComponents, otherActions, sorting = []}) => {
 
     const { t } = useTranslation();
 
@@ -41,6 +41,7 @@ export const useMaterialReactTableV2 = ({columns, data, options, exportedFileNam
         enableDensityToggle: false,
         initialState: {
           density: 'compact',
+          sorting
         },
         localization: {
             hideAll: t("main.hide all"),

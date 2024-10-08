@@ -40,11 +40,11 @@ function payrollGetRouter(req, res) {
 
 function payrollPostRouter(req, res) {
     console.log('payrollPostRouter');
-    const { company_id, employee_id, pay_period, base_salary, total_hours, hourly_rate, total_salary, pay_date } = req.body;
+    const { company_id, employee_id, pay_period, base_salary, total_hours, hourly_rate, total_salary, pay_date, yearly_rate, transport_rate, irpp, tdl, rav, cfc, pvid } = req.body;
     
     db.query(
-        'INSERT INTO payroll (employee_id, pay_period, base_salary, total_hours, hourly_rate, total_salary, company_id, pay_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING *',
-        [employee_id, pay_period, base_salary, total_hours, hourly_rate, total_salary, company_id, pay_date],
+        'INSERT INTO payroll (employee_id, pay_period, base_salary, total_hours, hourly_rate, total_salary, company_id, pay_date, yearly_rate, transport_rate, irpp, tdl, rav, cfc, pvid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *',
+        [employee_id, pay_period, base_salary, total_hours, hourly_rate, total_salary, company_id, pay_date, yearly_rate, transport_rate, irpp, tdl, rav, cfc, pvid],
         async (result, error) => {
             if (error) {
                 console.log(error);
@@ -78,11 +78,11 @@ function payrollPostRouter(req, res) {
 
 function payrollPutRouter(req, res) {
     console.log('payrollPutRouter');
-    const { id, employee_id, pay_period, base_salary, total_hours, hourly_rate, total_salary, pay_date } = req.body;
+    const { id, employee_id, pay_period, base_salary, total_hours, hourly_rate, total_salary, pay_date, yearly_rate, transport_rate, irpp, tdl, rav, cfc, pvid } = req.body;
     
     db.query(
-            'UPDATE payroll SET employee_id = ?, pay_period = ?, base_salary = ?, total_hours = ?, hourly_rate = ?, total_salary = ?, pay_date = ? WHERE id = ?',
-            [employee_id, pay_period, base_salary, total_hours, hourly_rate, total_salary, pay_date, id],
+            'UPDATE payroll SET employee_id = ?, pay_period = ?, base_salary = ?, total_hours = ?, hourly_rate = ?, total_salary = ?, pay_date = ?, yearly_rate = ?, transport_rate = ?, irpp = ?, tdl = ?, rav = ?, cfc = ?, pvid = ? WHERE id = ?',
+            [employee_id, pay_period, base_salary, total_hours, hourly_rate, total_salary, pay_date, yearly_rate, transport_rate, irpp, tdl, rav, cfc, pvid, id],
         async (result, error) => {
             if (error) {
                 console.log(error);
