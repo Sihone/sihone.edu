@@ -124,6 +124,8 @@ const CustomerForm = () => {
     base_salary: employee?.base_salary || "0",
     hourly_rate: employee?.hourly_rate || "0",
     pay_period: employee?.pay_period || "Monthly",
+    start_date: employee?.start_date || new Date().toISOString(),
+    work_level: employee?.work_level || 1, 
     emmergency_contact_name: employee?.emmergency_contact_name || "",
     emmergency_contact_phone: employee?.emmergency_contact_phone || "",
     emmergency_contact_relation: employee?.emmergency_contact_relation || "",

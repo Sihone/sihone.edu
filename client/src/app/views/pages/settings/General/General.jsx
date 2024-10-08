@@ -4,6 +4,7 @@ import {
   Divider,
   Grid,
   styled,
+  Switch,
   TextField,
 } from "@mui/material";
 import * as Yup from "yup";
@@ -49,7 +50,7 @@ const CustomerForm = () => {
       company_email: values.company_email,
       company_website: values.company_website,
       company_currency: values.company_currency,
-      company_registration: values.company_registration,
+      company_registration: values.company_registration
     })
     .then(() => {
       enqueueSnackbar(t("main.success"), { variant: "success" });
@@ -79,6 +80,25 @@ const CustomerForm = () => {
     });
     setLoading(false);
   };
+  
+  const handleSalarySubmit = async (values) => {
+    console.log(values);
+    setLoading(true);
+    updateData({
+      ...data,
+      automatic_salary: values.automatic_salary,
+      years_experience: values.years_experience,
+      work_experience: values.work_experience,
+      transportation: values.transportation
+    })
+    .then(() => {
+      enqueueSnackbar(t("main.success"), { variant: "success" });
+    })
+    .catch((err) => {
+      enqueueSnackbar(err.message || err.detail || err, { variant: "error" });
+    });
+    setLoading(false);
+  };
 
   useEffect(() => {
     if (error) {
@@ -95,7 +115,7 @@ const CustomerForm = () => {
     company_currency: data?.company_currency || "",
     company_address1: data?.company_address && data?.company_address.split(",")[0] || "",
     company_address2: data?.company_address && data?.company_address.split(",")[1] || "",
-    company_registration: data?.company_registration || "",
+    company_registration: data?.company_registration || ""
   };
 
   const initialValues2 = {
@@ -104,6 +124,13 @@ const CustomerForm = () => {
     smtp_user: data?.smtp_user || "",
     smtp_password: data?.smtp_password || "",
     smtp_security: data?.smtp_security || "",
+  };
+  
+  const initialValues3 = {
+    automatic_salary: data?.automatic_salary || false,
+    years_experience: data?.years_experience || false,
+    work_experience: data?.work_experience || false,
+    transportation: data?.transportation || false
   };
 
   const validationSchema1 = () => Yup.object().shape({
@@ -120,6 +147,9 @@ const CustomerForm = () => {
     smtp_user: Yup.string().required(t("main.required")),
     smtp_password: Yup.string().required(t("main.required")),
     smtp_security: Yup.string().required(t("main.required")),
+  });
+  
+  const validationSchema3 = () => Yup.object().shape({
   });
 
   return (
@@ -316,7 +346,106 @@ const CustomerForm = () => {
                     helperText={touched.company_currency && errors.company_currency}
                     error={Boolean(errors.company_currency && touched.company_currency)}
                   />
-                </Grid>  
+                </Grid>
+              </Grid>
+
+              <Box mt={3}>
+                <LoadingButton
+                    type="submit"
+                    color="primary"
+                    loading={loading}
+                    variant="contained"
+                    sx={{ mb: 2, mt: 3 }}
+                    disabled={!dirty}
+                  >
+                    {t("main.submit")}
+                  </LoadingButton>
+              </Box>
+            </Form>
+          )}
+        </Formik>
+      </Card>
+      
+      <Card elevation={3}  style={{marginTop: "36px"}}>
+        <H4 p={2}>{t("settings.salary")}</H4>
+
+        <Divider sx={{ mb: 1 }} />
+
+        <Formik
+          initialValues={initialValues3}
+          onSubmit={handleSalarySubmit}
+          enableReinitialize={true}
+          validationSchema={validationSchema3}
+        >
+          {({
+            values,
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            isSubmitting,
+            setSubmitting,
+            setFieldValue,
+            dirty
+          }) => (
+            <Form onSubmit={handleSubmit}>
+              <Grid container spacing={3} alignItems="center">
+                <Grid item md={4} sm={4} xs={12}>
+                  {t("settings.automatic salary")}
+                </Grid>
+                <Grid item md={8} sm={8} xs={12}>
+                  <Switch
+                    name="automatic_salary"
+                    checked={values.automatic_salary}
+                    onChange={value => setFieldValue("automatic_salary", value.target.checked)}
+                    color="primary"
+                    inputProps={{ 'aria-label': 'primary checkbox' }}
+                  />
+                </Grid>
+                
+                <Grid item md={4} sm={4} xs={12}>
+                  {t("settings.years experience")}
+                </Grid>
+                <Grid item md={8} sm={8} xs={12}>
+                  <Switch
+                    name="years_experience"
+                    checked={values.years_experience}
+                    onChange={value => setFieldValue("years_experience", value.target.checked)}
+                    color="primary"
+                    inputProps={{ 'aria-label': 'primary checkbox' }}
+                    disabled={!values.automatic_salary}
+                  />
+                </Grid>
+                
+                <Grid item md={4} sm={4} xs={12}>
+                  {t("settings.work experience")}
+                </Grid>
+                <Grid item md={8} sm={8} xs={12}>
+                  <Switch
+                    name="work_experience"
+                    checked={values.work_experience}
+                    onChange={value => setFieldValue("work_experience", value.target.checked)}
+                    color="primary"
+                    inputProps={{ 'aria-label': 'primary checkbox' }}
+                    disabled={!values.automatic_salary}
+                  />
+                </Grid>
+                
+                <Grid item md={4} sm={4} xs={12}>
+                  {t("settings.transportation")}
+                </Grid>
+                <Grid item md={8} sm={8} xs={12}>
+                  <Switch
+                    name="transportation"
+                    checked={values.transportation}
+                    onChange={value => setFieldValue("transportation", value.target.checked)}
+                    color="primary"
+                    inputProps={{ 'aria-label': 'primary checkbox' }}
+                    disabled={!values.automatic_salary}
+                  />
+                </Grid>
+                  
               </Grid>
 
               <Box mt={3}>
