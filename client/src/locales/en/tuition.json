@@ -10,7 +10,7 @@
         "amount": "Amount",
         "payment info": "Payment History",
         "subtotal": "Subtotal",
-        "total": "Tuition Balance",
+        "total": "Balance",
         "rebate": "Rebate",
         "payments": "Total Paid",
         "dialog delete pay title": "Delete Payment",
@@ -30,6 +30,8 @@
         "overpaid": "Overpaid",
         "partial paid": "Partially Paid",
         "item name": "Item Name",
-        "item price": "Item Price"
+        "item price": "Item Price",
+        "registration": "Registration Fee",
+        "print date": "As of"
     }
 }

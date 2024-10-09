@@ -126,7 +126,8 @@ app.put('/api/students', studentsPutRouter);
 app.delete('/api/students/:id', studentsDeleteRouter);
 
 // tuition routes
-const { tuitionGetAllRouter, tuitionGetRouter, tuitionPutRouter } = require('./server-mysql/tuition');
+const { tuitionPostRouter, tuitionGetAllRouter, tuitionGetRouter, tuitionPutRouter } = require('./server-mysql/tuition');
+app.post('/api/tuitions', tuitionPostRouter);
 app.get('/api/tuitions/:company_id/:id', tuitionGetRouter);
 app.get('/api/tuitions/:company_id', tuitionGetAllRouter);
 app.put('/api/tuitions', tuitionPutRouter);

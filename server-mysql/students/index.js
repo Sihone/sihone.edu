@@ -5,7 +5,7 @@ function studentsGetAllRouter(req, res) {
     console.log('studentsGetRouter');
     const { company_id } = req.params;
     db.query(`
-        SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id, students.status AS status, tuition.id AS tuition_id, students.student_id AS student_id FROM students
+        SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id, students.status AS status, tuition.id AS tuition_id, tuition.academic_year_id AS tuition_academic_year_id, students.academic_year_id AS academic_year_id, students.student_id AS student_id FROM students
         LEFT JOIN academic_programs ON students.program_id = academic_programs.id
         LEFT JOIN tuition ON students.id = tuition.student_id
         WHERE students.company_id = ?
@@ -26,7 +26,7 @@ function studentsGetAllByAcademicYearRouter(req, res) {
     console.log('studentsGetRouter');
     const { company_id, academic_year_id } = req.params;
     db.query(`
-        SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id, students.status AS status, tuition.id AS tuition_id, students.student_id AS student_id FROM students
+        SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id, students.status AS status, tuition.id AS tuition_id, tuition.academic_year_id AS tuition_academic_year_id, students.student_id AS student_id FROM students
         LEFT JOIN academic_programs ON students.program_id = academic_programs.id
         LEFT JOIN tuition ON students.id = tuition.student_id
         WHERE students.company_id = ? AND students.academic_year_id = ?
@@ -48,7 +48,7 @@ function studentGetRouter(req, res) {
     const { company_id, id } = req.params;
     db.query(
         `
-        SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id, students.status AS status, tuition.id AS tuition_id, students.student_id AS student_id FROM students
+        SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id, students.status AS status, tuition.id AS tuition_id, tuition.academic_year_id AS tuition_academic_year_id, students.student_id AS student_id FROM students
         LEFT JOIN academic_programs ON students.program_id = academic_programs.id
         LEFT JOIN tuition ON students.id = tuition.student_id
         WHERE students.company_id = ? AND students.id = ?
@@ -94,9 +94,9 @@ async function studentsPostRouter(req, res) {
                             } else {
                                 db.query(
                                     `
-                                        INSERT INTO tuition (student_id, company_id) VALUES (?, ?)
+                                        INSERT INTO tuition (student_id, academic_year_id, company_id) VALUES (?, ?, ?)
                                     `,
-                                    [result.rows[0].id, company_id],
+                                    [result.rows[0].id, academic_year_id, company_id],
                                     async (result3, error) => {
                                         if (error) {
                                             console.log(error);
@@ -104,7 +104,7 @@ async function studentsPostRouter(req, res) {
                                         } else {
                                             db.query(
                                                 `
-                                                    SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id, students.status AS status, tuition.id AS tuition_id, students.student_id AS student_id FROM students
+                                                    SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id, students.status AS status, tuition.id AS tuition_id, tuition.academic_year_id AS tuition_academic_year_id, students.student_id AS student_id FROM students
                                                     LEFT JOIN academic_programs ON students.program_id = academic_programs.id
                                                     LEFT JOIN tuition ON students.id = tuition.student_id
                                                     WHERE students.id = ?
@@ -162,7 +162,7 @@ function studentsPutRouter(req, res) {
             } else {
                 db.query(
                     `
-                    SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id, students.status AS status, tuition.id AS tuition_id, students.student_id AS student_id FROM students
+                    SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id, students.status AS status, tuition.id AS tuition_id, tuition.academic_year_id AS tuition_academic_year_id, students.student_id AS student_id FROM students
                     LEFT JOIN academic_programs ON students.program_id = academic_programs.id
                     LEFT JOIN tuition ON students.id = tuition.student_id
                     WHERE students.company_id = ? AND students.id = ?
