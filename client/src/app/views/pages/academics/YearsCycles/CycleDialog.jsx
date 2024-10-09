@@ -7,6 +7,8 @@ const CycleDialog = ({ open, onClose, save, update, cycle, t }) => {
   const [short_name_en, setShortNameEn] = useState('');
   const [long_name_fr, setLongNameFr] = useState('');
   const [short_name_fr, setShortNameFr] = useState('');
+  const [number_of_years, setNumberOfYears] = useState(0);
+  const [reg_fee, setRegFee] = useState(0);
 
   useEffect(() => {
     if (open && cycle) {
@@ -14,6 +16,8 @@ const CycleDialog = ({ open, onClose, save, update, cycle, t }) => {
         setShortNameEn(cycle.short_name_en);
         setLongNameFr(cycle.long_name_fr);
         setShortNameFr(cycle.short_name_fr);
+        setNumberOfYears(cycle.number_of_years);
+        setRegFee(cycle.reg_fee);
     }
   }, [cycle]);
 
@@ -30,14 +34,18 @@ const CycleDialog = ({ open, onClose, save, update, cycle, t }) => {
         long_name_en,
         short_name_en,
         long_name_fr,
-        short_name_fr
+        short_name_fr,
+        number_of_years,
+        reg_fee
       });
     } else {
         save({
             long_name_en,
             short_name_en,
             long_name_fr,
-            short_name_fr
+            short_name_fr,
+            number_of_years,
+            reg_fee
         });
     }
     resetForm();
@@ -45,7 +53,7 @@ const CycleDialog = ({ open, onClose, save, update, cycle, t }) => {
   }
 
   const disableSubmitButton = () => {
-    return !long_name_en || !short_name_en || !long_name_fr || !short_name_fr
+    return !long_name_en || !short_name_en || !long_name_fr || !short_name_fr || !number_of_years
   }
 
   const resetForm = () => {
@@ -53,7 +61,10 @@ const CycleDialog = ({ open, onClose, save, update, cycle, t }) => {
     setShortNameEn('');
     setLongNameFr('');
     setShortNameFr('');
+    setNumberOfYears(0);
+    setRegFee(0);
   }
+
 
   const handleClose = () => {
     resetForm();
@@ -100,6 +111,24 @@ const CycleDialog = ({ open, onClose, save, update, cycle, t }) => {
           fullWidth
           value={short_name_fr}
           onChange={(e) => setShortNameFr(e.target.value)}
+        />
+        <TextField
+          margin="dense"
+          id="number_of_years"
+          label={t("academics.number of years")}
+          type="number"
+          fullWidth
+          value={number_of_years}
+          onChange={(e) => setNumberOfYears(e.target.value)}
+        />
+        <TextField
+          margin="dense"
+          id="reg_fee"
+          label={t("academics.reg fee")}
+          type="number"
+          fullWidth
+          value={reg_fee}
+          onChange={(e) => setRegFee(e.target.value)}
         />
       </DialogContent>
       <DialogActions>

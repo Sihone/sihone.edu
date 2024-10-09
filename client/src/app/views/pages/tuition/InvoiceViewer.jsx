@@ -27,6 +27,7 @@ import { ConfirmationDialog } from "app/components";
 import { useSnackbar } from "notistack";
 import TuitionItemsDialog from "./TuitionItemsDialog";
 import RebateDialog from "./RebateDialog";
+import PrintAndPdfDownloader from "app/components/PrintAndPdfDownloader";
 
 const ButtonBox = styled(FlexBetween)(() => ({
   paddingLeft: "16px",
@@ -82,14 +83,26 @@ const InvoiceViewer = ({ toggleInvoiceEditor }) => {
   const [showItemDialog, setShowItemDialog] = useState(false);
   const [tuition_items, setTuitionItems] = useState([]);
   const [showRebateDialog, setShowRebateDialog] = useState(false);
+  const [currentStudentYear, setCurrentStudentYear] = useState(0);
 
   const {user} = useAuth();
   const {data: invoice, updateData: updateRebate} = useData("tuitions", user.company_id, id);
   const { data: tuitionItems, saveData: saveTuitionItem, deleteData: deleteTuitionItem } = useData("tuition_items", user.company_id);
   const { data: items, saveData: saveItem } = useData("items", user.company_id);
   const { data: tuitionPayments, saveData: savePayment, deleteData: deletePayment } = useData("tuition_payments", user.company_id);
+  const { data: academicYears } = useData("academic_years", user.company_id);
   const {t, i18n} = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
+  
+  useEffect(() => {
+    if (invoice && invoice.id && academicYears && academicYears.length) {
+      const studentAcademicYear = academicYears.find((_item) => _item.id == invoice.student_academic_year_id);
+      const currentAcademicYear = academicYears.find((_item) => _item.id == invoice.academic_year_id);
+      const year = new Date(currentAcademicYear.start_date).getFullYear() - new Date(studentAcademicYear.start_date).getFullYear() + 1;
+      setCurrentStudentYear(year);
+    }
+  }, [invoice, academicYears]);
+  
 
   const handlePrint = () => window.print();
 
@@ -127,9 +140,15 @@ const InvoiceViewer = ({ toggleInvoiceEditor }) => {
 
       const _totalPayments = _payments.reduce((acc, payment) => acc + payment.amount, 0);
       setPaymentAmount(_totalPayments);
-      setInitialBalance(invoice.price - invoice.rebate + _tuitionItems.reduce((acc, item) => acc + Number(item.price), 0));
-
-      const _balance = Number(invoice.price) + _tuitionItems.reduce((acc, item) => acc + Number(item.price), 0) - _totalPayments - invoice.rebate;
+      
+      let _balance = 0;
+      if (currentStudentYear === 1) {
+        setInitialBalance(Number(invoice.price) + Number(invoice.reg_fee) - invoice.rebate + _tuitionItems.reduce((acc, item) => acc + Number(item.price), 0));
+        _balance = Number(invoice.price) + Number(invoice.reg_fee) + _tuitionItems.reduce((acc, item) => acc + Number(item.price), 0) - _totalPayments - invoice.rebate;
+      } else {
+        setInitialBalance(Number(invoice.price) - invoice.rebate + _tuitionItems.reduce((acc, item) => acc + Number(item.price), 0));
+        _balance = Number(invoice.price) + _tuitionItems.reduce((acc, item) => acc + Number(item.price), 0) - _totalPayments - invoice.rebate;
+      }
       setBalance(_balance);
 
       let _status = "";
@@ -154,9 +173,14 @@ const InvoiceViewer = ({ toggleInvoiceEditor }) => {
       setStatus(_status);
       setStatusColor(_statusColor);
     }
-  }, [invoice, tuitionItems, tuitionPayments]);
+  }, [invoice, tuitionItems, tuitionPayments, initialBalance, currentStudentYear]);
 
-  let subTotalCost = Number(invoice.price);
+  let subTotalCost = Number(invoice.price) + Number(invoice.reg_fee);
+  if (currentStudentYear > 1) {
+    subTotalCost = Number(invoice.price);
+  }
+  
+  const academicYearStr = t(`students.year.${currentStudentYear}`);
 
   return (
     <Box py={2} className="invoice-viewer">
@@ -172,6 +196,7 @@ const InvoiceViewer = ({ toggleInvoiceEditor }) => {
             variant="contained"
             color="success"
             onClick={() => setShowPayDialog(true)}
+            startIcon={<Icon>attach_money</Icon>}
           >
             {t("tuition.pay")}
           </Button>
@@ -180,6 +205,7 @@ const InvoiceViewer = ({ toggleInvoiceEditor }) => {
             variant="contained"
             color="primary"
             onClick={() => setShowItemDialog(true)}
+            startIcon={<Icon>add</Icon>}
           >
             {t("tuition.add item")}
           </Button>
@@ -188,36 +214,78 @@ const InvoiceViewer = ({ toggleInvoiceEditor }) => {
             variant="contained"
             color="warning"
             onClick={() => setShowRebateDialog(true)}
+            startIcon={<Icon>percentage</Icon>}
           >
             {t("tuition.add rebate")}
           </Button>
-          <Button sx={{ py: 1 }} onClick={handlePrint} variant="contained" color="secondary">
-            {t("main.print")}
-          </Button>
+          <PrintAndPdfDownloader
+            elementId={"print-area"}
+            fileName={`${invoice.first_name}_${invoice.last_name}_Y${currentStudentYear}`}
+            color="secondary"
+            orientation="l"
+            replaceOptions={
+              [
+                {
+                  id: "invoice-status",
+                  html: status
+                },
+                {
+                  id: "delete-icon",
+                  html: ""
+                }
+              ]
+            }
+          />
+          <PrintAndPdfDownloader
+            elementId={"print-area"}
+            fileName={`${invoice.first_name}_${invoice.last_name}_Y${currentStudentYear}`}
+            color="error"
+            orientation="l"
+            replaceOptions={
+              [
+                {
+                  id: "invoice-status",
+                  html: status
+                },
+                {
+                  id: "delete-icon",
+                  html: ""
+                }
+              ]
+            }
+            print
+          />
         </div>
       </ButtonBox>
 
-      <div id="print-area">
+      <div id="print-area" style={{ padding: "20px" }}>
         <FlexBetween px={2} mb={2} className="viewer__order-info">
           <Box>
+            <StyledH5 sx={{ mb: 1 }}>{user.company_name}</StyledH5>
             <StyledH5 sx={{ mb: 1 }}>{t("tuition.summary")}</StyledH5>
             <Paragraph>{invoice.first_name} {invoice.last_name}</Paragraph>
             <Paragraph sx={{ mb: 1 }}>#{invoice.studentId}</Paragraph>
             <Paragraph>{i18n.language == "en" ? invoice.name_en : invoice.name_fr}</Paragraph>
             <Paragraph>{i18n.language == "en" ? invoice.long_name_en : invoice.long_name_fr}</Paragraph>
+            <Paragraph>{academicYearStr}</Paragraph>
           </Box>
 
           <TextBox>
             <StyledH5 sx={{ mb: 1 }}>
               <strong>{t("main.status")}: </strong>
-              <span>
+              <span className="invoice-status">
                 <Chip color={statusColor} label={status} />
               </span>
             </StyledH5>
 
             <StyledH5>
-            <strong>{t("tuition.date")}: </strong>
+              <strong>{t("tuition.date")}: </strong>
               <span>{invoice.created_at && format(new Date(invoice.created_at), "MMMM dd, yyyy")}</span>
+            </StyledH5>
+            
+            <StyledH5>
+              <strong>{t("tuition.print date")}: </strong>
+              <span>{format(new Date(), "MMMM dd, yyyy")}</span>
             </StyledH5>
           </TextBox>
         </FlexBetween>
@@ -225,7 +293,7 @@ const InvoiceViewer = ({ toggleInvoiceEditor }) => {
         <StyledTable>
           <TableHead>
             <TableRow>
-              <TableCell align="center">
+              <TableCell align="left">
                 {t("tuition.item")}
               </TableCell>
               <TableCell align="right">
@@ -237,8 +305,17 @@ const InvoiceViewer = ({ toggleInvoiceEditor }) => {
           </TableHead>
 
           <TableBody>
+            {
+              currentStudentYear == 1 && (
+                <TableRow>
+                  <TableCell align="left">{t("tuition.registration")}</TableCell>
+                  <TableCell align="right" style={{paddingRight: "0"}}>{numberWithCommas(invoice.reg_fee)} {user.currency}</TableCell>
+                  <TableCell align="right" style={{paddingRight: "32px"}}></TableCell>
+                </TableRow>
+              )
+            }
             <TableRow>
-              <TableCell align="center">{t("tuition.program fees")}: {i18n.language == "en" ? (invoice.short_name_en + " - " + invoice.name_en) : (invoice.short_name_fr + " - " + invoice.name_fr)}</TableCell>
+              <TableCell align="left">{t("tuition.program fees")}: {i18n.language == "en" ? (invoice.short_name_en + " - " + invoice.name_en) : (invoice.short_name_fr + " - " + invoice.name_fr)}</TableCell>
               <TableCell align="right" style={{paddingRight: "0"}}>{numberWithCommas(invoice.price)} {user.currency}</TableCell>
               <TableCell align="right" style={{paddingRight: "32px"}}></TableCell>
             </TableRow>
@@ -246,11 +323,11 @@ const InvoiceViewer = ({ toggleInvoiceEditor }) => {
               subTotalCost += Number(item.price);
               return (
                 <TableRow key={index}>
-                  <TableCell align="center">{item.name}</TableCell>
+                  <TableCell align="left">{item.name}</TableCell>
                   <TableCell align="right" style={{paddingRight: "0"}}>{numberWithCommas(item.price)} {user.currency}</TableCell>
                   <TableCell align="right" style={{paddingRight: "32px"}}>
                     <IconButton onClick={() => setDeleteItemId(item.id)}>
-                      <Icon>delete</Icon>
+                      <span className="delete-icon"><Icon>delete</Icon></span>
                     </IconButton>
                   </TableCell>
                 </TableRow>
@@ -271,7 +348,7 @@ const InvoiceViewer = ({ toggleInvoiceEditor }) => {
                     </Paragraph>
                     <Paragraph style={{paddingLeft: "8px"}}> {numberWithCommas(payment.amount)} {user.currency}</Paragraph>
                     <IconButton onClick={() => setDeleteId(payment.id)}>
-                      <Icon>delete</Icon>
+                      <span className="delete-icon"><Icon>delete</Icon></span>
                     </IconButton>
                   </FlexBetween>
                 );

@@ -36,10 +36,10 @@ function academicCycleGetRouter(req, res) {
 
 function academicCyclePostRouter(req, res) {
     console.log('academicCyclePostRouter');
-    const { company_id, long_name_en, short_name_en, long_name_fr, short_name_fr } = req.body;
+    const { company_id, long_name_en, short_name_en, long_name_fr, short_name_fr, number_of_years, reg_fee} = req.body;
     db.query(
-        'INSERT INTO academic_cycles (company_id, long_name_en, short_name_en, long_name_fr, short_name_fr) VALUES (?, ?, ?, ?, ?) RETURNING *',
-        [company_id, long_name_en, short_name_en, long_name_fr, short_name_fr],
+        'INSERT INTO academic_cycles (company_id, long_name_en, short_name_en, long_name_fr, short_name_fr, number_of_years, reg_fee) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING *',
+        [company_id, long_name_en, short_name_en, long_name_fr, short_name_fr, number_of_years, reg_fee],
         async (result, err) => {
             if (err) {
                 console.log(err);
@@ -53,10 +53,10 @@ function academicCyclePostRouter(req, res) {
 
 function academicCyclePutRouter(req, res) {
     console.log('academicCyclePutRouter');
-    const { id, long_name_en, short_name_en, long_name_fr, short_name_fr } = req.body;
+    const { id, long_name_en, short_name_en, long_name_fr, short_name_fr, number_of_years, reg_fee } = req.body;
     db.query(
-        'UPDATE academic_cycles SET long_name_en = ?, short_name_en = ?, long_name_fr = ?, short_name_fr = ? WHERE id = ?',
-        [long_name_en, short_name_en, long_name_fr, short_name_fr, id],
+        'UPDATE academic_cycles SET long_name_en = ?, short_name_en = ?, long_name_fr = ?, short_name_fr = ?, number_of_years = ?, reg_fee = ? WHERE id = ?',
+        [long_name_en, short_name_en, long_name_fr, short_name_fr, number_of_years, reg_fee, id],
         async (result, err) => {
             if (err) {
                 console.log(err);

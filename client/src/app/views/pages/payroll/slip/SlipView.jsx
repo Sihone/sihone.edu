@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Autocomplete } from '@mui/material';
 import { numberWithCommas } from 'app/utils/utils';
-import PdfDownloader from 'app/components/PdfDownloadButton';
+import PrintAndPdfDownloader from 'app/components/PrintAndPdfDownloader';
 import { format } from 'date-fns';
 import "./styles.css";
 
@@ -70,10 +70,9 @@ const SlipView = ({ open, onClose, paySlip, t, user, payments }) => {
           <Button onClick={handleClose} color="error" variant="contained">
             {t("main.close")}
           </Button>
-          <PdfDownloader
+          <PrintAndPdfDownloader
             elementId={"printContent"}
             fileName={paySlip && paySlip.name + " - " + format(new Date(paySlip ? paySlip.pay_period + "-5" : null), "MMMM yyyy")}
-            landscape={false}
           />
         </DialogActions>
         <DialogContent style={{display: "flex", flexDirection: "column", gap: "16px", marginTop: "-37mm"}}>

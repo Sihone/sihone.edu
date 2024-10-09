@@ -4,7 +4,7 @@ function tuitionPaymentsGetAllRouter(req, res) {
     console.log('tuitionGetRouter');
     const { company_id } = req.params;
     db.query(`
-        SELECT *, tuition_payments.id AS id FROM tuition_payments
+        SELECT *, tuition_payments.id AS id, tuition.academic_year_id AS tuition_academic_year_id FROM tuition_payments
         LEFT JOIN tuition ON tuition_payments.tuition_id = tuition.id
         WHERE tuition_payments.company_id = ?
     `,
@@ -23,7 +23,7 @@ function tuitionPaymentsGetRouter(req, res) {
     console.log('tuitionGetRouter');
     const { company_id, id } = req.params;
     db.query(`
-        SELECT *, tuition_payments.id AS id FROM tuition_payments
+        SELECT *, tuition_payments.id AS id, tuition.academic_year_id AS tuition_academic_year_id FROM tuition_payments
         LEFT JOIN tuition ON tuition_payments.tuition_id = tuition.id
         WHERE tuition_payments.company_id = ? AND tuition_payments.id = ?
     `,
@@ -51,7 +51,7 @@ function tuitionPaymentsPostRouter(req, res) {
                 res.status(500).json(error);
             } else {
                 db.query(
-                    'SELECT *, tuition_payments.id AS id FROM tuition_payments LEFT JOIN tuition ON tuition_payments.tuition_id = tuition.id WHERE tuition_payments.id = ?',
+                    'SELECT *, tuition_payments.id AS id, tuition.academic_year_id AS tuition_academic_year_id FROM tuition_payments LEFT JOIN tuition ON tuition_payments.tuition_id = tuition.id WHERE tuition_payments.id = ?',
                     [result.rows[0].id],
                     async (result, error) => {
                         if (error) {
@@ -80,7 +80,7 @@ function tuitionPaymentsPutRouter(req, res) {
                 res.status(500).json(error);
             } else {
                 db.query(
-                    'SELECT *, tuition_payments.id AS id FROM tuition_payments LEFT JOIN tuition ON tuition_payments.tuition_id = tuition.id WHERE tuition_payments.id = ?',
+                    'SELECT *, tuition_payments.id AS id, tuition.academic_year_id AS tuition_academic_year_id FROM tuition_payments LEFT JOIN tuition ON tuition_payments.tuition_id = tuition.id WHERE tuition_payments.id = ?',
                     [id],
                     async (result, error) => {
                         if (error) {

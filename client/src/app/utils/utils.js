@@ -72,3 +72,9 @@ export function completedStudents() {
     }
   }
 }
+
+export const deleteDuplicate = (array, property) => {
+  return array.filter((obj, pos, arr) => {
+    return arr.map(mapObj => mapObj[property]).indexOf(obj[property]) === pos;
+  });
+};

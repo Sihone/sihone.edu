@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import YearDialog from "./YearDialog";
 import { useSnackbar } from "notistack";
 import CycleDialog from "./CycleDialog";
+import { numberWithCommas } from "app/utils/utils";
 
 // styled components
 const FlexBox = styled(Box)({ display: "flex", alignItems: "center" });
@@ -49,6 +50,10 @@ const AcademicsList = () => {
   const { data, saveData, updateData, deleteData } = useData("academic_years", user.company_id);
   const { data: cycles, saveData: saveCycle, updateData: updateCycle, deleteData: deleteCycle } = useData("academic_cycles", user.company_id);
   const { data: settings } = useData("settings", user.company_id);
+  const { data: academicYears } = useData("academic_years", user.company_id);
+  const { data: academicCycles } = useData("academic_cycles", user.company_id);
+  const { data: students } = useData("students", user.company_id);
+  const { data: tutions, saveData: saveTution } = useData("tuitions", user.company_id);
   const { t } = useTranslation();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -75,6 +80,8 @@ const AcademicsList = () => {
   const columns2 = [
     { id: "name_en", align: "left", disablePadding: true, label: t("academics.table header.name en") },
     { id: "name_fr", align: "left", disablePadding: false, label: t("academics.table header.name fr") },
+    { id: "number_of_years", align: "left", disablePadding: false, label: t("academics.table header.number of years") },
+    { id: "reg_fee", align: "left", disablePadding: false, label: t("academics.reg fee") },
     { id: "edit", align: "center", disablePadding: false, label: t("academics.table header.actions") },
   ];
 
@@ -139,6 +146,24 @@ const AcademicsList = () => {
     setConfirmDelete2(false);
     setCycle(null);
   }
+  
+  const updateTution = (newAcademicYear) => {
+    students.forEach((student) => {
+      const studentAcademicYear = academicYears.find((_item) => _item.id == student.academic_year_id);
+      const studentCycle = academicCycles.find((_item) => _item.id == student.cycle_id);
+      let numberOfYears = studentCycle?.number_of_years;
+      for (let i = 1; i <= numberOfYears - 1; i++) {
+        const startYear = new Date(studentAcademicYear.start_date).getFullYear() + i;
+        if (startYear ===  new Date(newAcademicYear.start_date).getFullYear()) {
+          saveTution({
+            student_id: student.id,
+            academic_year_id: newAcademicYear.id,
+            company_id: user.company_id
+          })
+        }
+      }
+    })
+  }
 
   const onSave = async (data) => {
     await saveData({
@@ -149,6 +174,7 @@ const AcademicsList = () => {
       active: data.active,
     })
     .then((response) => {
+      updateTution(response);
       enqueueSnackbar(t("academics.save success"), { variant: "success" });
       if (data.active) {
         setCurrentAcademicYear(response.id);
@@ -167,6 +193,8 @@ const AcademicsList = () => {
       long_name_fr: data.long_name_fr,
       short_name_en: data.short_name_en,
       short_name_fr: data.short_name_fr,
+      number_of_years: data.number_of_years,
+      reg_fee: data.reg_fee
     })
     .then((response) => {
       enqueueSnackbar(t("academics.save success"), { variant: "success" });
@@ -328,6 +356,14 @@ const AcademicsList = () => {
 
                       <TableCell align="left">
                         {row.long_name_fr} ({row.short_name_fr})
+                      </TableCell>
+                      
+                      <TableCell align="left">
+                        {row.number_of_years}
+                      </TableCell>
+                      
+                      <TableCell align="left">
+                        {numberWithCommas(row.reg_fee)} {user.currency}
                       </TableCell>
 
                       <TableCell align="center">

@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useSnackbar } from 'notistack';
 import { Breadcrumb, ConfirmationDialog } from "app/components";
 import { useMaterialReactTableV2 } from 'app/hooks/useMaterialReactTable';
-import { inactiveStudents, completedStudents } from 'app/utils/utils';
+import { inactiveStudents, completedStudents, deleteDuplicate } from 'app/utils/utils';
 
 import "./styles.css";
 
@@ -38,9 +38,9 @@ const Container = styled("div")(({ theme }) => ({
     const { data: tuitionItems } = useData("tuition_items", user.company_id);
     const { data: invoiceList } = useData("tuitions", user.company_id);
     const {data: academicYears} = useData("academic_years", user.company_id);
+    const {data: academicCycles} = useData("academic_cycles", user.company_id);
     const [studentList, setStudentList] = useState(_students);
     const [students, setStudents] = useState([]);
-    const [showBalanceId, setShowBalanceId] = useState(null);
     const [item, setItem] = useState(null);
     const [showInactive, setShowInactive] = useState(false);
     const [showCompleted, setShowCompleted] = useState(false);
@@ -55,9 +55,9 @@ const Container = styled("div")(({ theme }) => ({
           header: 'EID',
           size: 20,
         }),
-        columnHelper.accessor('status', {
-          header: 'Status',
-          size: 20,
+        columnHelper.accessor('year', {
+          header: t("students.table header.year"),
+          size: 50,
         }),
         columnHelper.accessor('student', {
           header: t("students.full name"),
@@ -69,11 +69,11 @@ const Container = styled("div")(({ theme }) => ({
         }),
         columnHelper.accessor('parent', {
           header: t("students.table header.parent phone"),
-          size: 70,
+          size: 50,
         }),
         columnHelper.accessor('program', {
           header: t("students.table header.program"),
-          size: 120,
+          size: 100,
         }),
         columnHelper.accessor('fees', {
           header: t("students.table header.balance"),
@@ -81,7 +81,7 @@ const Container = styled("div")(({ theme }) => ({
         }),
         columnHelper.accessor('actions', {
           header: t("main.actions"),
-          size: 70,
+          size: 50,
         }),
       ];
 
@@ -110,56 +110,81 @@ const Container = styled("div")(({ theme }) => ({
     }
     
     useEffect(() => {
-      const tempList = _students.filter(obj => {
-        let comparison = obj.status === "active";
-        
-        if (showInactive && showCompleted) {
-          comparison =  obj.status === "active" || obj.status === "inactive" || obj.status === "completed";
-        } else if (!showInactive && showCompleted) {
-          comparison =  obj.status === "active" || obj.status === "completed";
-        } else if (showInactive && !showCompleted) {
-          comparison =  obj.status === "active" || obj.status === "inactive";
-        } else if (!showInactive && !showCompleted) {
-          comparison =  obj.status === "active";
-        }
-        if (academicYearId === "all") {
-          return comparison;
-        } else {
-          return comparison && obj.academic_year_id === Number(academicYearId);
-        }
+      
+    }, [_students])
+    
+    useEffect(() => {
+      if (academicYears.length > 0 && academicCycles.length > 0) {
+        // const _tempStudents = deleteDuplicate(_students, 'id');
+        const tempList = _students?.filter(obj => {
+          let comparison = obj.status === "active";
           
-      })
-      setStudentList(tempList);
-      setTimeout(inactiveStudents, 100);
-      setTimeout(completedStudents, 100);
-    }, [_students, showInactive, showCompleted, academicYearId]);
+          if (showInactive && showCompleted) {
+            comparison =  obj.status === "active" || obj.status === "inactive" || obj.status === "completed";
+          } else if (!showInactive && showCompleted) {
+            comparison =  obj.status === "active" || obj.status === "completed";
+          } else if (showInactive && !showCompleted) {
+            comparison =  obj.status === "active" || obj.status === "inactive";
+          } else if (!showInactive && !showCompleted) {
+            comparison =  obj.status === "active";
+          }
+          const studentAcademicYear = academicYears.find((_item) => _item.id == obj.academic_year_id);
+          const studentCycle = academicCycles.find((_item) => _item.id == obj.cycle_id);
+          let numberOfYears = studentCycle?.number_of_years;
+          const studentAcademicYears = [studentAcademicYear];
+          const studentAcademicYearsIds = [studentAcademicYear?.id];
+          for (let i = 1; i <= numberOfYears - 1; i++) {
+            const startYear = new Date(studentAcademicYear.start_date).getFullYear() + i;
+            const nextAcademicYear = academicYears.find((_item) => new Date(_item.start_date).getFullYear() == startYear);
+            studentAcademicYears.push(nextAcademicYear);
+            studentAcademicYearsIds.push(nextAcademicYear?.id);
+          }
+          
+          return comparison && studentAcademicYearsIds.includes(Number(academicYearId));
+            
+        })
+        setStudentList(tempList);
+        setTimeout(inactiveStudents, 100);
+        setTimeout(completedStudents, 100);
+      }
+    }, [_students, showInactive, showCompleted, academicYearId, academicYears, academicCycles]);
 
     useEffect(() => {
         if (studentList) {
-            const _data = studentList.map((item) => {
+            let _data = studentList.map((item) => {
+              if (item.tuition_academic_year_id != academicYearId) {
+                return null;
+              }
               const program = programs.find((_item) => _item.id == item.program_id);
               const programName = i18n.language == "en" ? (program?.short_name_en + " - " + program?.name_en) : (program?.short_name_fr + " - " + program?.name_fr);
-              const showBalance = showBalanceId == item.id;
 
               let _gender = item.gender === "male" ? "M" : "F";
               if (i18n.language == "fr") {
                 _gender = item.gender === "male" ? "H" : "F";
               }
 
-              const invoice = invoiceList.find((_item) => _item.student_id == item.id);
+              const invoice = invoiceList.find((_item) => _item.student_id == item.id && _item.academic_year_id == item.tuition_academic_year_id);
               const _payments = tuitionPayments.filter((payment) => payment.tuition_id === invoice?.id);
               const _totalPayments = _payments.reduce((acc, payment) => acc + payment.amount, 0);
+              
+              const studentAcademicYear = academicYears.find((_item) => _item.id == item.academic_year_id);
+              const currentAcademicYear = academicYears.find((_item) => _item.id == academicYearId);
+              const year = new Date(currentAcademicYear.start_date).getFullYear() - new Date(studentAcademicYear.start_date).getFullYear() + 1;
+              const academicYearStr = t(`students.year.${year}`);
 
               const _tuitionItems = tuitionItems.filter((_item) => _item.tuition_id === invoice?.id);
               const _totalItems = _tuitionItems.reduce((acc, _item) => acc + _item.price, 0);
 
-              let initialBalance = invoice?.price - invoice?.rebate + _totalItems;
+              let initialBalance = Number(invoice?.price) + Number(invoice?.reg_fee) - Number(invoice?.rebate) + _totalItems;
+              if (year > 1) {
+                initialBalance = Number(invoice?.price) - Number(invoice?.rebate) + _totalItems;
+              }
 
               const balance = initialBalance - _totalPayments;
               
               return {
-                student_id: "(" + _gender + ") " + item.student_id,
-                status: item.status,
+                student_id: item.student_id,
+                year: academicYearStr,
                 student: item.first_name + " " + item.last_name,
                 contact: <>
                   <p style={{margin: "0"}}>{item.phone}</p>
@@ -167,10 +192,25 @@ const Container = styled("div")(({ theme }) => ({
                 </>,
                 parent: item.parent_phone,
                 program: programName,
-                fees: <div onMouseOver={() => setShowBalanceId(item.id)} onMouseOut={() => setShowBalanceId(null)}><span style={{color: showBalance ? "#000" : "transparent", textShadow: showBalance ? "none" : "0 0 5px #000"}}>
-                  {showBalance ? numberWithCommas(balance) : "**,***"}
-                  {user.currency}
-                </span></div>,
+                fees: <div
+                        onMouseOver={() => {
+                          document.getElementById(`showBalanceId${item.id}`).style.display = "block";
+                          document.getElementById(`hideBalanceId${item.id}`).style.display = "none";
+                        }}
+                        onMouseOut={() => {
+                          document.getElementById(`showBalanceId${item.id}`).style.display = "none";
+                          document.getElementById(`hideBalanceId${item.id}`).style.display = "block";
+                        }}
+                      >
+                        <span id={`showBalanceId${item.id}`} style={{color: "#000", textShadow: "none", display: "none"}}>
+                          {numberWithCommas(balance)}
+                          {user.currency}
+                        </span>
+                        <span id={`hideBalanceId${item.id}`} style={{color: "transparent", textShadow: "0 0 5px #000"}}>
+                          {"**,***"}
+                          {user.currency}
+                        </span>
+                      </div>,
                 actions: (
                     <Box sx={{ display: 'flex', gap: '8px' }}>
                         <IconButton onClick={() => navigate("/tuition/" + item.tuition_id)}>
@@ -186,9 +226,10 @@ const Container = styled("div")(({ theme }) => ({
                   ),
             }
           });
+          _data = _data.filter((item) => item != null);
           setStudents(_data);   
         }
-    }, [studentList, showBalanceId]);
+    }, [studentList, academicYearId, academicYears, academicCycles, invoiceList, tuitionPayments, tuitionItems]);
   
     const table = useMaterialReactTableV2({
         columns,
@@ -209,7 +250,6 @@ const Container = styled("div")(({ theme }) => ({
                 <option value={item.id} key={item.name}>{item.name}</option>
               )
             })}
-            <option value="all">{t("main.show all")}</option>
           </Select>,
           _students.length > 0 && <FormControlLabel
             control={
@@ -223,6 +263,16 @@ const Container = styled("div")(({ theme }) => ({
             }
             label={t("students.completed")}
           />
+        ],
+        sorting: [
+          {
+            id: "year",
+            desc: false
+          },
+          {
+            id: "student",
+            desc: false
+          }
         ]
     })
   

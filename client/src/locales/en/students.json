@@ -14,12 +14,20 @@
         "parent phone": "Parent Phone",
         "table header": {
             "name": "Student Name & ID",
-            "phone": "Student Contact",
-            "parent phone": "Parent Contact",
+            "phone": "Contact",
+            "parent phone": "Parent",
             "gender": "Gender",
             "program": "Academic Program",
             "status": "Status",
-            "balance": "Fee Balance"
+            "balance": "Fee Balance",
+            "year": "Year"
+        },
+        "year": {
+          "1": "Year 1",
+          "2": "Year 2",
+          "3": "Year 3",
+          "4": "Year 4",
+          "5": "Year 5"
         },
         "table title": "Student List",
         "dialog title": "Delete Student",
