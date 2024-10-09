@@ -131,7 +131,7 @@ const Container = styled("div")(({ theme }) => ({
         if (_employees) {
             const _data = _employees.map((row) => {
               const numberOfHours = attendances?.filter((item) => item.employees_id === row.id && item.attendance_date.includes(selectedMonthYear)).reduce((a, b) => a + b.total_time, 0) / 60 / 60;
-              const employee = row.first_name + " " + row.last_name;
+              const employee = row.first_name.toUpperCase() + " " + row.last_name.toUpperCase();
               const base = row.base_salary;
               const hourly = row.hourly_rate * numberOfHours;
               const existingPayroll = payrolls?.filter((item) => item.employees_id === row.id && item.pay_period === selectedMonthYear);

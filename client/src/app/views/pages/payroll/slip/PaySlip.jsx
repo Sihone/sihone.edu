@@ -151,7 +151,7 @@ const Payroll = () => {
 
             <TableBody>
               {filteredPayrolls?.map((row) => {
-                  const name = row.first_name + " " + row.last_name;
+                  const name = row.first_name.toUpperCase() + " " + row.last_name.toUpperCase();
                   row.name = name;
 
                   return (
