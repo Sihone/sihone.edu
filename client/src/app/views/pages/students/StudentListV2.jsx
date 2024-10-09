@@ -185,7 +185,7 @@ const Container = styled("div")(({ theme }) => ({
               return {
                 student_id: item.student_id,
                 year: academicYearStr,
-                student: item.first_name + " " + item.last_name,
+                student: <>{item.first_name.toUpperCase() + " " + item.last_name.toUpperCase()} {item.status === "inactive" && <><br/><span style={{color: "red"}}>(inactive)</span></>} {item.status === "completed" && <><br/><span style={{color: "green"}}>(completed)</span></>}</>,
                 contact: <>
                   <p style={{margin: "0"}}>{item.phone}</p>
                   <p style={{margin: "0"}}>{item.email}</p>

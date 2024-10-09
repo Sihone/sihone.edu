@@ -96,7 +96,7 @@ const Container = styled("div")(({ theme }) => ({
     useEffect(() => {
         if (_attendance) {
             const _data = _attendance.map((item) => ({
-                employee: item.first_name + " " + item.last_name,
+                employee: item.first_name.toUpperCase() + " " + item.last_name.toUpperCase(),
                 date: item.attendance_date,
                 clock_in: item.clock_in,
                 clock_out: item.clock_out,

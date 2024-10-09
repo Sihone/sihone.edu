@@ -220,7 +220,7 @@ const InvoiceViewer = ({ toggleInvoiceEditor }) => {
           </Button>
           <PrintAndPdfDownloader
             elementId={"print-area"}
-            fileName={`${invoice.first_name}_${invoice.last_name}_Y${currentStudentYear}`}
+            fileName={`${invoice.first_name?.toUpperCase()}_${invoice.last_name?.toUpperCase()}_Y${currentStudentYear}`}
             color="secondary"
             orientation="l"
             replaceOptions={
@@ -238,7 +238,7 @@ const InvoiceViewer = ({ toggleInvoiceEditor }) => {
           />
           <PrintAndPdfDownloader
             elementId={"print-area"}
-            fileName={`${invoice.first_name}_${invoice.last_name}_Y${currentStudentYear}`}
+            fileName={`${invoice.first_name?.toUpperCase()}_${invoice.last_name?.toUpperCase()}_Y${currentStudentYear}`}
             color="error"
             orientation="l"
             replaceOptions={
@@ -263,7 +263,7 @@ const InvoiceViewer = ({ toggleInvoiceEditor }) => {
           <Box>
             <StyledH5 sx={{ mb: 1 }}>{user.company_name}</StyledH5>
             <StyledH5 sx={{ mb: 1 }}>{t("tuition.summary")}</StyledH5>
-            <Paragraph>{invoice.first_name} {invoice.last_name}</Paragraph>
+            <Paragraph>{invoice.first_name?.toUpperCase()} {invoice.last_name?.toUpperCase()}</Paragraph>
             <Paragraph sx={{ mb: 1 }}>#{invoice.studentId}</Paragraph>
             <Paragraph>{i18n.language == "en" ? invoice.name_en : invoice.name_fr}</Paragraph>
             <Paragraph>{i18n.language == "en" ? invoice.long_name_en : invoice.long_name_fr}</Paragraph>

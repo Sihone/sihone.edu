@@ -88,8 +88,8 @@ const Container = styled("div")(({ theme }) => ({
         if (_employees) {
             const _data = _employees.map((item) => ({
                 employee_id: item.employee_id,
-                first_name: item.first_name,
-                last_name: item.last_name,
+                first_name: item.first_name.toUpperCase(),
+                last_name: item.last_name.toUpperCase(),
                 phone: item.phone,
                 email: item.email,
                 role: item.role_name,

@@ -128,7 +128,7 @@ const Container = styled("div")(({ theme }) => ({
               
               return {
                 studentId: invoice.studentId,
-                student: invoice.first_name + " " + invoice.last_name,
+                student: invoice.first_name.toUpperCase() + " " + invoice.last_name.toUpperCase(),
                 year: academicYearStr,
                 program: i18n.language == "en" ? invoice.name_en : invoice.name_fr,
                 fees: numberWithCommas(balance) + " " + user.currency,
