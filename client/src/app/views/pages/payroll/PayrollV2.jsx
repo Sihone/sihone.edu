@@ -149,7 +149,7 @@ const Container = styled("div")(({ theme }) => ({
               }
               
               const partialTotal = base + hourly + yearsOfExperienceAmnt + workLevelAmnt;
-              const pvid  = 0.042 * partialTotal;
+              const pvid  = partialTotal > 60000 ? 0.042 * partialTotal : 0.042 * 60000;
               let irpp = 0;
               if (partialTotal < 62001) {
                 irpp = 0;
