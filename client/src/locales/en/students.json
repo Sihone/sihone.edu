@@ -17,10 +17,11 @@
             "phone": "Contact",
             "parent phone": "Parent",
             "gender": "Gender",
-            "program": "Academic Program",
+            "program": "Program",
             "status": "Status",
             "balance": "Fee Balance",
-            "year": "Year"
+            "year": "Year",
+            "laptop": "Laptop"
         },
         "year": {
           "1": "Year 1",
@@ -41,6 +42,10 @@
         "create success": "Student created successfully",
         "update success": "Student updated successfully",
         "inactive": "Show inactive students",
-        "completed": "Show completed students"
+        "completed": "Show completed students",
+        "laptop": "Laptop required",
+        "laptops": "Laptops assigned",
+        "no laptops": "No available laptop",
+        "select": "Select laptop"
     }
 }

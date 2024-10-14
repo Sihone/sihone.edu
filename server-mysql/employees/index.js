@@ -5,8 +5,9 @@ function employeesGetRouter(req, res) {
     console.log('employeesGetRouter');
     const { company_id } = req.params;
     db.query(`
-        SELECT *, roles.id AS roles_role_id, employees.id AS id, roles.company_id AS role_company_id, roles.name AS role_name, roles.description AS role_description FROM employees
+        SELECT *, roles.id AS roles_role_id, employees.id AS id, roles.company_id AS role_company_id, roles.name AS role_name, roles.description AS role_description, laptops.id AS laptops_id, laptops.make_model AS laptop_make_model, laptops.serial_number AS laptop_serial_number FROM employees
         LEFT JOIN roles ON employees.role = roles.id
+        LEFT JOIN laptops ON employees.laptop_id = laptops.id
         WHERE employees.company_id = ?
         ORDER BY employees.id DESC
     `,
@@ -25,8 +26,9 @@ function employeeGetRouter(req, res) {
     console.log('employeeGetRouter');
     const { company_id, id } = req.params;
     db.query(`
-        SELECT *, roles.id AS roles_role_id, employees.id AS id, roles.company_id AS role_company_id, roles.name AS role_name, roles.description AS role_description FROM employees
+        SELECT *, roles.id AS roles_role_id, employees.id AS id, roles.company_id AS role_company_id, roles.name AS role_name, roles.description AS role_description, laptops.id AS laptops_id, laptops.make_model AS laptop_make_model, laptops.serial_number AS laptop_serial_number FROM employees
         LEFT JOIN roles ON employees.role = roles.id
+        LEFT JOIN laptops ON employees.laptop_id = laptops.id
         WHERE employees.company_id = ? AND employees.id = ?
     `,
     [company_id, id],
@@ -44,12 +46,12 @@ function employeeGetRouter(req, res) {
 
 async function employeesPostRouter(req, res) {
     console.log('employeesPostRouter');
-    const { salutation, first_name, last_name, email, password, role, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, phone, start_date, work_level } = req.body;
+    const { salutation, first_name, last_name, email, password, role, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, phone, start_date, work_level, laptop_incentive } = req.body;
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     db.query(
-        'INSERT INTO employees (salutation, first_name, last_name, email, password, role, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, employee_id, phone, start_date, work_level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *',
-        [salutation, first_name, last_name, email, hashedPassword, role, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, "", phone, start_date, work_level],
+        'INSERT INTO employees (salutation, first_name, last_name, email, password, role, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, employee_id, phone, start_date, work_level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *',
+        [salutation, first_name, last_name, email, hashedPassword, role, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, "", phone, start_date, work_level, laptop_incentive],
         async (result, error) => {
             if (error) {
                 console.log(error);
@@ -67,8 +69,9 @@ async function employeesPostRouter(req, res) {
                             } else {
                                 db.query(
                                     `
-                                    SELECT *, roles.id AS roles_role_id, employees.id AS id, roles.company_id AS role_company_id, roles.name AS role_name, roles.description AS role_description FROM employees
+                                    SELECT *, roles.id AS roles_role_id, employees.id AS id, roles.company_id AS role_company_id, roles.name AS role_name, roles.description AS role_description, laptops.id AS laptops_id, laptops.make_model AS laptop_make_model, laptops.serial_number AS laptop_serial_number FROM employees
                                     LEFT JOIN roles ON employees.role = roles.id
+                                    LEFT JOIN laptops ON employees.laptop_id = laptops.id
                                     WHERE employees.company_id = ? AND employees.id = ?
                                     `,
                                     [company_id, result.rows[0].id],
@@ -95,9 +98,9 @@ async function employeesPostRouter(req, res) {
 
 function employeesPutRouter(req, res) {
     console.log('employeesPutRouter');
-    const { id, salutation, first_name, last_name, email, role, employee_id, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, start_date, work_level } = req.body;
-    db.query('UPDATE employees SET salutation = ?, first_name = ?, last_name = ?, email = ?, role = ?, employee_id = ?, company_id = ?, base_salary = ?, hourly_rate = ?, pay_period = ?, emmergency_contact_name = ?, emmergency_contact_phone = ?, emmergency_contact_relation = ?, start_date = ?, work_level = ? WHERE id = ?',
-        [salutation, first_name, last_name, email, role, employee_id, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, start_date, work_level, id],
+    const { id, salutation, first_name, last_name, email, role, employee_id, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, start_date, work_level, needs_laptop, laptop_id } = req.body;
+    db.query('UPDATE employees SET salutation = ?, first_name = ?, last_name = ?, email = ?, role = ?, employee_id = ?, company_id = ?, base_salary = ?, hourly_rate = ?, pay_period = ?, emmergency_contact_name = ?, emmergency_contact_phone = ?, emmergency_contact_relation = ?, start_date = ?, work_level = ?, needs_laptop = ?, laptop_id = ? WHERE id = ?',
+        [salutation, first_name, last_name, email, role, employee_id, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, start_date, work_level, needs_laptop, laptop_id, id],
         async (result, error) => {
             if (error) {
                 console.log(error);
@@ -105,8 +108,9 @@ function employeesPutRouter(req, res) {
             } else {
                 db.query(
                     `
-                    SELECT *, roles.id AS roles_role_id, employees.id AS id, roles.company_id AS role_company_id, roles.name AS role_name, roles.description AS role_description FROM employees
+                    SELECT *, roles.id AS roles_role_id, employees.id AS id, roles.company_id AS role_company_id, roles.name AS role_name, roles.description AS role_description, laptops.id AS laptops_id, laptops.make_model AS laptop_make_model, laptops.serial_number AS laptop_serial_number FROM employees
                     LEFT JOIN roles ON employees.role = roles.id
+                    LEFT JOIN laptops ON employees.laptop_id = laptops.id
                     WHERE employees.company_id = ? AND employees.id = ?
                     `,
                     [company_id, id],

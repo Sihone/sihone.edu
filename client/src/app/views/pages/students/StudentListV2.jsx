@@ -2,12 +2,12 @@ import {
     MaterialReactTable,
     createMRTColumnHelper,
 } from 'material-react-table';
-import { Box, Button, FormControlLabel, IconButton, Paper, Select, Switch, TableContainer, styled } from '@mui/material';
+import { Box, Button, Chip, FormControlLabel, IconButton, Paper, Select, Switch, TableContainer, styled } from '@mui/material';
 import useData from 'app/hooks/useData';
 import { useAuth } from 'app/hooks/useAuth';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Delete, Edit, RequestQuote } from '@mui/icons-material';
+import { Delete, Edit, Laptop, RequestQuote } from '@mui/icons-material';
 import { numberWithCommas } from 'app/utils/utils';
 import { useTranslation } from 'react-i18next';
 import { useSnackbar } from 'notistack';
@@ -16,6 +16,7 @@ import { useMaterialReactTableV2 } from 'app/hooks/useMaterialReactTable';
 import { inactiveStudents, completedStudents, deleteDuplicate } from 'app/utils/utils';
 
 import "./styles.css";
+import { green, red, yellow } from '@mui/material/colors';
 
 const Container = styled("div")(({ theme }) => ({
   margin: "30px",
@@ -39,6 +40,7 @@ const Container = styled("div")(({ theme }) => ({
     const { data: invoiceList } = useData("tuitions", user.company_id);
     const {data: academicYears} = useData("academic_years", user.company_id);
     const {data: academicCycles} = useData("academic_cycles", user.company_id);
+    const {data: settings} = useData("settings", user.company_id);
     const [studentList, setStudentList] = useState(_students);
     const [students, setStudents] = useState([]);
     const [item, setItem] = useState(null);
@@ -65,7 +67,7 @@ const Container = styled("div")(({ theme }) => ({
         }),
         columnHelper.accessor('contact', {
           header: t("students.table header.phone"),
-          size: 80,
+          size: 90,
         }),
         columnHelper.accessor('parent', {
           header: t("students.table header.parent phone"),
@@ -73,11 +75,11 @@ const Container = styled("div")(({ theme }) => ({
         }),
         columnHelper.accessor('program', {
           header: t("students.table header.program"),
-          size: 100,
+          size: 70,
         }),
         columnHelper.accessor('fees', {
           header: t("students.table header.balance"),
-          size: 70,
+          size: 50,
         }),
         columnHelper.accessor('actions', {
           header: t("main.actions"),
@@ -176,11 +178,23 @@ const Container = styled("div")(({ theme }) => ({
               const _totalItems = _tuitionItems.reduce((acc, _item) => acc + _item.price, 0);
 
               let initialBalance = Number(invoice?.price) + Number(invoice?.reg_fee) - Number(invoice?.rebate) + _totalItems;
+              
               if (year > 1) {
                 initialBalance = Number(invoice?.price) - Number(invoice?.rebate) + _totalItems;
               }
 
-              const balance = initialBalance - _totalPayments;
+              let balance = initialBalance - _totalPayments;
+              if (item.needs_laptop && settings?.laptop_incentive) {
+                balance += item.laptop_incentive;
+              }
+              
+              let laptopStatus = { color: red[500], label: "main.included"};
+              if (_totalPayments >= ((0.5 * initialBalance) + 50000)) {
+                laptopStatus = { color: yellow[500], label: "main.pending"};
+              }
+              if (item.laptop_id) {
+                laptopStatus = { color: green[500], label: "main.assigned"};
+              }
               
               return {
                 student_id: item.student_id,
@@ -201,6 +215,7 @@ const Container = styled("div")(({ theme }) => ({
                           document.getElementById(`showBalanceId${item.id}`).style.display = "none";
                           document.getElementById(`hideBalanceId${item.id}`).style.display = "block";
                         }}
+                        style={{display: "flex", flexDirection: "column"}}
                       >
                         <span id={`showBalanceId${item.id}`} style={{color: "#000", textShadow: "none", display: "none"}}>
                           {numberWithCommas(balance)}
@@ -210,6 +225,7 @@ const Container = styled("div")(({ theme }) => ({
                           {"**,***"}
                           {user.currency}
                         </span>
+                        {item.needs_laptop && settings?.laptop_incentive ? (<Laptop fontSize="small" sx={{color: laptopStatus.color}} />) : (null)}
                       </div>,
                 actions: (
                     <Box sx={{ display: 'flex', gap: '8px' }}>

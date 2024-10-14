@@ -35,7 +35,8 @@
             "delete_employee": "Delete Employee",
             "students": "Students",
             "academics": "Academics",
-            "reports": "Reports"
+            "reports": "Reports",
+            "hardware": "Hardware"
         },
         "role delete title": "Delete Role",
         "role delete text": "Are you sure you want to delete this role?",
@@ -43,6 +44,7 @@
         "years experience": "Include years of experience in salary",
         "work experience": "Include work experience in salary",
         "salary": "Compensation settings",
-        "transportation": "Include transport in salary"
+        "transportation": "Include transport in salary",
+        "laptop incentive": "Laptop discounted fee"
     }
 }

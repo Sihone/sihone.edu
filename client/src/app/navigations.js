@@ -61,6 +61,13 @@ export const useNavigations = () => {
           { name: t('main.menu.transactions'), path: "/transactions", iconText: "TR" },
         ],
       },
+      hasAccess(user.permissions, sections.hardware.id) && {
+        name: t('main.menu.hardware'),
+        icon: "hardware",
+        children: [
+          { name: t('main.menu.laptops'), path: "/laptops", iconText: "LT" }
+        ],
+      },
       (hasAccess(user.permissions, sections.settings.id) || hasAccess(user.permissions, sections.reports.id)) && {
         name: t('main.menu.control panel'),
         icon: "settings",

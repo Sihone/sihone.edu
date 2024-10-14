@@ -1,0 +1,17 @@
+{
+    "hardware": {
+        "title": "Hardware",
+        "laptop": {
+            "title": "Laptops",
+            "make model": "Make & model",
+            "serial": "Serial number",
+            "owner": "Owner",
+            "actions": "Actions",
+            "all": "All Laptops",
+            "dialog title": "Laptop details",
+            "status": "Status",
+            "active": "Active",
+            "inactive": "Inactive"
+        }
+    }
+}

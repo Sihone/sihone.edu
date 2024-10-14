@@ -29,9 +29,10 @@
         "unpaid": "Unpaid",
         "overpaid": "Overpaid",
         "partial paid": "Partially Paid",
-        "item name": "Item Name",
-        "item price": "Item Price",
-        "registration": "Registration Fee",
-        "print date": "As of"
+        "item name": "Item name",
+        "item price": "Item price",
+        "registration": "Registration fee",
+        "print date": "As of",
+        "laptop incentive": "Laptop discounted price"
     }
 }
