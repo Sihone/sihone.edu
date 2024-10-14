@@ -20,6 +20,8 @@ const Transcripts = Loadable(lazy(() => import("./academics/Transcripts")));
 const Accounts = Loadable(lazy(() => import("./finance/Accounts")));
 const Transactions = Loadable(lazy(() => import("./finance/Transactions")));
 
+const Laptops = Loadable(lazy(() => import("./hardware/Laptops")));
+
 const StudentList = Loadable(lazy(() => import("./students")));
 const StudentForm = Loadable(lazy(() => import("./students/customer-form")));
 const Tuition = Loadable(lazy(() => import("./tuition/")));
@@ -46,6 +48,8 @@ const pagesRoutes = [
 
   { path: "/accounts", element: <Accounts />},
   { path: "/transactions", element: <Transactions />},
+  
+  { path: "/laptops", element: <Laptops />},
 
   { path: "/students", element: <StudentList />},
   { path: "/students/:id", element: <StudentForm />},

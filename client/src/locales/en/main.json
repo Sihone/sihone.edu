@@ -43,7 +43,9 @@
             "settings roles": "Roles & Permissions",
             "settings academics": "Academics Settings",
             "reports": "Generate Reports",
-            "academic years": "Years & Clycles"
+            "academic years": "Years & Clycles",
+            "hardware": "Hardware",
+            "laptops": "Laptops"
         },
         "home": "Home",
         "profile": "Profile",
@@ -90,6 +92,10 @@
         "column actions": "Column Actions",
         "no records to display": "No Records To Display",
         "download pdf": "Download PDF",
-        "download pdf success": "PDF Downloaded Successfully"
+        "download pdf success": "PDF Downloaded Successfully",
+        "none": "None",
+        "included": "Included",
+        "pending": "Pending",
+        "assigned": "Assigned"
     }
 }

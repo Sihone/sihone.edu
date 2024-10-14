@@ -91,6 +91,7 @@ const InvoiceViewer = ({ toggleInvoiceEditor }) => {
   const { data: items, saveData: saveItem } = useData("items", user.company_id);
   const { data: tuitionPayments, saveData: savePayment, deleteData: deletePayment } = useData("tuition_payments", user.company_id);
   const { data: academicYears } = useData("academic_years", user.company_id);
+  const { data: settings } = useData("settings", user.company_id);
   const {t, i18n} = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
   
@@ -142,13 +143,20 @@ const InvoiceViewer = ({ toggleInvoiceEditor }) => {
       setPaymentAmount(_totalPayments);
       
       let _balance = 0;
+      let _initialBalance = 0;
       if (currentStudentYear === 1) {
-        setInitialBalance(Number(invoice.price) + Number(invoice.reg_fee) - invoice.rebate + _tuitionItems.reduce((acc, item) => acc + Number(item.price), 0));
+        _initialBalance = Number(invoice.price) + Number(invoice.reg_fee) - invoice.rebate + _tuitionItems.reduce((acc, item) => acc + Number(item.price), 0);
         _balance = Number(invoice.price) + Number(invoice.reg_fee) + _tuitionItems.reduce((acc, item) => acc + Number(item.price), 0) - _totalPayments - invoice.rebate;
       } else {
-        setInitialBalance(Number(invoice.price) - invoice.rebate + _tuitionItems.reduce((acc, item) => acc + Number(item.price), 0));
+        _initialBalance = Number(invoice.price) - invoice.rebate + _tuitionItems.reduce((acc, item) => acc + Number(item.price), 0);
         _balance = Number(invoice.price) + _tuitionItems.reduce((acc, item) => acc + Number(item.price), 0) - _totalPayments - invoice.rebate;
       }
+      if (invoice.needs_laptop && settings?.laptop_incentive) {
+        _initialBalance += settings.laptop_incentive;
+        _balance += invoice.laptop_incentive;
+      }
+
+      setInitialBalance(_initialBalance);
       setBalance(_balance);
 
       let _status = "";
@@ -315,7 +323,7 @@ const InvoiceViewer = ({ toggleInvoiceEditor }) => {
               )
             }
             <TableRow>
-              <TableCell align="left">{t("tuition.program fees")}: {i18n.language == "en" ? (invoice.short_name_en + " - " + invoice.name_en) : (invoice.short_name_fr + " - " + invoice.name_fr)}</TableCell>
+              <TableCell align="left">{i18n.language == "en" ? (invoice.short_name_en + " - " + invoice.name_en) : (invoice.short_name_fr + " - " + invoice.name_fr)}</TableCell>
               <TableCell align="right" style={{paddingRight: "0"}}>{numberWithCommas(invoice.price)} {user.currency}</TableCell>
               <TableCell align="right" style={{paddingRight: "32px"}}></TableCell>
             </TableRow>
@@ -333,6 +341,15 @@ const InvoiceViewer = ({ toggleInvoiceEditor }) => {
                 </TableRow>
               );
             })}
+            {
+              invoice.needs_laptop && settings?.laptop_incentive ? (
+                <TableRow>
+                  <TableCell align="left">{t("tuition.laptop incentive")}</TableCell>
+                  <TableCell align="right" style={{paddingRight: "0"}}>{numberWithCommas(invoice.laptop_incentive)} {user.currency}</TableCell>
+                  <TableCell align="right" style={{paddingRight: "32px"}}></TableCell>
+                </TableRow>
+              ) : null
+            }
           </TableBody>
         </StyledTable>
 

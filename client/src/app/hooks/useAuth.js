@@ -29,6 +29,10 @@ const getSections = (t) => ({
         id: "students",
         label: t("settings.permissions.students"),
     },
+    "hardware": {
+        id: "hardware",
+        label: t("settings.permissions.hardware"),
+    },
     "academics": {
         id: "academics",
         label: t("settings.permissions.academics"),

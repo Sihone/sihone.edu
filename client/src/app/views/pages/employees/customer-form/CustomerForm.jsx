@@ -48,6 +48,7 @@ const CustomerForm = () => {
   const { user } = useAuth();
   const {data: _employee, updateData, saveData, error} = useData("employees", user.company_id, id);
   const {data: roles} = useData("roles", user.company_id);
+  const {data: settings} = useData("settings", user.company_id);
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -72,7 +73,7 @@ const CustomerForm = () => {
       .then(() => enqueueSnackbar(t("employees.update success"), { variant: "success" }))
       .catch((err) => enqueueSnackbar(err.message || err.detail || err, { variant: "error" }));
     } else {
-      saveData({...values, company_id: user.company_id})
+      saveData({...values, company_id: user.company_id, laptop_incentive: settings.laptop_incentive})
       .then((newEmployee) => {
         if (newEmployee) {
           enqueueSnackbar(t("employees.create success"), { variant: "success" });

@@ -5,6 +5,7 @@ import {
   Grid,
   MenuItem,
   styled,
+  Switch,
   Tab,
   Tabs,
   TextField,
@@ -44,25 +45,42 @@ const CustomerForm = () => {
 
   const { id: studentId } = useParams();
   const { user } = useAuth();
+  const { data: students } = useData("students", user.company_id);
+  const { data: employees } = useData("employees", user.company_id);
   const {data: _student, updateData, saveData, error} = useData("students", user.company_id, studentId);
   const {data: programs} = useData("academic_programs", user.company_id);
   const {data: academicYears} = useData("academic_years", user.company_id);
   const {data: settings} = useData("settings", user.company_id);
+  const {data: laptops, updateData: updateLaptop} = useData("laptops", user.company_id);
+  const [availableLaptops, setAvailableLaptops] = useState([]);
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
   const { t, i18n } = useTranslation();
-
+  
+  useEffect(() => {
+    if (laptops) {
+      const studentsWithLaptops = students?.filter((_student) => _student.laptop_id);
+      const employeesWithLaptops = employees?.filter((_employee) => _employee.laptop_id);
+      const unAssignedLaptops = laptops.filter((_laptop) => !studentsWithLaptops.some((_student) => _student.laptop_id === _laptop.id) && !employeesWithLaptops.some((_employee) => _employee.laptop_id === _laptop.id));
+      setAvailableLaptops(unAssignedLaptops);
+    }
+    
+  }, [laptops, students, employees]);
+  
   const handleSubmit = async (values) => {
     console.log(values);
     setLoading(true);
     if (loading) return;
     if (studentId) {
+      if (!values.needs_laptop) {
+        values.laptop_id = null;
+      }
       updateData({...values, id: studentId, company_id: user.company_id})
       .then(() => enqueueSnackbar(t("students.update success"), { variant: "success" }))
       .catch((err) => enqueueSnackbar(err.message || err.detail || err, { variant: "error" }));
     } else {
-      saveData({...values, company_id: user.company_id})
+      saveData({...values, company_id: user.company_id, laptop_incentive: settings.laptop_incentive})
       .then((newStudent) => {
         if (newStudent) {
           enqueueSnackbar(t("students.create success"), { variant: "success" });
@@ -122,6 +140,8 @@ const CustomerForm = () => {
     parent_phone: student?.parent_phone || "",
     status: student?.status || "active",
     academic_year_id: student?.academic_year_id || settings?.current_academic_year,
+    needs_laptop: student?.needs_laptop === 1 || false,
+    laptop_id: student?.laptop_id || null,
     
     emmergency_contact_name: student?.emmergency_contact_name || "",
     emmergency_contact_phone: student?.emmergency_contact_phone || "",
@@ -153,7 +173,8 @@ const CustomerForm = () => {
 
   const title = studentId ? (student ? student.first_name + " " + student.last_name : t("students.edit") ) : t("students.new");
 
-  let tabList = [t("students.tuition"), t("students.emmergency")];
+  let tabList = [settings?.laptop_incentive && t("students.tuition"), t("students.emmergency")];
+  tabList = tabList.filter(Boolean);
 
   return (
     <Container>
@@ -479,8 +500,8 @@ const CustomerForm = () => {
                   <Tab key={ind} value={ind} label={item} sx={{ textTransform: "capitalize" }} />
                 ))}
               </Tabs>
-              {tabIndex === 1 && <ContactDetailsForm t={t} values={values} handleChange={handleChange} />}
-              {tabIndex === 0 && <TuitionDetails t={t} values={values} handleChange={handleChange} />}
+              {tabIndex === 1 || !settings?.laptop_incentive && <ContactDetailsForm t={t} values={values} handleChange={handleChange} />}
+              {tabIndex === 0 && settings?.laptop_incentive && <TuitionDetails t={t} values={values} setFieldValue={setFieldValue} student={student} laptops={laptops} availableLaptops={availableLaptops} touched={touched} errors={errors} handleChange={handleChange} students={students} employees={employees} />}
 
               <Box mt={3}>
                 <LoadingButton

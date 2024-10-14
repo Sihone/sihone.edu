@@ -16,10 +16,10 @@ function settingGetRouter(req, res) {
 
 function settingPutRouter(req, res) {
     console.log('settingPutRouter');
-    const { id, company_name, company_address, company_phone, company_email, company_website, company_logo, company_currency, smtp_server, smtp_port, smtp_user, smtp_password, smtp_security, company_registration, automatic_salary, years_experience, work_experience, transportation } = req.body;
+    const { id, company_name, company_address, company_phone, company_email, company_website, company_logo, company_currency, smtp_server, smtp_port, smtp_user, smtp_password, smtp_security, company_registration, automatic_salary, years_experience, work_experience, transportation, laptop_incentive } = req.body;
     db.query(
-        'UPDATE settings SET company_name = ?, company_address = ?, company_phone = ?, company_email = ?, company_website = ?, company_logo = ?, company_currency = ?, smtp_server = ?, smtp_port = ?, smtp_user = ?, smtp_password = ?, smtp_security = ?, company_registration = ?, automatic_salary = ?, years_experience = ?, work_experience = ?, transportation = ? WHERE id = ?',
-        [company_name, company_address, company_phone, company_email, company_website, company_logo, company_currency, smtp_server, smtp_port, smtp_user, smtp_password, smtp_security, company_registration, automatic_salary, years_experience, work_experience, transportation, id],
+        'UPDATE settings SET company_name = ?, company_address = ?, company_phone = ?, company_email = ?, company_website = ?, company_logo = ?, company_currency = ?, smtp_server = ?, smtp_port = ?, smtp_user = ?, smtp_password = ?, smtp_security = ?, company_registration = ?, automatic_salary = ?, years_experience = ?, work_experience = ?, transportation = ?, laptop_incentive = ? WHERE id = ?',
+        [company_name, company_address, company_phone, company_email, company_website, company_logo, company_currency, smtp_server, smtp_port, smtp_user, smtp_password, smtp_security, company_registration, automatic_salary, years_experience, work_experience, transportation, laptop_incentive, id],
         async (result, error) => {
             if (error) {
                 console.log(error);

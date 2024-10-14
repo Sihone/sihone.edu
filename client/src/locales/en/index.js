@@ -8,6 +8,7 @@ import academics from './academics.json';
 import finance from './finance.json';
 import students from './students.json';
 import tuition from './tuition.json';
+import hardware from './hardware.json';
 
 export const en = {
     ...register,
@@ -19,5 +20,6 @@ export const en = {
     ...academics,
     ...finance,
     ...students,
-    ...tuition
+    ...tuition,
+    ...hardware
 };

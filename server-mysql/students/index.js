@@ -5,9 +5,10 @@ function studentsGetAllRouter(req, res) {
     console.log('studentsGetRouter');
     const { company_id } = req.params;
     db.query(`
-        SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id, students.status AS status, tuition.id AS tuition_id, tuition.academic_year_id AS tuition_academic_year_id, students.academic_year_id AS academic_year_id, students.student_id AS student_id FROM students
+        SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id, students.status AS status, tuition.id AS tuition_id, tuition.academic_year_id AS tuition_academic_year_id, students.academic_year_id AS academic_year_id, students.student_id AS student_id, laptops.id AS laptops_id, laptops.make_model AS laptop_make_model, laptops.serial_number AS laptop_serial_number FROM students
         LEFT JOIN academic_programs ON students.program_id = academic_programs.id
         LEFT JOIN tuition ON students.id = tuition.student_id
+        LEFT JOIN laptops ON students.laptop_id = laptops.id
         WHERE students.company_id = ?
         ORDER BY students.first_name ASC
     `,
@@ -26,9 +27,10 @@ function studentsGetAllByAcademicYearRouter(req, res) {
     console.log('studentsGetRouter');
     const { company_id, academic_year_id } = req.params;
     db.query(`
-        SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id, students.status AS status, tuition.id AS tuition_id, tuition.academic_year_id AS tuition_academic_year_id, students.student_id AS student_id FROM students
+        SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id, students.status AS status, tuition.id AS tuition_id, tuition.academic_year_id AS tuition_academic_year_id, students.student_id AS student_id, laptops.id AS laptops_id, laptops.make_model AS laptop_make_model, laptops.serial_number AS laptop_serial_number FROM students
         LEFT JOIN academic_programs ON students.program_id = academic_programs.id
         LEFT JOIN tuition ON students.id = tuition.student_id
+        LEFT JOIN laptops ON students.laptop_id = laptops.id
         WHERE students.company_id = ? AND students.academic_year_id = ?
         ORDER BY students.first_name ASC
     `,
@@ -48,9 +50,10 @@ function studentGetRouter(req, res) {
     const { company_id, id } = req.params;
     db.query(
         `
-        SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id, students.status AS status, tuition.id AS tuition_id, tuition.academic_year_id AS tuition_academic_year_id, students.student_id AS student_id FROM students
+        SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id, students.status AS status, tuition.id AS tuition_id, tuition.academic_year_id AS tuition_academic_year_id, students.student_id AS student_id, laptops.id AS laptops_id, laptops.make_model AS laptop_make_model, laptops.serial_number AS laptop_serial_number FROM students
         LEFT JOIN academic_programs ON students.program_id = academic_programs.id
         LEFT JOIN tuition ON students.id = tuition.student_id
+        LEFT JOIN laptops ON students.laptop_id = laptops.id
         WHERE students.company_id = ? AND students.id = ?
         `,
         [company_id, id],
@@ -70,13 +73,13 @@ function studentGetRouter(req, res) {
 
 async function studentsPostRouter(req, res) {
     console.log('studentsPostRouter');
-    const { first_name, last_name, gender, email, phone, program_id, parent_phone, status, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, company_id, password, academic_year_id, dob } = req.body;
+    const { first_name, last_name, gender, email, phone, program_id, parent_phone, status, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, company_id, password, academic_year_id, dob, needs_laptop, laptop_incentive } = req.body;
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password || 'Abcd1234', salt);
     db.query(
-        `INSERT INTO students (first_name, last_name, gender, email, phone, program_id, parent_phone, status, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, company_id, password, academic_year_id, dob)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`,
-        [first_name, last_name, gender, email, phone, program_id, parent_phone, status, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, company_id, hashedPassword, academic_year_id, dob],
+        `INSERT INTO students (first_name, last_name, gender, email, phone, program_id, parent_phone, status, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, company_id, password, academic_year_id, dob, needs_laptop, laptop_incentive)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`,
+        [first_name, last_name, gender, email, phone, program_id, parent_phone, status, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, company_id, hashedPassword, academic_year_id, dob, needs_laptop, laptop_incentive],
         async (result, error) => {
             if (error) {
                 console.log(error);
@@ -104,9 +107,10 @@ async function studentsPostRouter(req, res) {
                                         } else {
                                             db.query(
                                                 `
-                                                    SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id, students.status AS status, tuition.id AS tuition_id, tuition.academic_year_id AS tuition_academic_year_id, students.student_id AS student_id FROM students
+                                                    SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id, students.status AS status, tuition.id AS tuition_id, tuition.academic_year_id AS tuition_academic_year_id, students.student_id AS student_id, laptops.id AS laptops_id, laptops.make_model AS laptop_make_model, laptops.serial_number AS laptop_serial_number FROM students
                                                     LEFT JOIN academic_programs ON students.program_id = academic_programs.id
                                                     LEFT JOIN tuition ON students.id = tuition.student_id
+                                                    LEFT JOIN laptops ON students.laptop_id = laptops.id
                                                     WHERE students.id = ?
                                                 `,
                                                 [result.rows[0].id],
@@ -136,7 +140,7 @@ async function studentsPostRouter(req, res) {
 
 function studentsPutRouter(req, res) {
     console.log('studentsPutRouter');
-    const { id, first_name, last_name, gender, email, phone, program_id, parent_phone, status, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, company_id, academic_year_id, dob } = req.body;
+    const { id, first_name, last_name, gender, email, phone, program_id, parent_phone, status, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, company_id, academic_year_id, dob, needs_laptop, laptop_id } = req.body;
     db.query(`
         UPDATE students SET 
         first_name = ?, 
@@ -151,10 +155,12 @@ function studentsPutRouter(req, res) {
         emmergency_contact_phone = ?, 
         emmergency_contact_relation = ?,
         academic_year_id = ?,
-        dob = ?
+        dob = ?,
+        needs_laptop = ?,
+        laptop_id = ?
         WHERE id = ?
         `,
-        [first_name, last_name, gender, email, phone, program_id, parent_phone, status, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, academic_year_id, dob, id],
+        [first_name, last_name, gender, email, phone, program_id, parent_phone, status, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, academic_year_id, dob, needs_laptop, laptop_id, id],
         async (result, error) => {
             if (error) {
                 console.log(error);
@@ -162,9 +168,10 @@ function studentsPutRouter(req, res) {
             } else {
                 db.query(
                     `
-                    SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id, students.status AS status, tuition.id AS tuition_id, tuition.academic_year_id AS tuition_academic_year_id, students.student_id AS student_id FROM students
+                    SELECT *, academic_programs.id AS programs_program_id, students.id AS id, academic_programs.company_id AS program_company_id, students.status AS status, tuition.id AS tuition_id, tuition.academic_year_id AS tuition_academic_year_id, students.student_id AS student_id, laptops.id AS laptops_id, laptops.make_model AS laptop_make_model, laptops.serial_number AS laptop_serial_number FROM students
                     LEFT JOIN academic_programs ON students.program_id = academic_programs.id
                     LEFT JOIN tuition ON students.id = tuition.student_id
+                    LEFT JOIN laptops ON students.laptop_id = laptops.id
                     WHERE students.company_id = ? AND students.id = ?
                     `,
                     [company_id, id],

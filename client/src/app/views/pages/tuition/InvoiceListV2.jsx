@@ -7,11 +7,12 @@ import useData from 'app/hooks/useData';
 import { useAuth } from 'app/hooks/useAuth';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Visibility } from '@mui/icons-material';
+import { Laptop, Visibility } from '@mui/icons-material';
 import { numberWithCommas } from 'app/utils/utils';
 import { useTranslation } from 'react-i18next';
 import { Breadcrumb } from "app/components";
 import { useMaterialReactTableV2 } from 'app/hooks/useMaterialReactTable';
+import { green, red, yellow } from '@mui/material/colors';
 
 const Container = styled("div")(({ theme }) => ({
   margin: "30px",
@@ -32,6 +33,7 @@ const Container = styled("div")(({ theme }) => ({
     const { data: tuitionPayments } = useData("tuition_payments", user.company_id);
     const { data: tuitionItems } = useData("tuition_items", user.company_id);
     const { data: academicYears } = useData("academic_years", user.company_id);
+    const { data: settings } = useData("settings", user.company_id);
 
     const [tuitionList, setTuitionList] = useState(_tuitions);
     const [tuitions, setTuitions] = useState([]);
@@ -104,9 +106,11 @@ const Container = styled("div")(({ theme }) => ({
               if (year > 1) {
                 initialBalance = Number(invoice.price) - Number(invoice.rebate) + _totalItems;
               }
-              
 
-              const balance = initialBalance - _totalPayments;
+              let balance = initialBalance - _totalPayments;
+              if (invoice.needs_laptop && settings?.laptop_incentive) {
+                balance += invoice.laptop_incentive;
+              }
               let status = t("tuition.unpaid");
               let statusColor = "error";
               if (balance == 0) {
@@ -126,12 +130,23 @@ const Container = styled("div")(({ theme }) => ({
                 statusColor = "warning";
               }
               
+              let laptopStatus = { color: red[500], label: "main.included"};
+              if (_totalPayments >= ((0.5 * initialBalance) + 50000)) {
+                laptopStatus = { color: yellow[500], label: "main.pending"};
+              }
+              if (invoice.laptop_id) {
+                laptopStatus = { color: green[500], label: "main.assigned"};
+              }
+              
               return {
                 studentId: invoice.studentId,
                 student: invoice.first_name.toUpperCase() + " " + invoice.last_name.toUpperCase(),
                 year: academicYearStr,
                 program: i18n.language == "en" ? invoice.name_en : invoice.name_fr,
-                fees: numberWithCommas(balance) + " " + user.currency,
+                fees: <div style={{display: "flex", flexDirection: "column"}}>
+                 {numberWithCommas(balance) + " " + user.currency}
+                 {invoice.needs_laptop && settings?.laptop_incentive ? (<Laptop fontSize="small" sx={{color: laptopStatus.color}} />) : (null)}
+                 </div>,
                 status: <Chip color={statusColor} label={status} />,
                 student_status: <Chip color={invoice.student_status == "active" ? "success" : "error"} label={t("main." + invoice.student_status)} />,
                 actions: (

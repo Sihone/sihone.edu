@@ -50,7 +50,8 @@ const CustomerForm = () => {
       company_email: values.company_email,
       company_website: values.company_website,
       company_currency: values.company_currency,
-      company_registration: values.company_registration
+      company_registration: values.company_registration,
+      laptop_incentive: values.laptop_incentive
     })
     .then(() => {
       enqueueSnackbar(t("main.success"), { variant: "success" });
@@ -115,7 +116,8 @@ const CustomerForm = () => {
     company_currency: data?.company_currency || "",
     company_address1: data?.company_address && data?.company_address.split(",")[0] || "",
     company_address2: data?.company_address && data?.company_address.split(",")[1] || "",
-    company_registration: data?.company_registration || ""
+    company_registration: data?.company_registration || "",
+    laptop_incentive: data?.laptop_incentive || 0
   };
 
   const initialValues2 = {
@@ -345,6 +347,25 @@ const CustomerForm = () => {
                     sx={{ minWidth: 208 }}
                     helperText={touched.company_currency && errors.company_currency}
                     error={Boolean(errors.company_currency && touched.company_currency)}
+                  />
+                </Grid>
+                
+                <Grid item md={2} sm={4} xs={12}>
+                  {t("settings.laptop incentive")}
+                </Grid>
+                <Grid item md={10} sm={8} xs={12}>
+                  <TextField
+                    name="laptop_incentive"
+                    size="small"
+                    type="number"
+                    variant="outlined"
+                    value={values.laptop_incentive}
+                    label={t("settings.laptop incentive")}
+                    onChange={handleChange}
+                    InputLabelProps={{ shrink: !isNaN(values.laptop_incentive) }}
+                    sx={{ minWidth: 208 }}
+                    helperText={touched.laptop_incentive && errors.laptop_incentive}
+                    error={Boolean(errors.laptop_incentive && touched.laptop_incentive)}
                   />
                 </Grid>
               </Grid>

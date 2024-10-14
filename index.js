@@ -155,6 +155,14 @@ app.post('/api/tuition_payments', tuitionPaymentsPostRouter);
 app.put('/api/tuition_payments', tuitionPaymentsPutRouter);
 app.delete('/api/tuition_payments/:id', tuitionPaymentsDeleteRouter);
 
+// laptops routes
+const { laptopsGetRouter, laptopGetRouter, laptopsPostRouter, laptopsDeleteRouter, laptopsPutRouter } = require('./server-mysql/laptops');
+app.get('/api/laptops/:company_id/:id', laptopGetRouter);
+app.get('/api/laptops/:company_id', laptopsGetRouter);
+app.post('/api/laptops', laptopsPostRouter);
+app.delete('/api/laptops/:id', laptopsDeleteRouter);
+app.put('/api/laptops', laptopsPutRouter);
+
 // let the react app to handle any unknown routes 
 // serve up the index.html if express does'nt recognize the route
 app.get('*', function(req, res) {
