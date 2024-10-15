@@ -1,36 +1,9 @@
-import { Box, Grid, MenuItem, Select, Switch, TextField } from "@mui/material";
-import { t } from "i18next";
+import { Box, Grid, MenuItem, TextField } from "@mui/material";
 
-const CompDetailsForm = ({ values, setFieldValue, student, laptops=[], handleChange, errors, touched, students=[], employees=[] }) => {
+const HardwareDetailsForm = ({ t, values, handleChange, employee, laptops=[], errors, touched, students=[], employees=[] }) => {
   return (
     <Grid container spacing={3} alignItems="center">
-      <Grid item md={2} sm={4} xs={12}>
-        {t("settings.laptop incentive")}
-      </Grid>
-      <Grid item md={10} sm={8} xs={12}>
-        <TextField
-          size="small"
-          name="laptop_incentive"
-          label={t("settings.laptop incentive")}
-          variant="outlined"
-          sx={{ minWidth: 208 }}
-          value={student?.laptop_incentive}
-          InputLabelProps={{ shrink: true }}
-          disabled
-        />
-      </Grid>
-      <Grid item md={2} sm={4} xs={12}>
-        {t("students.laptop")}
-      </Grid>
-      <Grid item md={10} sm={8} xs={12}>
-        <Switch
-          name="needs_laptop"
-          checked={values.needs_laptop}
-          onChange={value => setFieldValue("needs_laptop", value.target.checked)}
-          color="primary"
-        />
-      </Grid>
-      {student && (
+      {employee && (
         <>
           <Grid item md={2} sm={4} xs={12}>
             {t("students.laptops")}
@@ -51,7 +24,6 @@ const CompDetailsForm = ({ values, setFieldValue, student, laptops=[], handleCha
                     InputLabelProps={{ shrink: !!values.laptop_id }}
                     helperText={touched.laptop_id && errors.laptop_id}
                     error={Boolean(errors.laptop_id && touched.laptop_id)}
-                    disabled={!values.needs_laptop}
                   >
                     <MenuItem value={null}>
                       <em>{t("main.none")}</em>
@@ -76,4 +48,4 @@ const CompDetailsForm = ({ values, setFieldValue, student, laptops=[], handleCha
   );
 };
 
-export default CompDetailsForm;
+export default HardwareDetailsForm;

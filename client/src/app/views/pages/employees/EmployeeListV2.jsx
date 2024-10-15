@@ -7,12 +7,13 @@ import useData from 'app/hooks/useData';
 import { getSections, useAuth } from 'app/hooks/useAuth';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Delete, Edit } from '@mui/icons-material';
+import { Delete, Edit, Laptop } from '@mui/icons-material';
 import { hasAccess } from 'app/utils/utils';
 import { useTranslation } from 'react-i18next';
 import { useSnackbar } from 'notistack';
 import { Breadcrumb, ConfirmationDialog } from "app/components";
 import { useMaterialReactTableV2 } from 'app/hooks/useMaterialReactTable';
+import { green } from '@mui/material/colors';
 
 const Container = styled("div")(({ theme }) => ({
   margin: "30px",
@@ -92,7 +93,10 @@ const Container = styled("div")(({ theme }) => ({
                 last_name: item.last_name.toUpperCase(),
                 phone: item.phone,
                 email: item.email,
-                role: item.role_name,
+                role: <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        {item.role_name}
+                        {item.laptop_id ? (<Laptop fontSize="small" sx={{color: green[500]}} />) : (null)}
+                      </div>,
                 actions: (
                     <Box sx={{ display: 'flex', gap: '8px' }}>
                         <IconButton onClick={() => navigate("/employees/" + item.id)}>

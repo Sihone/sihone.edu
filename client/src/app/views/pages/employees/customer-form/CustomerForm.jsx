@@ -23,6 +23,7 @@ import { LoadingButton } from "@mui/lab";
 import { useSnackbar } from "notistack";
 import PasswordChangeForm from "./PasswordChangeForm";
 import { useTranslation } from 'react-i18next';
+import HardwareDetailsForm from "./HardwareDetailsForm";
 
 const Container = styled("div")(({ theme }) => ({
   margin: "30px",
@@ -42,6 +43,7 @@ const CustomerForm = () => {
   const [employee, setEmployee] = useState(null);
   const [loading, setLoading] = useState(false);
   const [employeeId, setEmployeeId] = useState(null);
+  const [availableLaptops, setAvailableLaptops] = useState([]);
 
   const { id } = useParams();
   
@@ -49,6 +51,9 @@ const CustomerForm = () => {
   const {data: _employee, updateData, saveData, error} = useData("employees", user.company_id, id);
   const {data: roles} = useData("roles", user.company_id);
   const {data: settings} = useData("settings", user.company_id);
+  const {data: laptops} = useData("laptops", user.company_id);
+  const {data: employees} = useData("employees", user.company_id);
+  const {data: students} = useData("students", user.company_id);
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -63,6 +68,16 @@ const CustomerForm = () => {
       setEmployee(null);
     }
   }, [employeeId, _employee, id]);
+  
+  useEffect(() => {
+    if (laptops) {
+      const studentsWithLaptops = students?.filter((_student) => _student.laptop_id);
+      const employeesWithLaptops = employees?.filter((_employee) => _employee.laptop_id);
+      const unAssignedLaptops = laptops.filter((_laptop) => !studentsWithLaptops.some((_student) => _student.laptop_id === _laptop.id) && !employeesWithLaptops.some((_employee) => _employee.laptop_id === _laptop.id));
+      setAvailableLaptops(unAssignedLaptops);
+    }
+    
+  }, [laptops, students, employees]);
 
   const handleSubmit = async (values) => {
     console.log(values);
@@ -126,7 +141,8 @@ const CustomerForm = () => {
     hourly_rate: employee?.hourly_rate || "0",
     pay_period: employee?.pay_period || "Monthly",
     start_date: employee?.start_date || new Date().toISOString(),
-    work_level: employee?.work_level || 1, 
+    work_level: employee?.work_level || 1,
+    laptop_id: employee?.laptop_id || null,
     emmergency_contact_name: employee?.emmergency_contact_name || "",
     emmergency_contact_phone: employee?.emmergency_contact_phone || "",
     emmergency_contact_relation: employee?.emmergency_contact_relation || "",
@@ -160,7 +176,7 @@ const CustomerForm = () => {
 
   const title = employeeId ? (employee ? employee.first_name + " " + employee.last_name : t("employees.edit") ) : t("employees.new");
 
-  let tabList = [t("employees.compensation"), t("employees.emmergency")];
+  let tabList = [t("employees.compensation"), t("employees.emmergency"), t("hardware.title")];
 
   return (
     <Container>
@@ -387,6 +403,7 @@ const CustomerForm = () => {
               </Tabs>
               {tabIndex === 1 && <ContactDetailsForm t={t} values={values} handleChange={handleChange} />}
               {tabIndex === 0 && <CompDetailsForm t={t} values={values} handleChange={handleChange} />}
+              {tabIndex === 2 && <HardwareDetailsForm t={t} values={values} setFieldValue={setFieldValue} employee={employee} laptops={laptops} availableLaptops={availableLaptops} touched={touched} errors={errors} handleChange={handleChange} students={students} employees={employees} />}
 
               <Box mt={3}>
                 <LoadingButton

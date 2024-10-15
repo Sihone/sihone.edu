@@ -1,5 +1,5 @@
 import { AddCircle, Delete, Edit } from "@mui/icons-material";
-import { Box, Paper, styled, Table, TableBody, TableCell, TableRow } from "@mui/material";
+import { Box, Link, Paper, styled, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useState } from "react";
 import { useSnackbar } from "notistack";
 import LaptopDialog from "./LaptopDialog";
+import { useNavigate } from "react-router-dom";
 
 // styled components
 const FlexBox = styled(Box)({ display: "flex", alignItems: "center" });
@@ -48,7 +49,8 @@ const LaptopList = () => {
   const { data: students } = useData("students", user.company_id);
   const { data: employees } = useData("employees", user.company_id);
   const { t } = useTranslation();
-
+  const navigate = useNavigate();
+  
   const { enqueueSnackbar } = useSnackbar();
 
   const [open, setOpen] = useState(false);
@@ -149,13 +151,13 @@ const LaptopList = () => {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
                   let ownerName = null;
-                  const student = students.find(student => student.id === laptop?.student_id);
+                  const student = students.find(student => student.laptop_id === row?.id);
                   if (student) {
-                    ownerName = student.first_name + " " + student.last_name;
+                    ownerName = <Link onClick={() => navigate("/students/" + student.id)} style={{cursor: "pointer"}}>{student.first_name + " " + student.last_name}</Link>;
                   }
-                  const employee = employees.find(employee => employee.id === laptop?.employee_id);
+                  const employee = employees.find(employee => employee.laptop_id === row?.id);
                   if (employee) {
-                    ownerName = employee.first_name + " " + employee.last_name;
+                    ownerName = <Link onClick={() => navigate("/employees/" + employee.id)} style={{cursor: "pointer"}}>{employee.first_name + " " + employee.last_name}</Link>;
                   }
                   return (
                     <TableRow
@@ -181,17 +183,15 @@ const LaptopList = () => {
                       </TableCell>
 
                       <TableCell align="center">
-                        {!row.student_id && !row.employee_id && (
-                          <>
+                        <>
                           <IconButton onClick={() => handleEdit(row)}>
                             <Edit />
                           </IconButton>
-                        
+                          {!ownerName &&
                           <IconButton onClick={() => handleDeleteClick(row)}>
                             <Delete />
-                          </IconButton>
-                          </>
-                        )}
+                          </IconButton>}
+                        </>
                       </TableCell>
                     </TableRow>
                   );

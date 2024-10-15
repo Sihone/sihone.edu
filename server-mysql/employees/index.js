@@ -98,9 +98,9 @@ async function employeesPostRouter(req, res) {
 
 function employeesPutRouter(req, res) {
     console.log('employeesPutRouter');
-    const { id, salutation, first_name, last_name, email, role, employee_id, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, start_date, work_level, needs_laptop, laptop_id } = req.body;
-    db.query('UPDATE employees SET salutation = ?, first_name = ?, last_name = ?, email = ?, role = ?, employee_id = ?, company_id = ?, base_salary = ?, hourly_rate = ?, pay_period = ?, emmergency_contact_name = ?, emmergency_contact_phone = ?, emmergency_contact_relation = ?, start_date = ?, work_level = ?, needs_laptop = ?, laptop_id = ? WHERE id = ?',
-        [salutation, first_name, last_name, email, role, employee_id, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, start_date, work_level, needs_laptop, laptop_id, id],
+    const { id, salutation, first_name, last_name, email, role, employee_id, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, start_date, work_level, laptop_id } = req.body;
+    db.query('UPDATE employees SET salutation = ?, first_name = ?, last_name = ?, email = ?, role = ?, employee_id = ?, company_id = ?, base_salary = ?, hourly_rate = ?, pay_period = ?, emmergency_contact_name = ?, emmergency_contact_phone = ?, emmergency_contact_relation = ?, start_date = ?, work_level = ?, laptop_id = ? WHERE id = ?',
+        [salutation, first_name, last_name, email, role, employee_id, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, start_date, work_level, laptop_id, id],
         async (result, error) => {
             if (error) {
                 console.log(error);
