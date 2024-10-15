@@ -16,7 +16,7 @@ import { useMaterialReactTableV2 } from 'app/hooks/useMaterialReactTable';
 import { inactiveStudents, completedStudents, deleteDuplicate } from 'app/utils/utils';
 
 import "./styles.css";
-import { green, red, yellow } from '@mui/material/colors';
+import { green, orange, red } from '@mui/material/colors';
 
 const Container = styled("div")(({ theme }) => ({
   margin: "30px",
@@ -189,8 +189,8 @@ const Container = styled("div")(({ theme }) => ({
               }
               
               let laptopStatus = { color: red[500], label: "main.included"};
-              if (_totalPayments >= ((0.5 * initialBalance) + 50000)) {
-                laptopStatus = { color: yellow[500], label: "main.pending"};
+              if (_totalPayments >= ((0.35 * initialBalance) + 50000)) {
+                laptopStatus = { color: orange[500], label: "main.pending"};
               }
               if (item.laptop_id) {
                 laptopStatus = { color: green[500], label: "main.assigned"};
