@@ -245,7 +245,7 @@ const Container = styled("div")(({ theme }) => ({
           _data = _data.filter((item) => item != null);
           setStudents(_data);   
         }
-    }, [studentList, academicYearId, academicYears, academicCycles, invoiceList, tuitionPayments, tuitionItems]);
+    }, [studentList, academicYearId, academicYears, academicCycles, invoiceList, tuitionPayments, tuitionItems, programs]);
   
     const table = useMaterialReactTableV2({
         columns,

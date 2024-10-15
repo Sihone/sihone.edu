@@ -187,6 +187,9 @@ const InvoiceViewer = ({ toggleInvoiceEditor }) => {
   if (currentStudentYear > 1) {
     subTotalCost = Number(invoice.price);
   }
+  if (invoice.needs_laptop && settings?.laptop_incentive) {
+    subTotalCost += invoice.laptop_incentive;
+  }
   
   const academicYearStr = t(`students.year.${currentStudentYear}`);
 
