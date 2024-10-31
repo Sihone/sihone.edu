@@ -50,7 +50,7 @@ async function employeesPostRouter(req, res) {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     db.query(
-        'INSERT INTO employees (salutation, first_name, last_name, email, password, role, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, employee_id, phone, start_date, work_level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *',
+        'INSERT INTO employees (salutation, first_name, last_name, email, password, role, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, employee_id, phone, start_date, work_level, laptop_incentive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *',
         [salutation, first_name, last_name, email, hashedPassword, role, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, "", phone, start_date, work_level, laptop_incentive],
         async (result, error) => {
             if (error) {
