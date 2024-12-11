@@ -144,11 +144,20 @@ const Container = styled("div")(({ theme }) => ({
               if (settings?.automatic_salary) {
                 const yearsOfExperience = Math.floor(row.start_date ? (new Date() - new Date(row.start_date)) / (1000 * 60 * 60 * 24 * 365) : 0);
                 yearsOfExperienceAmnt = settings?.years_experience && yearsOfExperience > 1 ? 0.02 *yearsOfExperience * base : 0;
-                workLevelAmnt = settings?.work_experience ? row.work_level * base / 100 : 0;
-                transportAmnt = settings?.transportation ? base * 0.05 : 0;
+                workLevelAmnt = 0; //settings?.work_experience ? row.work_level * base / 100 : 0;
+                transportAmnt = settings?.transportation ? base * 0.05 * row.work_level : 0;
+                if (row.work_level >= 3) {
+                  transportAmnt += 3000;
+                }
+                if (row.work_level >= 4) {
+                  transportAmnt += 9000;
+                }
+                if (row.work_level === 0) {
+                  yearsOfExperienceAmnt = 0;
+                }
               }
               
-              const partialTotal = base + hourly + yearsOfExperienceAmnt + workLevelAmnt;
+              const partialTotal = base + yearsOfExperienceAmnt + workLevelAmnt;
               const pvid  = partialTotal > 60000 ? 0.042 * partialTotal : 0.042 * 60000;
               let irpp = 0;
               if (partialTotal < 62001) {
@@ -186,7 +195,7 @@ const Container = styled("div")(({ theme }) => ({
                 tdl = 25000;
               }
               tdl = tdl/12;
-              const withholdings = base === 0 ? 0 : Math.floor(irpp_total) + Math.floor(rav) + Math.floor(cfc) + Math.floor(tdl) + Math.floor(pvid);
+              const withholdings = base === 0 || row.work_level === 0 ? 0 : Math.floor(irpp_total) + Math.floor(rav) + Math.floor(cfc) + Math.floor(tdl) + Math.floor(pvid);
               
               const total = base + hourly + yearsOfExperienceAmnt + workLevelAmnt + transportAmnt - withholdings;
               

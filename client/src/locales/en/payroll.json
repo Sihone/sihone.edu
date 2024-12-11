@@ -13,7 +13,7 @@
             "pay month": "Salary Month",
             "years experience": "Years",
             "work experience": "Level",
-            "transportation": "Transport",
+            "transportation": "Representation",
             "withholding": "CNPS"
         },
         "slip": {
@@ -47,7 +47,7 @@
             "total other earnings": "Total Other Earnings",
             "employee title": "Employee Title",
             "years": "Years of experience bonus",
-            "transport": "Transport allowance",
+            "transport": "Representation Allowance",
             "irpp": "IRPP",
             "tdl": "TDL",
             "rav": "RAV",
