@@ -2,7 +2,7 @@ import {
     MaterialReactTable,
     createMRTColumnHelper,
 } from 'material-react-table';
-import { Box, IconButton, LinearProgress, Paper, TableContainer, styled } from '@mui/material';
+import { Box, FormControlLabel, IconButton, LinearProgress, Paper, Switch, TableContainer, TextField, Typography, styled } from '@mui/material';
 import useData from 'app/hooks/useData';
 import { useAuth } from 'app/hooks/useAuth';
 import { useEffect, useState } from 'react';
@@ -34,6 +34,10 @@ const Container = styled("div")(({ theme }) => ({
     const [selectedAttendance, setSelectedAttendance] = useState(null);
     const [open, setOpen] = useState(false);
     const [confirmDelete, setConfirmDelete] = useState(false);
+    const [selectedFromDate, setSelectedFromDate] = useState(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - new Date().getDay() + 2).toISOString().slice(0, 10))
+    const [selectedToDate, setSelectedToDate] = useState(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + (6 - new Date().getDay()) + 2).toISOString().slice(0, 10))
+    const [showAll, setShowAll] = useState(false);
+    const [totalHours, setTotalHours] = useState(0);
     const { enqueueSnackbar } = useSnackbar();
 
     const { t } = useTranslation();
@@ -94,8 +98,9 @@ const Container = styled("div")(({ theme }) => ({
     }
 
     useEffect(() => {
+        let _data = _attendance;
         if (_attendance) {
-            const _data = _attendance.map((item) => ({
+            _data = _attendance.map((item) => ({
                 employee: item.first_name.toUpperCase() + " " + item.last_name.toUpperCase(),
                 date: item.attendance_date,
                 clock_in: item.clock_in,
@@ -113,9 +118,13 @@ const Container = styled("div")(({ theme }) => ({
                     </Box>
                   ),
             }));
-            setAttendance(_data);
         }
-    }, [_attendance]);
+        if (!showAll) {
+          _data = _data.filter((item) => new Date(item.date) >= new Date(selectedFromDate) && new Date(item.date) <= new Date(selectedToDate));
+        }
+        setAttendance(_data);
+        setTotalHours(_data.reduce((total, item) => total + parseFloat(item.total), 0));
+    }, [_attendance, selectedFromDate, selectedToDate, showAll]);
   
     const table = useMaterialReactTableV2({
       columns,
@@ -127,7 +136,57 @@ const Container = styled("div")(({ theme }) => ({
           onClick: () => setOpen(true),
           icon: <Add />,
         }
-      ]
+      ],
+      extraComponents: [
+        <TextField
+          fullWidth
+          size='small'
+          label={t("main.filter from")}
+          value={selectedFromDate}
+          onChange={(e) => setSelectedFromDate(e.target.value)}
+          type="date"
+          sx={{ maxWidth: 200 }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          disabled={showAll}
+        />,
+        <TextField
+          fullWidth
+          size='small'
+          label={t("main.filter to")}
+          value={selectedToDate}
+          onChange={(e) => setSelectedToDate(e.target.value)}
+          type="date"
+          sx={{ maxWidth: 200 }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          disabled={showAll}
+        />,
+        <FormControlLabel
+          label={t("attendance.show all")}
+          labelPlacement='start'
+          control={
+            <Switch
+              checked={showAll}
+              onChange={(e) => setShowAll(e.target.checked)}
+            />
+          }
+        />,
+        <TextField
+          fullWidth
+          size='small'
+          label={t("attendance.total hours")}
+          value={totalHours}
+          type="text"
+          sx={{ maxWidth: 200 }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          disabled={true}
+        />,
+      ],
     })
   
     return (

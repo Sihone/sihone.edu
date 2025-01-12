@@ -96,6 +96,8 @@
         "none": "None",
         "included": "Included",
         "pending": "Pending",
-        "assigned": "Assigned"
+        "assigned": "Assigned",
+        "filter from": "Filter From",
+        "filter to": "Filter To"
     }
 }

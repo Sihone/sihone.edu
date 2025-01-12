@@ -17,6 +17,8 @@
         "save success": "Attendance saved successfully.",
         "save error": "Error saving attendance.",
         "update success": "Attendance updated successfully.",
-        "update error": "Error updating attendance."
+        "update error": "Error updating attendance.",
+        "show all": "Show All",
+        "total hours": "Total Hours"
     }
 }
