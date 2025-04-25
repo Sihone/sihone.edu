@@ -40,11 +40,11 @@ function payrollGetRouter(req, res) {
 
 function payrollPostRouter(req, res) {
     console.log('payrollPostRouter');
-    const { company_id, employee_id, pay_period, base_salary, total_hours, hourly_rate, total_salary, pay_date, yearly_rate, transport_rate, irpp, tdl, rav, cfc, pvid } = req.body;
+    const { company_id, employee_id, pay_period, base_salary, total_hours, hourly_rate, total_salary, pay_date, yearly_rate, work_level_rate, transport_rate, irpp, tdl, rav, cfc, pvid } = req.body;
     
     db.query(
-        'INSERT INTO payroll (employee_id, pay_period, base_salary, total_hours, hourly_rate, total_salary, company_id, pay_date, yearly_rate, transport_rate, irpp, tdl, rav, cfc, pvid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *',
-        [employee_id, pay_period, base_salary, total_hours, hourly_rate, total_salary, company_id, pay_date, yearly_rate, transport_rate, irpp, tdl, rav, cfc, pvid],
+        'INSERT INTO payroll (employee_id, pay_period, base_salary, total_hours, hourly_rate, total_salary, company_id, pay_date, yearly_rate, work_level_rate, transport_rate, irpp, tdl, rav, cfc, pvid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *',
+        [employee_id, pay_period, base_salary, total_hours, hourly_rate, total_salary, company_id, pay_date, yearly_rate, work_level_rate, transport_rate, irpp, tdl, rav, cfc, pvid],
         async (result, error) => {
             if (error) {
                 console.log(error);

@@ -6,12 +6,13 @@ import { Box, FormControlLabel, IconButton, LinearProgress, Paper, Switch, Table
 import useData from 'app/hooks/useData';
 import { useAuth } from 'app/hooks/useAuth';
 import { useEffect, useState } from 'react';
-import { Add, Delete, Edit } from '@mui/icons-material';
+import { Add, Delete, Edit, Upload } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { useSnackbar } from 'notistack';
 import { Breadcrumb, ConfirmationDialog } from "app/components";
 import { useMaterialReactTableV2 } from 'app/hooks/useMaterialReactTable';
 import AttendanceDialog from './AttendanceDialog';
+import AttendanceUploadDialog from './AttendanceUploadDialog';
 
 const Container = styled("div")(({ theme }) => ({
   margin: "30px",
@@ -39,6 +40,8 @@ const Container = styled("div")(({ theme }) => ({
     const [showAll, setShowAll] = useState(false);
     const [totalHours, setTotalHours] = useState(0);
     const { enqueueSnackbar } = useSnackbar();
+    
+    const [uploadOpen, setUploadOpen] = useState(false);
 
     const { t } = useTranslation();
 
@@ -71,6 +74,7 @@ const Container = styled("div")(({ theme }) => ({
 
     const handleClose = () => {
       setOpen(false);
+      setUploadOpen(false);
       setSelectedAttendance(null);
     }
   
@@ -135,6 +139,11 @@ const Container = styled("div")(({ theme }) => ({
           label: t("attendance.add attendance"),
           onClick: () => setOpen(true),
           icon: <Add />,
+        },
+        {
+          label: t("attendance.upload attendance"),
+          onClick: () => setUploadOpen(true),
+          icon: <Upload />,
         }
       ],
       extraComponents: [
@@ -218,6 +227,13 @@ const Container = styled("div")(({ theme }) => ({
                   text={t("attendance.delete dialog content")}
                   onConfirmDialogClose={() => setConfirmDelete(false)}
                   onYesClick={() => handleDelete(selectedAttendance.id)}
+                />
+                <AttendanceUploadDialog
+                  open={uploadOpen}
+                  onClose={handleClose}
+                  t={t}
+                  enqueueSnackbar={enqueueSnackbar}
+                  save={saveData}
                 />
             </Paper>
         </Container>

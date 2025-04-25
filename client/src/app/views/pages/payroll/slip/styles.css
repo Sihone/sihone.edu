@@ -5,25 +5,21 @@
 .slip-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 30px;
 }
 
 .slip-logo {
     width: 50%;
     text-align: right;
-    padding-bottom: 16px;
 }
 
 .slip-info {
-    display: flex;
-    justify-content: space-between;
-    margin: 8px 0 16px;
+    margin: 10px 0 0;
     font-size: 13px;
     gap: 24px;
 }
 
 .slip-info > div {
-    width: 50%;
+    width: 67%;
     display: flex;
     flex-wrap: wrap;
 }

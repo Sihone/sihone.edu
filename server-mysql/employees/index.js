@@ -46,12 +46,12 @@ function employeeGetRouter(req, res) {
 
 async function employeesPostRouter(req, res) {
     console.log('employeesPostRouter');
-    const { salutation, first_name, last_name, email, password, role, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, phone, start_date, work_level, laptop_incentive } = req.body;
+    const { salutation, first_name, last_name, email, password, role, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, phone, start_date, work_level, laptop_incentive, title } = req.body;
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     db.query(
-        'INSERT INTO employees (salutation, first_name, last_name, email, password, role, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, employee_id, phone, start_date, work_level, laptop_incentive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *',
-        [salutation, first_name, last_name, email, hashedPassword, role, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, "", phone, start_date, work_level, laptop_incentive],
+        'INSERT INTO employees (salutation, first_name, last_name, email, password, role, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, employee_id, phone, start_date, work_level, laptop_incentive, title) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *',
+        [salutation, first_name, last_name, email, hashedPassword, role, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, "", phone, start_date, work_level, laptop_incentive, title],
         async (result, error) => {
             if (error) {
                 console.log(error);
@@ -98,9 +98,9 @@ async function employeesPostRouter(req, res) {
 
 function employeesPutRouter(req, res) {
     console.log('employeesPutRouter');
-    const { id, salutation, first_name, last_name, email, role, employee_id, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, start_date, work_level, laptop_id } = req.body;
-    db.query('UPDATE employees SET salutation = ?, first_name = ?, last_name = ?, email = ?, role = ?, employee_id = ?, company_id = ?, base_salary = ?, hourly_rate = ?, pay_period = ?, emmergency_contact_name = ?, emmergency_contact_phone = ?, emmergency_contact_relation = ?, start_date = ?, work_level = ?, laptop_id = ? WHERE id = ?',
-        [salutation, first_name, last_name, email, role, employee_id, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, start_date, work_level, laptop_id, id],
+    const { id, salutation, first_name, last_name, email, role, employee_id, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, start_date, work_level, laptop_id, title } = req.body;
+    db.query('UPDATE employees SET salutation = ?, first_name = ?, last_name = ?, email = ?, role = ?, employee_id = ?, company_id = ?, base_salary = ?, hourly_rate = ?, pay_period = ?, emmergency_contact_name = ?, emmergency_contact_phone = ?, emmergency_contact_relation = ?, start_date = ?, work_level = ?, laptop_id = ?, title = ? WHERE id = ?',
+        [salutation, first_name, last_name, email, role, employee_id, company_id, base_salary, hourly_rate, pay_period, emmergency_contact_name, emmergency_contact_phone, emmergency_contact_relation, start_date, work_level, laptop_id, title, id],
         async (result, error) => {
             if (error) {
                 console.log(error);

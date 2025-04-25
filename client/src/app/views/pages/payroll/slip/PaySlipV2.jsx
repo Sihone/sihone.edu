@@ -64,7 +64,7 @@ const Container = styled("div")(({ theme }) => ({
     useEffect(() => {
         if (payrolls) {
             const _data = payrolls.map((item) => ({
-                employee: item.first_name.toUpperCase() + " " + item.last_name.toUpperCase(),
+                employee: item.first_name + " " + item.last_name,
                 month: item.pay_period,
                 total: numberWithCommas(item.total_salary) + " " + user.currency,
                 date: item.pay_date,
@@ -72,7 +72,7 @@ const Container = styled("div")(({ theme }) => ({
                     <Box sx={{ display: 'flex', gap: '8px' }}>
                         <IconButton onClick={() => viewPaySlip({
                           ...item,
-                          name: item.first_name.toUpperCase() + " " + item.last_name.toUpperCase(),
+                          name: item.first_name + " " + item.last_name,
                           hourly_salary: item.hourly_rate * item.total_hours,
                         })}>
                           <Visibility />

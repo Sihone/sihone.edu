@@ -163,6 +163,25 @@ app.post('/api/laptops', laptopsPostRouter);
 app.delete('/api/laptops/:id', laptopsDeleteRouter);
 app.put('/api/laptops', laptopsPutRouter);
 
+app.post('/api/sms/incoming', async (req, res) => {
+  const { from, message } = req.body;
+
+  // Send WhatsApp message through Meta Cloud API
+  await axios.post('https://graph.facebook.com/v22.0/630122820183920/messages', {
+    messaging_product: "whatsapp",
+    to: "+15149670418",
+    type: "text",
+    text: { body: `New SMS from ${from}: ${message}` }
+  }, {
+    headers: {
+      Authorization: `Bearer EAAdDZCwBldY0BOzftdvcMZBuCUt3rUM7D6jR5sG5uN60qvykmAzkiM08UK5cS58ZB8K9LP1GxiVTDZCwE7wyJauGLe1g9BzoR1jCfzRkTh88dMZBQEoQoCf44pqm0TPyMCYapZAQahKUGaKp3IltVhE5q3cESHmCWnIQ79tbZBiWLwRqLWMRhSakx7yaYVBvkaXHl1Wt8ZA8hs7ljZALkU6mPuc5b7YTgeS6mSiyIC73I`,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  res.sendStatus(200);
+});
+
 // let the react app to handle any unknown routes 
 // serve up the index.html if express does'nt recognize the route
 app.get('*', function(req, res) {
