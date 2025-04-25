@@ -52,7 +52,8 @@
             "tdl": "TDL",
             "rav": "RAV",
             "cfc": "CFC",
-            "pvid": "PVID"
+            "pvid": "PVID",
+            "bonus": "Performance"
         },
         "paid": "Paid",
         "unpaid": "Unpaid",

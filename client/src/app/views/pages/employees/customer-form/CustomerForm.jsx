@@ -136,6 +136,7 @@ const CustomerForm = () => {
     salutation: employee?.salutation || "",
     email: employee?.email || "",
     phone: employee?.phone || "",
+    title: employee?.title || "",
     role: employee?.role || "",
     base_salary: employee?.base_salary || "0",
     hourly_rate: employee?.hourly_rate || "0",
@@ -346,6 +347,24 @@ const CustomerForm = () => {
                     sx={{ minWidth: 208 }}
                     helperText={touched.email && errors.email}
                     error={Boolean(errors.email && touched.email)}
+                  />
+                </Grid>
+                
+                <Grid item md={2} sm={4} xs={12}>
+                  Employee Title
+                </Grid>
+                <Grid item md={10} sm={8} xs={12}>
+                  <TextField
+                    name="title"
+                    size="small"
+                    type="text"
+                    variant="outlined"
+                    value={values.title}
+                    onChange={handleChange}
+                    InputLabelProps={{ shrink: !!values.title }}
+                    sx={{ minWidth: 208 }}
+                    helperText={touched.title && errors.title}
+                    error={Boolean(errors.title && touched.title)}
                   />
                 </Grid>
 

@@ -35,6 +35,8 @@ const SlipView = ({ open, onClose, paySlip, t, user, payments }) => {
 
   const hourlySalary = paySlip ? (paySlip.total_hours * paySlip.hourly_rate) : 0;
   
+  // const workExperience = paySlip ? paySlip.work_level_rate : 0;
+  
   const totalYearlyRate = currentPayments.reduce((acc, payment) => {
     return acc + payment.yearly_rate;
   }, 0);
@@ -42,6 +44,10 @@ const SlipView = ({ open, onClose, paySlip, t, user, payments }) => {
   const totalTransportRate = currentPayments.reduce((acc, payment) => {
     return acc + payment.transport_rate;
   }, 0);
+  
+  // const totalWorkLevelRate = currentPayments.reduce((acc, payment) => {
+  //   return acc + payment.work_level_rate;
+  // }, 0);
   
   const totalIrpp = currentPayments.reduce((acc, payment) => {
     return acc + payment.irpp;
@@ -82,22 +88,26 @@ const SlipView = ({ open, onClose, paySlip, t, user, payments }) => {
                 <div id="printContent" style={{maxWidth: "800px", margin: "40px auto", width: "100%"}}>
                   <div style={{margin: "20mm 16mm"}}>
                     <div className={"slip-header"}>
-                      <div style={{width: "50%"}}>
-                        <div style={{fontSize: "18px", fontWeight: "bold"}}>{t("payroll.slip dialog title")}</div>
+                      <div style={{width: "75%"}}>
+                        <div style={{fontSize: "18px", fontWeight: "bold"}}>{user.company_name.toUpperCase()}</div>
+                        <div style={{fontSize: "13px"}}>{user.company_address}</div>
+                        <div style={{fontSize: "12px"}}><strong>Authorisation #:</strong> {user.company_registration}</div>
+                        <div style={{fontSize: "12px"}}><strong>Tel:</strong> 695 44 39 99 / 680 13 53 03</div>
                       </div>
                       <div className={"slip-logo"}>
-                        
+                        <img src="/assets/images/logo-pt.png" width={200} alt="logo" />
                       </div>
                     </div>
+                    <hr />
                     <div className={'slip-info'}>
-                      <div>
+                      {/* <div>
                         <div><b>{t("payroll.slip.company name")}</b></div>
                         <div>{user.company_name}</div>
                         <div><b>{t("payroll.slip.company address")}</b></div>
                         <div>{user.company_address}</div>
                         <div><b>{t("payroll.slip.company registration")}</b></div>
                         <div>{user.company_registration}</div>
-                      </div>
+                      </div> */}
                       <div>
                         <div><b>{t("payroll.slip.employee name")}</b></div>
                         <div>{paySlip.name}</div>
@@ -105,54 +115,55 @@ const SlipView = ({ open, onClose, paySlip, t, user, payments }) => {
                         <div>{paySlip.employee_id}</div>
                         <div><b>{t("payroll.slip.employee title")}</b></div>
                         <div>{paySlip.title}</div>
+                        <div><b>{t("payroll.slip.pay period")}</b></div>
+                        <div>{format(new Date(paySlip ? paySlip.pay_period + "-5" : null), "MMMM, yyyy")}</div>
+                        <div><b>{t("payroll.pay dialog date")}</b></div>
+                        <div>{format(new Date(paySlip ? paySlip.pay_date + "T00:00:00" : null), "MMMM dd, yyyy")}</div>
                       </div>
                     </div>
+                    
+                    <hr />
 
-                    <div className={'slip-pay-period'}>
+                    {/* <div className={'slip-pay-period'}>
                       <div>
                         <div style={{fontWeight: "bold"}}>{t("payroll.slip.pay period")}</div>
                         <div>{format(new Date(paySlip ? paySlip.pay_period + "-5" : null), "MMMM, yyyy")}</div>
                       </div>
-                      {/* <div>
-                        <div style={{fontWeight: "bold"}}>{t("payroll.slip.pay period to")}</div>
-                        <div>{format(new Date(paySlip?.pay_period), "MMM dd, yyyy")}</div>
-                      </div> */}
                       <div>
                         <div style={{fontWeight: "bold"}}>{t("payroll.pay dialog date")}</div>
                         <div>{format(new Date(paySlip ? paySlip.pay_date + "T00:00:00" : null), "MMMM dd, yyyy")}</div>
                       </div>
-                    </div>
-                    <br/>
+                    </div> */}
                     <div className={'slip-heading'}>{t("payroll.slip.earnings").toUpperCase()}</div>
 
                     <div className={'slip-earnings slip-earnings-header'}>
-                      <div style={{width: "18%", backgroundColor: "transparent"}} />
-                      <div style={{width: "12%"}}>{t("payroll.slip.rate")}</div>
-                      <div style={{width: "10%"}}>{t("payroll.slip.hours")}</div>
+                      <div style={{width: "40%", backgroundColor: "transparent"}} />
+                      {/* <div style={{width: "12%"}}>{t("payroll.slip.rate")}</div>
+                      <div style={{width: "10%"}}>{t("payroll.slip.hours")}</div> */}
                       <div style={{width: "30%"}}>{t("payroll.slip.current amount")}</div>
                       <div style={{width: "30%"}}>{t("payroll.slip.ytd amount")}</div>
                     </div>
 
                     <div className={'slip-earnings'}>
-                      <div style={{width: "18%"}}><b>{t("payroll.slip.base salary")}</b></div>
-                      <div style={{width: "12%"}}>{numberWithCommas(paySlip.base_salary)}</div>
-                      <div style={{width: "10%"}}></div>
+                      <div style={{width: "40%"}}><b>{t("payroll.slip.base salary")}</b></div>
+                      {/* <div style={{width: "12%"}}>{numberWithCommas(paySlip.base_salary)}</div>
+                      <div style={{width: "10%"}}></div> */}
                       <div style={{width: "30%"}}>{numberWithCommas(paySlip.base_salary) + " " + (paySlip.base_salary ? user.currency : "")}</div>
                       <div style={{width: "30%"}}>{numberWithCommas(totalBaseSalary) + " " + (totalBaseSalary ? user.currency : "")}</div>
                     </div>
 
                     <div className={'slip-earnings'}>
-                      <div style={{width: "18%"}}><b>{t("payroll.slip.hourly salary")}</b></div>
-                      <div style={{width: "12%"}}>{numberWithCommas(paySlip.hourly_rate)}</div>
-                      <div style={{width: "10%"}}>{paySlip.total_hours}</div>
+                      <div style={{width: "40%"}}><b>{t("payroll.slip.hourly salary")}</b></div>
+                      {/* <div style={{width: "12%"}}>{numberWithCommas(paySlip.hourly_rate)}</div>
+                      <div style={{width: "10%"}}>{paySlip.total_hours}</div> */}
                       <div style={{width: "30%"}}>{numberWithCommas(hourlySalary) + " " + (hourlySalary ? user.currency : "")}</div>
                       <div style={{width: "30%"}}>{numberWithCommas(totalHourlySalary) + " " + (totalHourlySalary ? user.currency : "")}</div>
                     </div>
                     
                     <div className={'slip-earnings'}>
-                      <div style={{width: "18%"}}><b>{t("payroll.slip.years")}</b></div>
-                      <div style={{width: "12%"}}>{numberWithCommas(paySlip.yearly_rate)}</div>
-                      <div style={{width: "10%"}}></div>
+                      <div style={{width: "40%"}}><b>{t("payroll.slip.years")}</b></div>
+                      {/* <div style={{width: "12%"}}>{numberWithCommas(paySlip.yearly_rate)}</div>
+                      <div style={{width: "10%"}}></div> */}
                       <div style={{width: "30%"}}>{numberWithCommas(paySlip.yearly_rate) + " " + (paySlip.yearly_rate ? user.currency : "")}</div>
                       <div style={{width: "30%"}}>{numberWithCommas(totalYearlyRate) + " " + (totalYearlyRate ? user.currency : "")}</div>
                     </div>
@@ -163,7 +174,6 @@ const SlipView = ({ open, onClose, paySlip, t, user, payments }) => {
                       <div><b>{numberWithCommas(totalHourlySalary + totalBaseSalary + totalYearlyRate) + " " + user.currency}</b></div>
                     </div>
                    
-                    <br/>
                     <div className={'slip-heading'}>{t("payroll.slip.deductions").toUpperCase()}</div>
 
                     <div className={'slip-list'}>
@@ -201,23 +211,21 @@ const SlipView = ({ open, onClose, paySlip, t, user, payments }) => {
                       <div><b>{numberWithCommas(paySlip.irpp + paySlip.tdl + paySlip.rav + paySlip.cfc + paySlip.pvid) + " " + user.currency}</b></div>
                       <div><b>{numberWithCommas(totalIrpp + totalTdl + totalRav + totalCfc + totalPvid) + " " + user.currency}</b></div>
                     </div>
-
-                    <br />
                     
                     <div className={'slip-heading'}>{t("payroll.slip.other earnings").toUpperCase()}</div>
 
                     <div className={'slip-earnings slip-earnings-header'}>
-                      <div style={{width: "18%", backgroundColor: "transparent"}} />
-                      <div style={{width: "12%"}}>{t("payroll.slip.rate")}</div>
-                      <div style={{width: "10%"}}>{t("payroll.slip.hours")}</div>
+                      <div style={{width: "40%", backgroundColor: "transparent"}} />
+                      {/* <div style={{width: "12%"}}>{t("payroll.slip.rate")}</div>
+                      <div style={{width: "10%"}}>{t("payroll.slip.hours")}</div> */}
                       <div style={{width: "30%"}}>{t("payroll.slip.current amount")}</div>
                       <div style={{width: "30%"}}>{t("payroll.slip.ytd amount")}</div>
                     </div>
                     
                     <div className={'slip-earnings'}>
-                      <div style={{width: "18%"}}><b>{t("payroll.slip.transport")}</b></div>
-                      <div style={{width: "12%"}}>{numberWithCommas(paySlip.transport_rate)}</div>
-                      <div style={{width: "10%"}}></div>
+                      <div style={{width: "40%"}}><b>{t("payroll.slip.transport")}</b></div>
+                      {/* <div style={{width: "12%"}}>{numberWithCommas(paySlip.transport_rate)}</div>
+                      <div style={{width: "10%"}}></div> */}
                       <div style={{width: "30%"}}>{numberWithCommas(paySlip.transport_rate) + " " + (paySlip.transport_rate ? user.currency : "")}</div>
                       <div style={{width: "30%"}}>{numberWithCommas(totalTransportRate) + " " + (totalTransportRate ? user.currency : "")}</div>
                     </div>
@@ -238,8 +246,8 @@ const SlipView = ({ open, onClose, paySlip, t, user, payments }) => {
 
                     <div className={'slip-list'}>
                       <div><b>{t("payroll.slip.net pay")}</b></div>
-                      <div>{numberWithCommas(hourlySalary + paySlip.base_salary + paySlip.yearly_rate + paySlip.transport_rate - paySlip.irpp - paySlip.tdl - paySlip.rav - paySlip.cfc - paySlip.pvid) + " " + user.currency}</div>
-                      <div>{numberWithCommas(totalHourlySalary + totalBaseSalary + totalYearlyRate + totalTransportRate - totalIrpp - totalTdl - totalRav - totalCfc - totalPvid) + " " + user.currency}</div>
+                      <div><strong>{numberWithCommas(hourlySalary + paySlip.base_salary + paySlip.yearly_rate + paySlip.transport_rate - paySlip.irpp - paySlip.tdl - paySlip.rav - paySlip.cfc - paySlip.pvid) + " " + user.currency}</strong></div>
+                      <div><strong>{numberWithCommas(totalHourlySalary + totalBaseSalary + totalYearlyRate + totalTransportRate - totalIrpp - totalTdl - totalRav - totalCfc - totalPvid) + " " + user.currency}</strong></div>
                     </div>
                   </div>
                 </div>
